@@ -1,11 +1,14 @@
 # ProyectoIADAII
 Desarrollo del proyecto 1 de ADA II
 
-Versiones
+versiones:
 Angular CLI: 11.2.4
 Node: 14.17.3
 OS: win32 x64
+
 Angular:
+...
+Ivy Workspace:
 Package                      Version
 ------------------------------------------------------
 @angular-devkit/architect    0.1102.4 (cli-only)
@@ -38,11 +41,11 @@ Para instalar todas las dependencias del proyecto, ejecutar:
 pip install -r requirements.txt
 
 para correr el backend:
-entrar a la carpeta backend
-ejecutar python app.py
+1. entrar a la carpeta backend
+2. ejecutar python app.py
 
 para ejecutar el front 
-luego de haber instalado dependencias con npm i
-ejecutar ng serve
-abrir el navegador en http://localhost:4200/
+1. luego de haber instalado dependencias con npm i
+2. ejecutar ng serve
+3. abrir el navegador en http://localhost:4200/
 
