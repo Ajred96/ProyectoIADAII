@@ -9,7 +9,6 @@ OS: win32 x64
 Angular:
 ...
 Ivy Workspace:
-
 Package                      Version
 ------------------------------------------------------
 @angular-devkit/architect    0.1102.4 (cli-only)
