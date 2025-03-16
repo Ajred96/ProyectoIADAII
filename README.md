@@ -17,11 +17,13 @@ Package                      Version
 @schematics/angular          11.2.4 (cli-only)
 @schematics/update           0.1102.4 (cli-only)
 
+
 Versión de Python: 3.13.1 (Compilado el 3 de diciembre de 2024)
 Arquitectura: 64-bit (AMD64)
 Compilador: MSC v.1942
 Ubicación de pip: C:\Python313\Lib\site-packages\pip
 Versión de pip: 24.3.1
+
 📦 Paquetes Instalados
 blinker 1.9.0
 click 8.1.8
@@ -33,6 +35,7 @@ Jinja2 3.1.6
 MarkupSafe 3.0.2
 Werkzeug 3.1.3
 pip 24.3.1
+
 📂 Dependencias del Proyecto
 Para instalar todas las dependencias del proyecto, ejecutar:
 pip install -r requirements.txt
