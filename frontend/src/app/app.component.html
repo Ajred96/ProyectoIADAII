@@ -1,0 +1,41 @@
+<div class="container mt-4 text-center">
+  <h2>Moderación de Opiniones - ModCI</h2>
+
+  <!-- Cargar Archivo -->
+  <div class="mb-3">
+    <input #fileInput type="file" (change)="seleccionarArchivo($event)" class="form-control d-inline-block w-auto"
+           [disabled]="archivoCargado">
+    <button *ngIf="archivoCargado" (click)="limpiar()" class="btn btn-danger ms-2">Limpiar</button>
+  </div>
+
+  <!-- Botones de Métodos -->
+  <div class="mt-3" *ngIf="archivoCargado">
+    <button (click)="ejecutarMetodo('fuerzaBruta')" [disabled]="procesando || resultado" class="btn btn-primary me-2">
+      Fuerza Bruta
+    </button>
+    <button (click)="ejecutarMetodo('voraz')" [disabled]="procesando || resultado" class="btn btn-success me-2">Algoritmo
+      Voraz
+    </button>
+    <button (click)="ejecutarMetodo('dinamico')" [disabled]="procesando || resultado" class="btn btn-warning">
+      Programación Dinámica
+    </button>
+  </div>
+
+  <!-- Spinner (se muestra mientras se procesa) -->
+  <div *ngIf="mostrandoSpinner" class="mt-3">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Procesando...</span>
+    </div>
+  </div>
+
+  <!-- Resultado -->
+  <div *ngIf="resultado" class="mt-4">
+    <h3>Resultados:</h3>
+    <p><strong>Conflicto Interno:</strong> {{ resultado.CI }}</p>
+    <p><strong>Esfuerzo Total:</strong> {{ resultado.Esfuerzo }}</p>
+    <p><strong>Estrategia:</strong> {{ resultado.Estrategia?.join(', ') }}</p>
+  </div>
+
+  <!-- Botón para limpiar solo los resultados -->
+  <button *ngIf="resultado" (click)="limpiarResultados()" class="btn btn-danger mt-3">Limpiar Resultados</button>
+</div>
