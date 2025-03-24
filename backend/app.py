@@ -3,6 +3,7 @@ from flask_cors import CORS
 from modciFB import modciFB
 from modciPD import modciPD
 from modciPV import modciPV
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -35,6 +36,7 @@ def procesar_archivo(archivo):
 def ejecutar_metodo(metodo, red_social, r_max):
     """Ejecuta el método seleccionado y devuelve el resultado."""
     try:
+        tiempo_inicio = time.time()
         if metodo == 'fuerzaBruta':
             ci, esfuerzo, estrategia = modciFB(red_social, r_max)
         elif metodo == 'dinamico':
@@ -43,8 +45,8 @@ def ejecutar_metodo(metodo, red_social, r_max):
             ci, esfuerzo, estrategia = modciPV(red_social, r_max)
         else:
             return jsonify({"error": "Método no válido"}), 400
-
-        respuesta = {"CI": ci, "Esfuerzo": esfuerzo, "Estrategia": estrategia}
+        tiempo = round(time.time() - tiempo_inicio, 4)
+        respuesta = {"CI": ci, "Esfuerzo": esfuerzo, "Estrategia": estrategia, "Tiempo": tiempo}
         print("📢 Respuesta enviada al frontend:", respuesta)  # Depuración
         return jsonify(respuesta)
     
