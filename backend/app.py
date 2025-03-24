@@ -57,12 +57,33 @@ def ejecutar_metodo(metodo, red_social, r_max):
 def procesar_metodo(metodo):
     """Recibe el archivo y ejecuta el método seleccionado."""
     archivo = request.files.get('file')
-    datos, error_respuesta, codigo = procesar_archivo(archivo)
-    if error_respuesta:
-        return error_respuesta, codigo
+    if not archivo:
+        return jsonify({"error": "No se proporcionó un archivo"}), 400
 
-    red_social, r_max = datos
-    return ejecutar_metodo(metodo, red_social, r_max)
+    lineas = archivo.read().decode('utf-8').strip().split('\n')
+
+    # Validar que hay al menos una línea
+    if len(lineas) < 2:
+        return jsonify({"error": "El archivo no tiene suficientes datos"}), 400
+
+    try:
+        n = int(lineas[0])
+        if len(lineas) < n + 2:  # n líneas de datos + 1 para R_max
+            return jsonify({"error": "El archivo no contiene todas las líneas esperadas"}), 400
+
+        red_social = [(int(datos[0]), int(datos[1]), int(datos[2]), float(datos[3])) for datos in
+                      (linea.split(',') for linea in lineas[1:n + 1])]
+        r_max = int(lineas[n + 1])
+    except ValueError:
+        return jsonify({"error": "Error en el formato del archivo"}), 400
+
+    ci, esfuerzo, estrategia = resolver_modci(red_social, r_max)
+
+    respuesta = {"CI": ci, "Esfuerzo": esfuerzo, "Estrategia": estrategia}
+    print("📢 Respuesta enviada al frontend:", respuesta)  # 👀 Agregar print para depuración
+
+    return jsonify(respuesta)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
