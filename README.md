@@ -40,12 +40,14 @@ pip 24.3.1
 Para instalar todas las dependencias del proyecto, ejecutar:
 pip install -r requirements.txt
 
-para correr el backend:
-1. entrar a la carpeta backend
-2. ejecutar python app.py
+Para correr el backend:
+1. Entrar a la carpeta backend
+2. Ejecutar python app.py
 
-para ejecutar el front 
-1. luego de haber instalado dependencias con npm i
-2. ejecutar ng serve
-3. abrir el navegador en http://localhost:4200/
+Para ejecutar el frontend 
+1. Luego de haber instalado dependencias con npm i
+2. Posiblemente sea necesario ejecutar $env:NODE_OPTIONS="--openssl-legacy-provider" para establecer 
+   la variable de entorno (Windows)
+3. Ejecutar ng serve
+4. Abrir el navegador en http://localhost:4200/
 
