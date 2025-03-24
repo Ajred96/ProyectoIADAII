@@ -1,31 +1,38 @@
-import math
 from itertools import product
+from utils import calcular_ci_esfuerzo
 
 def modciFB(red_social, r_max):
-    n = len(red_social)
-    mejor_estrategia = []
-    mejor_ci = float('inf')
-    mejor_esfuerzo = 0
+    """
+    Algoritmo de fuerza bruta para minimizar el conflicto interno con un esfuerzo máximo permitido.
 
-    for estrategia in product(*(range(0, grupo[0] + 1) for grupo in red_social)):
+    Args:
+        red_social (list of tuples): Lista de grupos (n_i, op1_i, op2_i, rigidez_i), donde:
+            - n_i (int): Personas en el grupo.
+            - op1_i, op2_i (float): Opinión inicial y objetivo.
+            - rigidez_i (float): Factor de resistencia al cambio.
+        r_max (float): Esfuerzo máximo disponible.
+    Returns:
+        tuple: (CI óptimo, Esfuerzo total, Estrategia óptima)
+            - CI óptimo (float): Conflicto interno mínimo alcanzado.
+            - Esfuerzo total (float): Recursos usados en la estrategia.
+            - Estrategia óptima (list of int): Esfuerzo asignado a cada grupo.
+    """
+    mejor_ci, mejor_esfuerzo, mejor_estrategia = float('inf'), 0, []
+
+    # Generar todas las combinaciones de estrategias
+    estrategias = [[]]
+
+    for grupo in red_social:
+        nuevas_estrategias = []
+        for estrategia in estrategias:
+            for e in range(grupo[0] + 1):  # Generar valores de esfuerzo de 0 a n
+                nuevas_estrategias.append(estrategia + [e])
+        estrategias = nuevas_estrategias  # Reemplazar con la nueva lista de combinaciones
+
+    # Evaluar cada estrategia
+    for estrategia in estrategias:
         ci, esfuerzo = calcular_ci_esfuerzo(red_social, estrategia)
         if esfuerzo <= r_max and ci < mejor_ci:
-            mejor_ci = ci
-            mejor_esfuerzo = esfuerzo
-            mejor_estrategia = estrategia
+            mejor_ci, mejor_esfuerzo, mejor_estrategia = ci, esfuerzo, estrategia
 
     return mejor_ci, mejor_esfuerzo, mejor_estrategia
-
-def calcular_ci_esfuerzo(red_social, estrategia):
-    ci_numerador = 0
-    ci_denominador = 0
-    esfuerzo_total = 0
-
-    for i, (n_i, o1, o2, r) in enumerate(red_social):
-        e_i = estrategia[i]
-        esfuerzo_total += math.ceil(abs(o1 - o2) * r * e_i)
-        ci_numerador += (n_i - e_i) * (o1 - o2) ** 2
-        ci_denominador += (n_i - e_i)
-
-    ci = ci_numerador / ci_denominador if ci_denominador > 0 else 0
-    return ci, esfuerzo_total

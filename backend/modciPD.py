@@ -1,64 +1,76 @@
 import math
+from utils import esfuerzo_necesario, extraer_datos_red, calcular_ci_esfuerzo
 
-def calcular_conflicto_vec(n, opiniones_1, opiniones_2):
-    total_agentes = sum(n)
-    if total_agentes == 0:
-        return 0
-    conflict = sum(n[i] * (opiniones_1[i] - opiniones_2[i])**2 for i in range(len(n)))
-    return conflict / total_agentes
+def actualizar_dp(dp, i, used_effort, total_rem, S, decisions, n, opiniones_1, opiniones_2, rigidez, d, R_max):
+    """Actualiza la tabla de programación dinámica con nuevas decisiones."""
+    for e in range(n[i] + 1):
+        cost = esfuerzo_necesario(opiniones_1[i], opiniones_2[i], rigidez[i], e)
+        new_effort = used_effort + cost
+        if new_effort <= R_max:
+            new_rem = n[i] - e
+            new_total = total_rem + new_rem
+            new_S = S + new_rem * d[i]
+            new_decisions = decisions + [e]
+            if new_effort not in dp[i+1]:
+                dp[i+1][new_effort] = {}
+            if new_total not in dp[i+1][new_effort] or new_S < dp[i+1][new_effort][new_total][0]:
+                dp[i+1][new_effort][new_total] = (new_S, new_decisions)
+                
+def seleccionar_mejor_estrategia(dp, num_grupos):
+    """Selecciona la mejor estrategia minimizando el conflicto interno."""
+    best_conflict = float('inf')
+    best_state = None
+    best_decisions = None
 
-def esfuerzo_necesario(op1, op2, rigidez, e):
-    return int(math.ceil(abs(op1 - op2) * rigidez * e))
+    for used_effort in dp[num_grupos]:
+        for total_rem, (S, decisions) in dp[num_grupos][used_effort].items():
+            conflict = S / total_rem if total_rem > 0 else 0
+            if conflict < best_conflict:
+                best_conflict = conflict
+                best_state = (used_effort, total_rem, S)
+                best_decisions = decisions
 
-def modciPD(n, opiniones_1, opiniones_2, rigidez, R_max):
-    num_grupos = len(n)
-    # Precalcular el cuadrado de la diferencia (para el conflicto) y la diferencia absoluta (para el esfuerzo)
+    return best_conflict, best_state, best_decisions
+
+
+def modciPD(red_social, R_max):
+    """Calcula la mejor estrategia de moderación usando programación dinámica.
+    
+    Args:
+        red_social (list of tuples): Lista de grupos (n_i, op1_i, op2_i, rigidez_i), donde:
+            - n_i (int): Personas en el grupo.
+            - op1_i, op2_i (float): Opinión inicial y objetivo.
+            - rigidez_i (float): Factor de resistencia al cambio.
+        R_max (float): Esfuerzo máximo disponible.
+
+    Returns:
+        tuple: (CI óptimo, Esfuerzo total, Estrategia óptima)
+            - CI óptimo (float): Conflicto interno mínimo alcanzado.
+            - Esfuerzo total (float): Recursos usados en la estrategia.
+            - Estrategia óptima (list of int): Esfuerzo asignado a cada grupo.
+            
+    """
+    num_grupos = len(red_social)
+    # Extraemos datos con la función modular
+    n, opiniones_1, opiniones_2, rigidez = extraer_datos_red(red_social)
+    # Precalcular valores
     d = [(opiniones_1[i] - opiniones_2[i])**2 for i in range(num_grupos)]
-    diff = [abs(opiniones_1[i] - opiniones_2[i]) for i in range(num_grupos)]
-
-    # dp[i] será una estructura en la que para los primeros i grupos se almacena:
-    # clave: esfuerzo utilizado hasta el momento
-    # valor: un diccionario que mapea (total de agentes restantes) a (S, lista de decisiones)
+    # Inicializar DP
     dp = [dict() for _ in range(num_grupos+1)]
-    # Estado inicial: 0 grupos procesados, 0 esfuerzo usado, 0 agentes acumulados y S = 0.
     dp[0][0] = {0: (0, [])}
 
     for i in range(num_grupos):
         dp[i+1] = dict()
-        # Para cada estado alcanzado con los primeros i grupos:
         for used_effort in dp[i]:
             for total_rem, (S, decisions) in dp[i][used_effort].items():
-                # Para el grupo i se prueba moderar de 0 a n[i] agentes
-                for e in range(n[i] + 1):
-                    cost = esfuerzo_necesario(opiniones_1[i], opiniones_2[i], rigidez[i], e)
-                    new_effort = used_effort + cost
-                    if new_effort <= R_max:
-                        new_rem = n[i] - e  # Agentes que quedan en el grupo i
-                        new_total = total_rem + new_rem
-                        new_S = S + new_rem * d[i]
-                        new_decisions = decisions + [e]
-                        # Se actualiza el estado en dp[i+1] para el esfuerzo new_effort y total new_total
-                        if new_effort not in dp[i+1]:
-                            dp[i+1][new_effort] = {}
-                        # Si para ese esfuerzo y total no hay estado o se encontró uno con S mayor, se actualiza
-                        if new_total not in dp[i+1][new_effort] or new_S < dp[i+1][new_effort][new_total][0]:
-                            dp[i+1][new_effort][new_total] = (new_S, new_decisions)
+                actualizar_dp(dp, i, used_effort, total_rem, S, decisions, n, opiniones_1, opiniones_2, rigidez, d, R_max)
 
-    # Se busca, entre todos los estados alcanzados (para todos los niveles de esfuerzo <= R_max),
-    # aquel que minimice el conflicto: conflict = S / (total de agentes restantes) (o 0 si no quedan agentes)
-    best_conflict = float('inf')
-    best_state = None
-    for used_effort in dp[num_grupos]:
-        for total_rem, (S, decisions) in dp[num_grupos][used_effort].items():
-            if total_rem == 0:
-                conflict = 0
-            else:
-                conflict = S / total_rem
-            if conflict < best_conflict:
-                best_conflict = conflict
-                best_state = (used_effort, total_rem, S, decisions)
+    # Encontrar mejor solución usando calcular_conflicto
+    best_conflict, best_state, best_decisions = seleccionar_mejor_estrategia(dp, num_grupos)
 
     if best_state is None:
-        return None, None
-    else:
-        return best_conflict, best_state[3]  # conflict y la lista de decisiones
+        return None, None, None
+
+    ci, esfuerzo = calcular_ci_esfuerzo(red_social, best_decisions)
+
+    return ci, esfuerzo, best_decisions
