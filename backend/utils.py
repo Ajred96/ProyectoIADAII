@@ -17,15 +17,13 @@ def calcular_conflicto(red_social, estrategia=None):
     - total_agentes: Número total de agentes considerados.
     """
     ci_numerador = 0
-    ci_denominador = 0
-
+    ci_denominador = len(red_social)
     for i, (n, o1, o2, _) in enumerate(red_social):  
         moderados = estrategia[i] if estrategia else 0
         agentes_restantes = n - moderados
         diferencia_cuadrado = (o1 - o2) ** 2
 
         ci_numerador += agentes_restantes * diferencia_cuadrado
-        ci_denominador += agentes_restantes
 
     conflicto = ci_numerador / ci_denominador if ci_denominador > 0 else 0
     return conflicto, ci_denominador

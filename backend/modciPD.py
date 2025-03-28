@@ -24,7 +24,7 @@ def seleccionar_mejor_estrategia(dp, num_grupos):
 
     for used_effort in dp[num_grupos]:
         for total_rem, (S, decisions) in dp[num_grupos][used_effort].items():
-            conflict = S / total_rem if total_rem > 0 else 0
+            conflict = S / num_grupos if num_grupos > 0 else 0
             if conflict < best_conflict:
                 best_conflict = conflict
                 best_state = (used_effort, total_rem, S)
