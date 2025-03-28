@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from modciFB import modciFB
 from modciPD import modciPD
+from modciPV import modciPV
 import time
 
 app = Flask(__name__)
@@ -41,7 +42,7 @@ def ejecutar_metodo(metodo, red_social, r_max):
         elif metodo == 'dinamico':
             ci, esfuerzo, estrategia = modciPD(red_social, r_max)  # Ahora retorna los mismos 3 valores
         elif metodo == 'voraz':
-            return jsonify({"mensaje": "Método voraz aún no implementado"}), 200
+            ci, esfuerzo, estrategia = modciPV(red_social, r_max)
         else:
             return jsonify({"error": "Método no válido"}), 400
         tiempo = round(time.time() - tiempo_inicial, 4)
