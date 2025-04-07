@@ -8,23 +8,26 @@ def utilidad_base(o1, o2, rigidez):
     Heurística base: |o1 - o2| / rigidez.
     Prioriza grupos con alta diferencia de opiniones y baja rigidez.
     """
+    rigidez = max(rigidez, 1e-6)  # Evita divisiones por valores muy pequeños
     diferencia = abs(o1 - o2)
-    return diferencia / rigidez if rigidez != 0 else float('inf')
+    return diferencia / rigidez
 
 def utilidad_reduccion_absoluta(o1, o2, rigidez):
     """
     Heurística alternativa: (o1 - o2)^2 / (rigidez * e).
     Prioriza reducción absoluta del conflicto por esfuerzo.
     """
+    rigidez = max(rigidez, 1e-6)
     reduccion = (o1 - o2) ** 2
-    esfuerzo = math.ceil(abs(o1 - o2) * rigidez) if rigidez != 0 else 0
-    return reduccion / esfuerzo if esfuerzo != 0 else float('inf')
+    esfuerzo = max(1, math.ceil(abs(o1 - o2) * rigidez))  # Evita esfuerzo 0
+    return reduccion / esfuerzo
 
 def utilidad_solo_extremos(o1, o2, rigidez):
     """
     Heurística para priorizar agentes extremos (|o1 - o2| > 50).
     Si no son extremos, utilidad = 0.
     """
+    rigidez = max(rigidez, 1e-6)
     diferencia = abs(o1 - o2)
     return diferencia / rigidez if diferencia > 50 else 0
 
@@ -51,7 +54,7 @@ def modciPV(red_social, R_max):
             continue
         
         utilidad = utilidad_base(opiniones_1[i], opiniones_2[i], rigidez[i])
-        esfuerzo_por_agente = math.ceil(abs(opiniones_1[i] - opiniones_2[i]) * rigidez[i])
+        esfuerzo_por_agente = max(1, math.ceil(abs(opiniones_1[i] - opiniones_2[i]) * rigidez[i]))
         utilidades.append((utilidad, i, esfuerzo_por_agente))
 
     # Ordenar por utilidad descendente
