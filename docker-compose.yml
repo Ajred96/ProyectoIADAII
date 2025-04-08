@@ -1,0 +1,17 @@
+services:
+  backend:
+    build: ./backend
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"
+    working_dir: /app/backend
+    command: python app.py
+
+  frontend:
+    build: ./frontend
+    volumes:
+      - .:/app
+    ports:
+      - "4200:4200"
+    working_dir: /app/frontend
