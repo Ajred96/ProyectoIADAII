@@ -4,6 +4,7 @@ from modciFB import modciFB
 from modciPD import modciPD
 from modciPV import modciPV
 from utils import calcular_conflicto
+import os
 import time
 
 app = Flask(__name__)
@@ -34,7 +35,21 @@ def procesar_archivo(archivo):
     except (ValueError, IndexError):
         return None, jsonify({"error": "Error en el formato del archivo"}), 400
 
-def ejecutar_metodo(metodo, red_social, r_max):
+def guardar_resultado(ci, esfuerzo, estrategia, filename, metodo):
+    """Guarda el resultado en un archivo con el formato requerido."""
+    nombre_base = os.path.splitext(filename)[0]
+    nombre_salida = f"{nombre_base}_{metodo}.txt"
+
+    with open(nombre_salida, 'w') as f:
+        f.write(f"{ci}\n")
+        f.write(f"{esfuerzo}\n")
+        for mod in estrategia:
+            f.write(f"{mod}\n")
+    
+    print(f"📁 Resultado guardado en: {nombre_salida}")
+    
+    
+def ejecutar_metodo(metodo, red_social, r_max, nombre_archivo):
     """Ejecuta el método seleccionado y devuelve el resultado."""
     try:
         tiempo_inicial = time.time()
@@ -47,6 +62,7 @@ def ejecutar_metodo(metodo, red_social, r_max):
         else:
             return jsonify({"error": "Método no válido"}), 400
         tiempo = round(time.time() - tiempo_inicial, 4)
+        guardar_resultado(ci, esfuerzo, estrategia, nombre_archivo, metodo)
         respuesta = {"CI": ci, "Esfuerzo": esfuerzo, "Estrategia": estrategia, "Tiempo": tiempo}
         print("📢 Respuesta enviada al frontend:", respuesta)  # Depuración
         return jsonify(respuesta)
@@ -64,8 +80,35 @@ def procesar_metodo(metodo):
         return error_respuesta, codigo
 
     red_social, r_max = datos
-    return ejecutar_metodo(metodo, red_social, r_max)
 
+    nombre_base = os.path.splitext(archivo.filename)[0]
+
+    try:
+        tiempo_inicial = time.time()
+        if metodo == 'fuerzaBruta':
+            ci, esfuerzo, estrategia = modciFB(red_social, r_max)
+        elif metodo == 'dinamico':
+            ci, esfuerzo, estrategia = modciPD(red_social, r_max)
+        elif metodo == 'voraz':
+            ci, esfuerzo, estrategia = modciPV(red_social, r_max)
+        else:
+            return jsonify({"error": "Método no válido"}), 400
+
+        tiempo = round(time.time() - tiempo_inicial, 4)
+        respuesta = {"CI": ci, "Esfuerzo": esfuerzo, "Estrategia": estrategia, "Tiempo": tiempo}
+
+        nombre_archivo = f"../BateriaPruebas_Proyecto1_2025-I/ResultadosPruebas/{nombre_base}_{metodo}.txt"
+        with open(nombre_archivo, 'w') as f:
+            f.write(f"{ci}\n")
+            f.write(f"{esfuerzo}\n")
+            for valor in estrategia:
+                f.write(f"{valor}\n")
+
+        print("📢 Respuesta enviada al frontend:", respuesta)
+        return jsonify(respuesta)
+    except Exception as e:
+        return jsonify({"error": f"Error al ejecutar el método: {str(e)}"}), 500
+    
 @app.route('/calcular_ci', methods=['POST'])
 def calcular_ci_inicial():
     """Recibe el archivo y calcula el conflicto interno."""
