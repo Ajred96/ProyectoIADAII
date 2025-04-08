@@ -3,6 +3,7 @@ from flask_cors import CORS
 from modciFB import modciFB
 from modciPD import modciPD
 from modciPV import modciPV
+from utils import calcular_conflicto
 import time
 
 app = Flask(__name__)
@@ -51,6 +52,8 @@ def ejecutar_metodo(metodo, red_social, r_max):
         return jsonify(respuesta)
     except Exception as e:
         return jsonify({"error": f"Error al ejecutar el método: {str(e)}"}), 500
+    
+
 
 @app.route('/procesar/<metodo>', methods=['POST'])
 def procesar_metodo(metodo):
@@ -62,6 +65,21 @@ def procesar_metodo(metodo):
 
     red_social, r_max = datos
     return ejecutar_metodo(metodo, red_social, r_max)
+
+@app.route('/calcular_ci', methods=['POST'])
+def calcular_ci_inicial():
+    """Recibe el archivo y calcula el conflicto interno."""
+    archivo = request.files.get('file')
+    datos, error_respuesta, codigo = procesar_archivo(archivo)
+    if error_respuesta:
+        return error_respuesta, codigo
+
+    red_social, _ = datos
+    estrategia_str = request.form.get('estrategia')  # 👈 aquí el cambio
+    estrategia = eval(estrategia_str) if estrategia_str else None  # o usa json.loads si es JSON puro
+
+    ci = calcular_conflicto(red_social, estrategia)
+    return jsonify({"CI": ci})
 
 if __name__ == '__main__':
     app.run(debug=True)
