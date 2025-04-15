@@ -66,747 +66,822 @@
 
 
 \begin{document}
-\onehalfspacing
+    \onehalfspacing
 
 %%%%%%% PORTADA %%%%%%% INICIO
-\begin{titlepage}
-\centering
-\includegraphics[width=0.15\textwidth]{resources/universidad-del-valle.png}\par\vspace{1cm}
-{\scshape\LARGE Universidad del Valle \par}
-{\scshape\Large Facultad de Ingeniería \par}
-{\scshape\Large Escuela de Ingeniería de Sistemas y Computación \par}
-\vspace{2cm}
+    \begin{titlepage}
+        \centering
+        \includegraphics[width=0.15\textwidth]{resources/universidad-del-valle.png}\par\vspace{1cm}
+        {\scshape\LARGE Universidad del Valle \par}
+        {\scshape\Large Facultad de Ingeniería \par}
+        {\scshape\Large Escuela de Ingeniería de Sistemas y Computación \par}
+        \vspace{2cm}
 
-{\Large \textbf{Moderando el Conflicto Interno de Opiniones en una Red Social}}\\
+        {\Large \textbf{Moderando el Conflicto Interno de Opiniones en una Red Social}}\\
 
-\vspace{2cm}
-    {\large \textbf{Anderson Johan Alban Angulo - 202310006}}\\
-    {\large \textbf{Andrés Felipe Asprilla Urrutia - 202224101 }}\\
-    {\large \textbf{Andrés Mauricio Ortiz Bermúdez - 202110330}}\\
-    {\large \textbf{Carlos Mauricio Tovar Parra - 201741699}}\\
-\vspace{2cm}
+        \vspace{2cm}
+        {\large \textbf{Anderson Johan Alban Angulo - 202310006}}\\
+        {\large \textbf{Andrés Felipe Asprilla Urrutia - 202224101 }}\\
+        {\large \textbf{Andrés Mauricio Ortiz Bermúdez - 202110330}}\\
+        {\large \textbf{Carlos Mauricio Tovar Parra - 201741699}}\\
+        \vspace{2cm}
 
-    \Large\textbf{Profesor}\par
-    {\large \textbf{Jesús Alexander Aranda Bueno Ph.D.}}\\
-\vspace{1.4cm}
-    \Large\textbf{Curso}\par
-    {\large \textbf{Análisis y Diseño de Algoritmos II (750020C)}}\\
-\vspace{1cm}
-{\large {19 de abril de 2025}\par}
-\end{titlepage}
+        \Large\textbf{Profesor}\par
+        {\large \textbf{Jesús Alexander Aranda Bueno Ph.D.}}\\
+        \vspace{1.4cm}
+        \Large\textbf{Curso}\par
+        {\large \textbf{Análisis y Diseño de Algoritmos II (750020C)}}\\
+        \vspace{1cm}
+        {\large {19 de abril de 2025}\par}
+    \end{titlepage}
 %%%%%%% PORTADA %%%%%%% FIN
 
 %%%%%%% INDICE %%%%%%% INICIO
-\tableofcontents
+    \tableofcontents
 %%%%%%% INDICE %%%%%%% FIN
-\newpage
+    \newpage
 
 %%%%%%% INTRODUCCIÓN %%%%%%% INICIO
-\section{Introducción}
 
-En este proyecto se aborda el problema de la moderación del conflicto interno de opiniones en una red social ficticia, denominada ModCI. Este fenómeno se presenta cuando un mismo individuo sostiene opiniones inconsistentes frente a dos afirmaciones relacionadas con un mismo tema, lo que refleja una falta de coherencia interna. Esta incoherencia puede ser indicativa de una comprensión superficial o confusa del tema, y su presencia generalizada en una red social puede afectar la calidad del debate y la estabilidad de las posturas colectivas.
 
-El objetivo principal del proyecto es diseñar e implementar soluciones algorítmicas que permitan reducir el conflicto interno de la red social, modificando las opiniones de algunos de sus agentes de manera estratégica, teniendo en cuenta el nivel de rigidez de cada uno y un presupuesto limitado de esfuerzo disponible. Para ello, se utilizaron y compararon tres enfoques clásicos del diseño de algoritmos: fuerza bruta, algoritmos voraces y programación dinámica.
+    \section{Introducción}
 
-Cada enfoque será aplicado al problema ModCI para identificar qué agentes deben ser priorizados en el proceso de ajuste de opinión, con el fin de maximizar la reducción del conflicto interno total en la red. Además de implementar los algoritmos, se realizará un análisis comparativo considerando la optimalidad de las soluciones y la eficiencia computacional de cada estrategia.
-
-Este proyecto busca que los estudiantes pongan en práctica las técnicas aprendidas para enfrentar problemas de naturaleza combinatoria, y que sean capaces de evaluar críticamente las ventajas y limitaciones de diferentes enfoques algorítmicos, tanto desde el punto de vista teórico como práctico.
+    En este proyecto se aborda el problema de la moderación del conflicto interno de opiniones en una red social ficticia, denominada ModCI. Este fenómeno se presenta cuando un mismo individuo sostiene opiniones inconsistentes frente a dos afirmaciones relacionadas con un mismo tema, lo que refleja una falta de coherencia interna. Esta incoherencia puede ser indicativa de una comprensión superficial o confusa del tema, y su presencia generalizada en una red social puede afectar la calidad del debate y la estabilidad de las posturas colectivas.
+    \par\vspace{0.5cm}
+    El objetivo principal del proyecto es diseñar e implementar soluciones algorítmicas que permitan reducir el conflicto interno de la red social, modificando las opiniones de algunos de sus agentes de manera estratégica, teniendo en cuenta el nivel de rigidez de cada uno y un presupuesto limitado de esfuerzo disponible. Para ello, se utilizaron y compararon tres enfoques clásicos del diseño de algoritmos: fuerza bruta, algoritmos voraces y programación dinámica.
+    \par\vspace{0.5cm}
+    Cada enfoque será aplicado al problema ModCI para identificar qué agentes deben ser priorizados en el proceso de ajuste de opinión, con el fin de maximizar la reducción del conflicto interno total en la red. Además de implementar los algoritmos, se realizará un análisis comparativo considerando la optimalidad de las soluciones y la eficiencia computacional de cada estrategia.
+    \par\vspace{0.5cm}
+    Este proyecto busca que los estudiantes pongan en práctica las técnicas aprendidas para enfrentar problemas de naturaleza combinatoria, y que sean capaces de evaluar críticamente las ventajas y limitaciones de diferentes enfoques algorítmicos, tanto desde el punto de vista teórico como práctico.
 %%%%%%% INTRODUCCIÓN %%%%%%% FIN
 
-\newpage
+    \newpage
 
 %%%%%%% FUNCIONES AUXILIARES %%%%%%% INICIO
-\section{Funciones auxiliares}
+
+
+    \section{Funciones auxiliares}
 
     Se implementaron varias funciones auxiliares que permiten calcular de manera modular el esfuerzo de moderación aplicado a una red social y el conflicto interno resultante. Estas funciones son esenciales para evaluar cualquier estrategia de solución (fuerza bruta, voraz o dinámica).
 
     \[
-\begin{aligned}
-\textbf{CI} &: \text{Conflicto Interno} \\
-\mathcal{RS} &: \text{Red Social} \\
-o_{i,1} &: \text{Primera opinión del grupo } i \\
-o_{i,2} &: \text{Segunda opinión del grupo } i \\
-r_i &: \text{Rigidez del grupo } i \\
-E &: \text{Estrategia de moderación}
-\end{aligned}
-\]
+        \begin{aligned}
+            \textbf{CI} &: \text{Conflicto Interno} \\
+            \mathcal{RS} &: \text{Red Social} \\
+            o_{i,1} &: \text{Primera opinión del grupo } i \\
+            o_{i,2} &: \text{Segunda opinión del grupo } i \\
+            r_i &: \text{Rigidez del grupo } i \\
+            E &: \text{Estrategia de moderación}
+        \end{aligned}
+    \]
 
 
     \subsection*{1. \texttt{calcular\_conflicto}}
-        Esta función estima el nivel de conflicto interno de una red social, considerando una posible estrategia de moderación. Si no se proporciona una estrategia, se asume que todos los agentes conservan sus opiniones originales. El cálculo sigue la definición de conflicto interno:
-        
-        \[
-        CI(\mathcal{RS}) = \frac{\sum_{i=0}^{n-1} \left(n_i^\mathcal{RS} \ast \left(o_{i,1}^\mathcal{RS} - o_{i,2}^\mathcal{RS}\right)^2\right)}{n}
-        \]
-        
-        donde $e_i$ es la cantidad de agentes moderados del grupo $i$. El conflicto se promedia respecto al número total de grupos
-        
-        \begin{itemize}
-          \item \textbf{Entrada:} \texttt{red\_social} (lista de tuplas), \texttt{estrategia} (lista opcional).
-          \item \textbf{Salida:} Valor del conflicto interno (real).
-        \end{itemize}
-    
-    \subsection*{2. \texttt{calcular\_esfuerzo}}
-        Calcula el esfuerzo total requerido para aplicar una estrategia de moderación sobre los grupos de la red. El esfuerzo se calcula como:
-        
-        \[
-Esfuerzo(\mathcal{RS}, E) = \sum_{i=0}^{n-1} \left[ \left| o^{\mathcal{RS}}_{i,1} - o^{\mathcal{RS}}_{i,2} \right| * r^{\mathcal{RS}}_i * e_i \right]
-\]
+    Esta función estima el nivel de conflicto interno de una red social, considerando una posible estrategia de moderación. Si no se proporciona una estrategia, se asume que todos los agentes conservan sus opiniones originales. El cálculo sigue la definición de conflicto interno:
 
-        
-        \begin{itemize}
-          \item \textbf{Entrada:} \texttt{red\_social}, \texttt{estrategia}.
-          \item \textbf{Salida:} Esfuerzo total requerido (entero).
-        \end{itemize}
-    
+    \[
+        CI(\mathcal{RS}) = \frac{\sum_{i=0}^{n-1} \left(n_i^\mathcal{RS} \ast \left(o_{i,1}^\mathcal{RS} - o_{i,2}^\mathcal{RS}\right)^2\right)}{n}
+    \]
+
+    donde $e_i$ es la cantidad de agentes moderados del grupo $i$. El conflicto se promedia respecto al número total de grupos
+
+    \begin{itemize}
+        \item \textbf{Entrada:} \texttt{red\_social} (lista de tuplas), \texttt{estrategia} (lista opcional).
+        \item \textbf{Salida:} Valor del conflicto interno (real).
+    \end{itemize}
+
+    \subsection*{2. \texttt{calcular\_esfuerzo}}
+    Calcula el esfuerzo total requerido para aplicar una estrategia de moderación sobre los grupos de la red. El esfuerzo se calcula como:
+
+    \[
+        Esfuerzo(\mathcal{RS}, E) = \sum_{i=0}^{n-1} \left[ \left| o^{\mathcal{RS}}_{i,1} - o^{\mathcal{RS}}_{i,2} \right| * r^{\mathcal{RS}}_i * e_i \right]
+    \]
+
+
+    \begin{itemize}
+        \item \textbf{Entrada:} \texttt{red\_social}, \texttt{estrategia}.
+        \item \textbf{Salida:} Esfuerzo total requerido (entero).
+    \end{itemize}
+
     \subsection*{3. \texttt{calcular\_ci\_esfuerzo}}
-        \label{sec:calcular_ci_esfuerzo}
-        Función compuesta que retorna simultáneamente el conflicto interno y el esfuerzo total asociado a una estrategia. Es usada como función de evaluación principal por los tres enfoques de solución.
-        
-        \begin{itemize}
-          \item \textbf{Entrada:} \texttt{red\_social}, \texttt{estrategia}.
-          \item \textbf{Salida:} Tupla \texttt{(conflicto, esfuerzo)}.
-        \end{itemize}
-    
-    \subsection*{4. \texttt{extraer\_datos\_red}} 
-        Facilita la manipulación de la red social al extraer sus atributos en listas separadas.
-        
-        \begin{itemize}
-          \item \textbf{Entrada:} \texttt{red\_social}.
-          \item \textbf{Salida:} Cuádrupla de listas: \texttt{(n, opiniones\_1, opiniones\_2, rigidez)}.
-        \end{itemize}
+    \label{sec:calcular_ci_esfuerzo}
+    Función compuesta que retorna simultáneamente el conflicto interno y el esfuerzo total asociado a una estrategia. Es usada como función de evaluación principal por los tres enfoques de solución.
+
+    \begin{itemize}
+        \item \textbf{Entrada:} \texttt{red\_social}, \texttt{estrategia}.
+        \item \textbf{Salida:} Tupla \texttt{(conflicto, esfuerzo)}.
+    \end{itemize}
+
+    \subsection*{4. \texttt{extraer\_datos\_red}}
+    Facilita la manipulación de la red social al extraer sus atributos en listas separadas.
+
+    \begin{itemize}
+        \item \textbf{Entrada:} \texttt{red\_social}.
+        \item \textbf{Salida:} Cuádrupla de listas: \texttt{(n, opiniones\_1, opiniones\_2, rigidez)}.
+    \end{itemize}
 
 %%%%%%% FUNCIONES AUXILIARES %%%%%%% FIN
-\newpage
+    \newpage
 %%%%%%% FUERZA BRUTA %%%%%%% INICIO
-\section{Algoritmo Fuerza Bruta}
-\subsection{Descripción}
-El enfoque de fuerza bruta para resolver el problema ModCI consiste en examinar exhaustivamente todas las posibles formas en que puede distribuirse el esfuerzo disponible entre los grupos de agentes de una red social, con el fin de minimizar su conflicto interno. Este enfoque parte de la premisa de considerar cada combinación factible de cambios en las opiniones de los agentes, evaluando en cada caso el nivel de conflicto resultante. De todas las estrategias que respetan el límite de esfuerzo permitido, se elige aquella que produce el menor conflicto interno. Al contemplar el espacio completo de soluciones, este método asegura encontrar la solución óptima. No obstante, su principal desventaja radica en el elevado costo computacional que implica, lo que restringe su uso práctico a redes de tamaño reducido.
 
-\subsection{Implementación}
-La implementación del algoritmo de fuerza bruta se realizó empleando una representación estructurada de la red social como una lista de tuplas. Cada tupla modela un grupo de agentes e incluye cuatro elementos: la cantidad de individuos en el grupo, sus opiniones frente a dos afirmaciones específicas, y su nivel de rigidez al cambio de opinión.
 
-El proceso se estructura en dos fases principales:
+    \section{Algoritmo Fuerza Bruta}
 
-\begin{enumerate}
-    \item \textbf{Generación Exhaustiva de Estrategias:} Se construye el conjunto completo de combinaciones posibles de moderación sobre los grupos de agentes. Para cada grupo, se consideran todos los valores enteros desde 0 hasta el número total de agentes del grupo, lo cual representa cuántos de sus miembros podrían modificar su opinión. Al combinar estas posibilidades para todos los grupos, se genera el espacio total de estrategias viables.S
-    \item \textbf{Evaluación y Selección de la Mejor Estrategia:} Cada combinación es evaluada mediante la función auxiliar \nameref{sec:calcular_ci_esfuerzo}, la cual calcula tanto el conflicto interno como el esfuerzo requerido para esa estrategia. Si el esfuerzo total no supera el máximo permitido $\mathtt{R_{\text{max}}}$ y el conflicto interno es menor al mejor encontrado hasta el momento, se actualiza la mejor solución.
-\end{enumerate}
+    \subsection{Descripción}
+    El enfoque de fuerza bruta para resolver el problema ModCI consiste en examinar exhaustivamente todas las posibles formas en que puede distribuirse el esfuerzo disponible entre los grupos de agentes de una red social, con el fin de minimizar su conflicto interno. Este enfoque parte de la premisa de considerar cada combinación factible de cambios en las opiniones de los agentes, evaluando en cada caso el nivel de conflicto resultante. De todas las estrategias que respetan el límite de esfuerzo permitido, se elige aquella que produce el menor conflicto interno. Al contemplar el espacio completo de soluciones, este método asegura encontrar la solución óptima. No obstante, su principal desventaja radica en el elevado costo computacional que implica, lo que restringe su uso práctico a redes de tamaño reducido.
 
-El resultado final es una tupla que contiene: el conflicto interno mínimo alcanzado, el esfuerzo total utilizado y la estrategia óptima de asignación de esfuerzos.
+    \subsection{Implementación}
+    La implementación del algoritmo de fuerza bruta se realizó empleando una representación estructurada de la red social como una lista de tuplas. Cada tupla modela un grupo de agentes e incluye cuatro elementos: la cantidad de individuos en el grupo, sus opiniones frente a dos afirmaciones específicas, y su nivel de rigidez al cambio de opinión.
 
-\subsection{Pseudocódigo}
-\begin{algorithm}[H]
-\caption{modciFB: Estrategia óptima por fuerza bruta}
-\KwIn{Una red social $RS$ como lista de tuplas $(n_i, op1_i, op2_i, rigidez_i)$ para cada grupo $i$, y un esfuerzo máximo permitido $R_{max}$}
-\KwOut{Tupla $(CI_{\min}, Esfuerzo_{\text{total}}, Estrategia_{\text{óptima}})$}
+    El proceso se estructura en dos fases principales:
 
-$mejorCI \leftarrow \infty$ \tcp*[r]{Inicializa el conflicto mínimo como infinito}
-$mejorEsfuerzo \leftarrow 0$ \tcp*[r]{Inicializa el esfuerzo asociado}
-$mejorEstrategia \leftarrow []$ \tcp*[r]{Inicializa la mejor estrategia vacía}
+    \begin{enumerate}
+        \item \textbf{Generación Exhaustiva de Estrategias:} Se construye el conjunto completo de combinaciones posibles de moderación sobre los grupos de agentes. Para cada grupo, se consideran todos los valores enteros desde 0 hasta el número total de agentes del grupo, lo cual representa cuántos de sus miembros podrían modificar su opinión. Al combinar estas posibilidades para todos los grupos, se genera el espacio total de estrategias viables.S
+        \item \textbf{Evaluación y Selección de la Mejor Estrategia:} Cada combinación es evaluada mediante la función auxiliar \nameref{sec:calcular_ci_esfuerzo}, la cual calcula tanto el conflicto interno como el esfuerzo requerido para esa estrategia. Si el esfuerzo total no supera el máximo permitido $\mathtt{R_{\text{max}}}$ y el conflicto interno es menor al mejor encontrado hasta el momento, se actualiza la mejor solución.
+    \end{enumerate}
 
-$estrategias \leftarrow [[]]$ \tcp*[r]{Lista inicial con una estrategia vacía}
+    El resultado final es una tupla que contiene: el conflicto interno mínimo alcanzado, el esfuerzo total utilizado y la estrategia óptima de asignación de esfuerzos.
 
-\ForEach{grupo $g_i$ en $RS$}{
-    $nuevasEstrategias \leftarrow []$ \\
-    \ForEach{estrategia en estrategias}{
-        \For{$e \leftarrow 0$ \KwTo $n_i$}{
-            $nuevasEstrategias.\text{append}(estrategia + [e])$
+    \subsection{Pseudocódigo}
+    \begin{algorithm}[H]
+        \caption{modciFB: Estrategia óptima por fuerza bruta}
+        \KwIn{Una red social $RS$ como lista de tuplas $(n_i, op1_i, op2_i, rigidez_i)$ para cada grupo $i$, y un esfuerzo máximo permitido $R_{max}$}
+        \KwOut{Tupla $(CI_{\min}, Esfuerzo_{\text{total}}, Estrategia_{\text{óptima}})$}
+
+        $mejorCI \leftarrow \infty$ \tcp*[r]{Inicializa el conflicto mínimo como infinito}
+        $mejorEsfuerzo \leftarrow 0$ \tcp*[r]{Inicializa el esfuerzo asociado}
+        $mejorEstrategia \leftarrow []$ \tcp*[r]{Inicializa la mejor estrategia vacía}
+
+        $estrategias \leftarrow [[]]$ \tcp*[r]{Lista inicial con una estrategia vacía}
+
+        \ForEach{grupo $g_i$ en $RS$}{
+            $nuevasEstrategias \leftarrow []$ \\
+            \ForEach{estrategia en estrategias}{
+                \For{$e \leftarrow 0$ \KwTo $n_i$}{
+                    $nuevasEstrategias.\text{append}(estrategia + [e])$
+                }
+            }
+            $estrategias \leftarrow nuevasEstrategias$ \tcp*[r]{Actualizar todas las combinaciones}
         }
+
+        \ForEach{estrategia $E$ en estrategias}{
+            $(CI, esfuerzo) \leftarrow calcular\_ci\_esfuerzo(RS, E)$ \\
+            \If{$esfuerzo \leq R_{max}$ \textbf{and} $CI < mejorCI$}{
+                $mejorCI \leftarrow CI$ \\
+                $mejorEsfuerzo \leftarrow esfuerzo$ \\
+                $mejorEstrategia \leftarrow E$
+            }
+        }
+
+        \Return $(mejorCI, mejorEsfuerzo, mejorEstrategia)$
+    \end{algorithm}
+
+
+    \definecolor{lightgray}{rgb}{0.9,0.9,0.9}
+    \lstset{
+        language=Python,
+        backgroundcolor=\color{lightgray},
+        frame=single,
+        rulecolor=\color{black}
     }
-    $estrategias \leftarrow nuevasEstrategias$ \tcp*[r]{Actualizar todas las combinaciones}
-}
 
-\ForEach{estrategia $E$ en estrategias}{
-    $(CI, esfuerzo) \leftarrow calcular\_ci\_esfuerzo(RS, E)$ \\
-    \If{$esfuerzo \leq R_{max}$ \textbf{and} $CI < mejorCI$}{
-        $mejorCI \leftarrow CI$ \\
-        $mejorEsfuerzo \leftarrow esfuerzo$ \\
-        $mejorEstrategia \leftarrow E$
-    }
-}
+    \subsection{Complejidad}
 
-\Return $(mejorCI, mejorEsfuerzo, mejorEstrategia)$
-\end{algorithm}
+    \subsubsection{Complejidad Temporal}
 
+    El algoritmo de fuerza bruta tiene una complejidad temporal exponencial, debido a que genera y evalúa todas las posibles combinaciones de esfuerzos para los grupos de la red. Si hay $n$ grupos y cada grupo tiene $k_i$ personas, entonces el número total de combinaciones posibles es:
 
-\definecolor{lightgray}{rgb}{0.9,0.9,0.9}
-\lstset{
-    language=Python,
-    backgroundcolor=\color{lightgray},
-    frame=single,
-    rulecolor=\color{black}
-}
+    \[
+        O\left(\prod_{i=1}^{n}(k_i + 1)\right)
+    \]
 
-\subsection{Complejidad}
-\subsubsection{Complejidad Temporal}
+    En el peor de los casos, si todos los grupos tienen un tamaño máximo de $k$, la complejidad se puede expresar como:
 
-El algoritmo de fuerza bruta tiene una complejidad temporal exponencial, debido a que genera y evalúa todas las posibles combinaciones de esfuerzos para los grupos de la red. Si hay $n$ grupos y cada grupo tiene $k_i$ personas, entonces el número total de combinaciones posibles es:
+    \[
+        O\left((k + 1)^n\right)
+    \]
 
-\[
-O\left(\prod_{i=1}^{n}(k_i + 1)\right)
-\]
+    Además, para cada combinación se evalúa el conflicto interno y el esfuerzo total, lo que implica un recorrido lineal sobre los $n$ grupos. Por lo tanto, la complejidad final del algoritmo es:
 
-En el peor de los casos, si todos los grupos tienen un tamaño máximo de $k$, la complejidad se puede expresar como:
+    \[
+        O\left(n (k + 1)^n\right)
+    \]
 
-\[
-O\left((k + 1)^n\right)
-\]
+    Esto lo convierte en un algoritmo extremadamente costoso computacionalmente, ya que el tiempo de ejecución crece exponencialmente con el número de grupos y el tamaño de cada uno. Aunque garantiza una solución óptima, este enfoque no es adecuado para instancias grandes del problema.
 
-Además, para cada combinación se evalúa el conflicto interno y el esfuerzo total, lo que implica un recorrido lineal sobre los $n$ grupos. Por lo tanto, la complejidad final del algoritmo es:
+    En términos prácticos, esta complejidad significa que incluso para valores moderados de $n$ y $k$, el número total de combinaciones puede volverse inmanejable. Por ejemplo, si se tienen apenas 10 grupos de tamaño 10, el algoritmo tendría que evaluar $(10 + 1)^{10} = 25937424601$ combinaciones posibles.
 
-\[
-O\left(n (k + 1)^n\right)
-\]
+    \subsubsection{Complejidad Espacial}
 
-Esto lo convierte en un algoritmo extremadamente costoso computacionalmente, ya que el tiempo de ejecución crece exponencialmente con el número de grupos y el tamaño de cada uno. Aunque garantiza una solución óptima, este enfoque no es adecuado para instancias grandes del problema.
+    La complejidad espacial también es considerable. El algoritmo almacena en memoria todas las combinaciones posibles de esfuerzos antes de evaluarlas. Por tanto, en el peor de los casos, el número de combinaciones almacenadas es:
 
-En términos prácticos, esta complejidad significa que incluso para valores moderados de $n$ y $k$, el número total de combinaciones puede volverse inmanejable. Por ejemplo, si se tienen apenas 10 grupos de tamaño 10, el algoritmo tendría que evaluar $(10 + 1)^{10} = 25937424601$ combinaciones posibles.
+    \[
+            {O}\left((k+1)^n\right)
+    \]
 
-\subsubsection{Complejidad Espacial}
+    donde $n$ es la cantidad de grupos y $k$ el número máximo de agentes por grupo. Esto se debe a que se construye la lista completa de estrategias (vectores de tamaño $n$), en la cual cada componente puede tomar un valor entre $0$ y $k$.
 
-La complejidad espacial también es considerable. El algoritmo almacena en memoria todas las combinaciones posibles de esfuerzos antes de evaluarlas. Por tanto, en el peor de los casos, el número de combinaciones almacenadas es:
+    Este costo espacial es resultado del uso de listas auxiliares que mantienen todas las estrategias posibles en memoria antes de su evaluación, lo que puede saturar rápidamente la memoria en problemas con muchos grupos o agentes.
 
-\[
-{O}\left((k+1)^n\right)
-\]
+    \subsection{Corrección}
 
-donde $n$ es la cantidad de grupos y $k$ el número máximo de agentes por grupo. Esto se debe a que se construye la lista completa de estrategias (vectores de tamaño $n$), en la cual cada componente puede tomar un valor entre $0$ y $k$.
+    El algoritmo de fuerza bruta desarrollado para el problema ModCI garantiza la
+    obtención de la solución óptima, ya que evalúa exhaustivamente todas las
+    combinaciones posibles de distribución de esfuerzos entre los grupos de la red
+    social. Para cada combinación generada, calcula el nivel de conflicto interno
+    resultante y verifica que el esfuerzo total no supere el límite máximo permitido.
+    Posteriormente, selecciona la estrategia que logra minimizar el conflicto interno
+    dentro de las restricciones establecidas.
 
-Este costo espacial es resultado del uso de listas auxiliares que mantienen todas las estrategias posibles en memoria antes de su evaluación, lo que puede saturar rápidamente la memoria en problemas con muchos grupos o agentes.
+    Sin embargo, aunque el algoritmo es correcto desde el punto de vista funcional, su
+    ejecución implica una búsqueda exhaustiva de soluciones que conlleva una
+    complejidad exponencial. A medida que aumenta el número de grupos o el tamaño
+    de estos, el número de combinaciones crece de forma drástica, lo cual impacta
+    negativamente en el rendimiento. Esto limita su aplicabilidad a redes de pequeño
+    tamaño, donde aún es viable computacionalmente.
+    Por lo tanto, si bien este enfoque asegura una solución óptima y es útil como
+    referencia o para validar la calidad de soluciones aproximadas, no es práctico para
+    redes sociales grandes, y por ello es necesario acudir a técnicas más eficientes
+    como los algoritmos voraces o la programación dinámica para abordar instancias
+    más complejas del problema.
 
-\subsection{Corrección}
+    \subsection{Análisis}
 
-El algoritmo de fuerza bruta desarrollado para el problema ModCI garantiza la 
-obtención de la solución óptima, ya que evalúa exhaustivamente todas las 
-combinaciones posibles de distribución de esfuerzos entre los grupos de la red 
-social. Para cada combinación generada, calcula el nivel de conflicto interno 
-resultante y verifica que el esfuerzo total no supere el límite máximo permitido. 
-Posteriormente, selecciona la estrategia que logra minimizar el conflicto interno 
-dentro de las restricciones establecidas. 
+    A continuación se presenta un análisis concreto que permite ilustrar el funcionamiento paso a paso del algoritmo de fuerza bruta
 
-Sin embargo, aunque el algoritmo es correcto desde el punto de vista funcional, su 
-ejecución implica una búsqueda exhaustiva de soluciones que conlleva una 
-complejidad exponencial. A medida que aumenta el número de grupos o el tamaño 
-de estos, el número de combinaciones crece de forma drástica, lo cual impacta 
-negativamente en el rendimiento. Esto limita su aplicabilidad a redes de pequeño 
-tamaño, donde aún es viable computacionalmente. 
-Por lo tanto, si bien este enfoque asegura una solución óptima y es útil como 
-referencia o para validar la calidad de soluciones aproximadas, no es práctico para 
-redes sociales grandes, y por ello es necesario acudir a técnicas más eficientes 
-como los algoritmos voraces o la programación dinámica para abordar instancias 
-más complejas del problema.
+    \textbf{Datos de entrada:}
 
-\subsection{Análisis}
-
-A continuación se presenta un análisis concreto que permite ilustrar el funcionamiento paso a paso del algoritmo de fuerza bruta
-
-\textbf{Datos de entrada:}
-
-\begin{table}[ht]
-\centering
-\begin{tabular}{cccccc}
-\toprule
-\textbf{Grupo} & \textbf{Agentes} & \textbf{Opinión 1} & \textbf{Opinión 2} & \textbf{Rigidez} \\
-\midrule
-1 & 1 & -4 & 2 & 0.1 \\
-2 & 4 & 1 & -1 & 0.2 \\
-3 & 3 & 3 & 0 & 0.5 \\
-\bottomrule
-$R_{\text{max}} = 5$
-\end{tabular}
-\caption{Datos entrada: análisis fuerza bruta}
-\end{table}
+    \begin{table}[ht]
+        \centering
+        \begin{tabular}{cccccc}
+            \toprule
+            \textbf{Grupo} & \textbf{Agentes} & \textbf{Opinión 1} & \textbf{Opinión 2} & \textbf{Rigidez} \\
+            \midrule
+            1              & 1                & -4                 & 2                  & 0.1              \\
+            2              & 4                & 1                  & -1                 & 0.2              \\
+            3              & 3                & 3                  & 0                  & 0.5              \\
+            \bottomrule
+            $R_{\text{max}} = 5$
+        \end{tabular}
+        \caption{Datos entrada: análisis fuerza bruta}
+    \end{table}
 
 
-\subsubsection*{Análisis del proceso}
-El paso a paso para generar la solución en el algoritmo de fuerza bruta es el siguiente:
-\begin{enumerate}
-    \item \textbf{Generación de combinaciones posibles}: Se generan todas las combinaciones de esfuerzos posibles para los grupos, respetando el rango desde 0 hasta el número de agentes por grupo.
-    
-    En este caso:
-    \begin{itemize}
-        \item Grupo 1: $0$ a $1$ (2 opciones)
-        \item Grupo 2: $0$ a $4$ (5 opciones)
-        \item Grupo 3: $0$ a $1$ (2 opciones)
-    \end{itemize}
+    \subsubsection*{Análisis del proceso}
+    El paso a paso para generar la solución en el algoritmo de fuerza bruta es el siguiente:
+    \begin{enumerate}
+        \item \textbf{Generación de combinaciones posibles}: Se generan todas las combinaciones de esfuerzos posibles para los grupos, respetando el rango desde 0 hasta el número de agentes por grupo.
 
-    Total de combinaciones: $2 \times 5 \times 2 = 20$
+        En este caso:
+        \begin{itemize}
+            \item Grupo 1: $0$ a $1$ (2 opciones)
+            \item Grupo 2: $0$ a $4$ (5 opciones)
+            \item Grupo 3: $0$ a $1$ (2 opciones)
+        \end{itemize}
 
-    \item \textbf{Cálculo del conflicto interno (CI)}: Se calcula el conflicto interno para cada combinación válida, considerando cuántos agentes permanecen sin moderar. Usando la función \nameref{sec:calcular_ci_esfuerzo}.
-    \item \textbf{Cálculo del esfuerzo total por combinación}: Se calcula el esfuerzo total requerido usando la misma función auxiliar.
-    
-    \item \textbf{Filtrado por esfuerzo máximo permitido ($R_{\text{max}}$)}: Se descartan combinaciones cuyo esfuerzo supere el valor de $R_{\text{max}} = 5$.
+        Total de combinaciones: $2 \times 5 \times 2 = 20$
 
-    \item \textbf{Selección de la mejor estrategia}: De las combinaciones válidas, se selecciona la que genere el menor conflicto interno.
-\end{enumerate}
+        \item \textbf{Cálculo del conflicto interno (CI)}: Se calcula el conflicto interno para cada combinación válida, considerando cuántos agentes permanecen sin moderar. Usando la función \nameref{sec:calcular_ci_esfuerzo}.
+        \item \textbf{Cálculo del esfuerzo total por combinación}: Se calcula el esfuerzo total requerido usando la misma función auxiliar.
 
-\textbf{Combinaciones posibles (20 en total):}
+        \item \textbf{Filtrado por esfuerzo máximo permitido ($R_{\text{max}}$)}: Se descartan combinaciones cuyo esfuerzo supere el valor de $R_{\text{max}} = 5$.
 
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\begin{table}[H]
-\centering
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{cccc}
-\toprule
-\textbf{Combinación (G1 - G2 - G3)} & \textbf{Esfuerzo Total} & \textbf{Conflicto Interno} & \textbf{Válida} \\
-\midrule
-0 - 0 - 0 & 0 & 29.3333 & \ding{51} \\
-\rowcolor{gray!10} 0 - 0 - 1 & 1 & 21.3333 & \ding{51} \\
-0 - 0 - 2 & 2 & 25.3333 & \ding{51} \\
-0 - 1 - 0 & 1 & 27.3333 & \ding{51} \\
-0 - 1 - 1 & 2 & 17.3333 & \ding{51} \\
-\rowcolor{gray!10} 0 - 2 - 0 & 2 & 21.3333 & \ding{51} \\
-0 - 2 - 1 & 3 & 13.3333 & \ding{51} \\
-0 - 3 - 0 & 3 & 17.3333 & \ding{51} \\
-0 - 3 - 1 & 4 & 9.3333 & \ding{55} \\
-0 - 4 - 0 & 4 & 13.3333 & \ding{55} \\
-0 - 4 - 1 & 5 & 5.3333 & \ding{55} \\
-1 - 0 - 0 & 1 & 25.3333 & \ding{51} \\
-\rowcolor{gray!10}\textbf{1 - 0 - 1} & \textbf{6} & \textbf{21.3333} & \ding{72} \\
-\rowcolor{gray!10} 1 - 1 - 0 & 2 & 21.3333 & \ding{51} \\
-1 - 1 - 1 & 3 & 13.3333 & \ding{55} \\
-1 - 2 - 0 & 3 & 17.3333 & \ding{51} \\
-1 - 2 - 1 & 4 & 9.3333 & \ding{55} \\
-1 - 3 - 0 & 4 & 13.3333 & \ding{55} \\
-1 - 3 - 1 & 5 & 5.3333 & \ding{55} \\
-1 - 4 - 0 & 5 & 9.3333 & \ding{55} \\
-1 - 4 - 1 & 6 & 1.3333 & \ding{55} \\
-\bottomrule
-\end{tabular}
-\caption{Combinaciones posibles fuerza bruta}
-\end{table}
-\end{center}
+        \item \textbf{Selección de la mejor estrategia}: De las combinaciones válidas, se selecciona la que genere el menor conflicto interno.
+    \end{enumerate}
 
+    \textbf{Combinaciones posibles (20 en total):}
 
+    \begin{center}
+        \renewcommand{\arraystretch}{1.2}
+        \begin{table}[H]
+            \centering
+            \renewcommand{\arraystretch}{1.2}
+            \begin{tabular}{cccc}
+                \toprule
+                \textbf{Combinación (G1 - G2 - G3)}  & \textbf{Esfuerzo Total} & \textbf{Conflicto Interno} & \textbf{Válida} \\
+                \midrule
+                0 - 0 - 0                            & 0                       & 45.3333                    & \ding{51}       \\
+                0 - 0 - 1                            & 3                       & 33.3333                    & \ding{51}       \\
+                0 - 1 - 0                            & 2                       & 40.0000                    & \ding{51}       \\
+                0 - 1 - 1                            & 5                       & 28.0000                    & \ding{51}       \\
+                0 - 2 - 0                            & 4                       & 34.6667                    & \ding{51}       \\
+                0 - 2 - 0                            & 7                       & 22.6667                    & \ding{55}       \\
+                0 - 3 - 0                            & 5                       & 29.3333                    & \ding{51}       \\
+                0 - 3 - 1                            & 8                       & 17.3333                    & \ding{55}       \\
+                0 - 4 - 0                            & 7                       & 24.0000                    & \ding{55}       \\
+                0 - 4 - 1                            & 10                      & 12.0000                    & \ding{55}       \\
+                1 - 0 - 0                            & 1                       & 33.3333                    & \ding{51}       \\
+                \rowcolor{gray!10}\textbf{1 - 0 - 1} & \textbf{4}              & \textbf{21.3333}           & \ding{72}       \\
+                1 - 1 - 0                            & 3                       & 28.0000                    & \ding{51}       \\
+                1 - 1 - 1                            & 6                       & 16.0000                    & \ding{55}       \\
+                1 - 2 - 0                            & 5                       & 22.6667                    & \ding{51}       \\
+                1 - 2 - 1                            & 8                       & 10.6667                    & \ding{55}       \\
+                1 - 3 - 0                            & 6                       & 17.3333                    & \ding{55}       \\
+                1 - 3 - 1                            & 9                       & 5.3333                     & \ding{55}       \\
+                1 - 4 - 0                            & 8                       & 12.0000                    & \ding{55}       \\
+                1 - 4 - 1                            & 11                      & 0.0000                     & \ding{55}       \\
+                \bottomrule
+            \end{tabular}
+            \caption{Combinaciones posibles fuerza bruta}
+        \end{table}
+    \end{center}
+    \newpage
+    \subsection*{Resultados Finales del Algoritmo}
 
-\textbf{¿Por qué el algoritmo eligió la de mayor esfuerzo si el conflicto era igual?}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|l|c|}
+            \hline
+            \rowcolor[HTML]{EFEFEF}
+            \textbf{Métrica}    & \textbf{Valor}  \\
+            \hline
+            Estrategia óptima   & {[}1, 0, 1{]}   \\
+            \hline
+            Conflicto interno   & 21.3333         \\
+            \hline
+            Esfuerzo total      & 4               \\
+            \hline
+            Tiempo de ejecución & 0.0039 segundos \\
+            \hline
+        \end{tabular}
+        \caption{Resultados obtenidos: análisis fuerza bruta.}
+    \end{table}
 
-\textbf{Inferencia:} El algoritmo busca la \textit{primera combinación} con el menor conflicto.
+    Este ejemplo ilustra cómo el algoritmo de fuerza bruta explora exhaustivamente todas las posibles combinaciones de esfuerzos para encontrar la que minimice el conflicto interno. Aunque este enfoque garantiza encontrar la solución óptima, tiene una complejidad exponencial, ya que el número de combinaciones crece rápidamente con cada grupo o incremento de agentes.
 
-\begin{itemize}
-    \item \textbf{Paso 1:} Recorre las combinaciones en orden (como las va generando).
-    \item \textbf{Paso 2:} Guarda la primera que cumpla con:
-    \begin{itemize}
-        \item Esfuerzo $\leq R_{\text{max}}$
-        \item Menor conflicto interno encontrado hasta el momento.
-    \end{itemize}
-\end{itemize}
+    En esta prueba con solo 3 grupos y 20 combinaciones, el tiempo de ejecución fue casi instantáneo, lo que demuestra que para problemas pequeños es muy efectivo. Sin embargo, en problemas reales con muchos grupos o agentes, este enfoque se vuelve inviable por el alto costo computacional, siendo recomendable en esos casos el uso de algoritmos voraces o programación dinámica.
 
-\vspace{0.5em}
+    \subsection{Impacto en el Rendimiento}
+    \label{sec:limitaciones_fuerza_bruta}
 
-\textbf{Resolución:}
-\begin{itemize}
-    \item Encuentra \texttt{1 - 0 - 1} con conflicto $21.33 \rightarrow$ lo guarda. \ding{72}
-    \item Luego llega a \texttt{1 - 1 - 0} con mismo conflicto, pero como no mejora el conflicto, no actualiza aunque tenga menor esfuerzo.
-\end{itemize}
+    A pesar de su simplicidad, el enfoque de fuerza bruta presenta importantes limitaciones prácticas. Una de las más críticas es el impacto que tiene sobre el rendimiento a medida que crece el tamaño de la red social o el número de agentes por grupo.
 
+    Supongamos que la red social está compuesta por \( n \) grupos, y que cada grupo \( i \) tiene \( a_i \) agentes. Como las estrategias posibles para cada grupo van desde moderar 0 hasta \( a_i \) agentes, entonces el número de combinaciones de estrategias posibles es:
 
-\subsection*{Resultados Finales del Algoritmo}
+    \[
+        \prod_{i=1}^{n} (a_i + 1)
+    \]
 
-\begin{table}[H]
-\centering
-\begin{tabular}{|l|c|}
-\hline
-\rowcolor[HTML]{EFEFEF}
-\textbf{Métrica} & \textbf{Valor} \\
-\hline
-Estrategia óptima & {[}1, 0, 1{]} \\
-\hline
-Conflicto interno & 213.333 \\
-\hline
-Esfuerzo total & 4 \\
-\hline
-Tiempo de ejecución & 0.0001 segundos \\
-\hline
-\end{tabular}
-\caption{Resultados obtenidos: análisis fuerza bruta.}
-\end{table}
+    Este crecimiento es exponencial en el número de grupos, y además está influenciado por el tamaño de cada grupo. Incluso si cada grupo tuviera pocos agentes, al multiplicar las posibilidades de todos los grupos, el total de combinaciones puede escalar rápidamente.
 
-Este ejemplo ilustra cómo el algoritmo de fuerza bruta explora exhaustivamente todas las posibles combinaciones de esfuerzos para encontrar la que minimice el conflicto interno. Aunque este enfoque garantiza encontrar la solución óptima, tiene una complejidad exponencial, ya que el número de combinaciones crece rápidamente con cada grupo o incremento de agentes.
+    Por ejemplo, para un conjunto de grupos con tamaños heterogéneos, como:
 
-En esta prueba con solo 3 grupos y 20 combinaciones, el tiempo de ejecución fue casi instantáneo, lo que demuestra que para problemas pequeños es muy efectivo. Sin embargo, en problemas reales con muchos grupos o agentes, este enfoque se vuelve inviable por el alto costo computacional, siendo recomendable en esos casos el uso de algoritmos voraces o programación dinámica.
+    \[
+        \left\{ a_1, a_2, \ldots, a_n \right\}
+    \]
 
-\subsection{Impacto en el Rendimiento}
-\label{sec:limitaciones_fuerza_bruta}
+    ...el total de estrategias a evaluar será:
 
-A pesar de su simplicidad, el enfoque de fuerza bruta presenta importantes limitaciones prácticas. Una de las más críticas es el impacto que tiene sobre el rendimiento a medida que crece el tamaño de la red social o el número de agentes por grupo.
+    \[
+        (a_1 + 1) \cdot (a_2 + 1) \cdot \ldots \cdot (a_n + 1)
+    \]
+    Cada una de estas combinaciones debe ser evaluada para calcular su conflicto interno y su esfuerzo total, lo que implica un costo computacional adicional por iteración.
+    \vspace{1em}
+    \noindent
+    \begin{tcolorbox}[colback=red!5!white, colframe=red!50!black, title=Advertencia sobre rendimiento]
+        Aunque el algoritmo garantiza encontrar la solución óptima, el tiempo de ejecución crece de forma multiplicativa con la cantidad de grupos y el tamaño de cada uno, lo que puede llevar a tiempos de ejecución inaceptables en redes sociales grandes.
 
-Supongamos que la red social está compuesta por \( n \) grupos, y que cada grupo \( i \) tiene \( a_i \) agentes. Como las estrategias posibles para cada grupo van desde moderar 0 hasta \( a_i \) agentes, entonces el número de combinaciones de estrategias posibles es:
-
-\[
-\prod_{i=1}^{n} (a_i + 1)
-\]
-
-Este crecimiento es exponencial en el número de grupos, y además está influenciado por el tamaño de cada grupo. Incluso si cada grupo tuviera pocos agentes, al multiplicar las posibilidades de todos los grupos, el total de combinaciones puede escalar rápidamente.
-
-Por ejemplo, para un conjunto de grupos con tamaños heterogéneos, como:
-
-\[
-\left\{ a_1, a_2, \ldots, a_n \right\}
-\]
-
-...el total de estrategias a evaluar será:
-
-\[
-(a_1 + 1) \cdot (a_2 + 1) \cdot \ldots \cdot (a_n + 1)
-\]
-Cada una de estas combinaciones debe ser evaluada para calcular su conflicto interno y su esfuerzo total, lo que implica un costo computacional adicional por iteración.
-\vspace{1em}
-\noindent
-\begin{tcolorbox}[colback=red!5!white, colframe=red!50!black, title=Advertencia sobre rendimiento]
- Aunque el algoritmo garantiza encontrar la solución óptima, el tiempo de ejecución crece de forma multiplicativa con la cantidad de grupos y el tamaño de cada uno, lo que puede llevar a tiempos de ejecución inaceptables en redes sociales grandes.
-
-En estos casos, se vuelve recomendable recurrir a algoritmos de programación dinámica, que también garantiza la solución óptima en menor tiempo o voraces que sacrifican algo de precisión a cambio de un rendimiento mucho más eficiente.
-\end{tcolorbox}
-
+        En estos casos, se vuelve recomendable recurrir a algoritmos de programación dinámica, que también garantiza la solución óptima en menor tiempo o voraces que sacrifican algo de precisión a cambio de un rendimiento mucho más eficiente.
+    \end{tcolorbox}
 
 
 %%%%%%% FUERZA BRUTA %%%%%%% FIN
-\newpage
+    \newpage
 
 %%%%%%% ALGORITMO DINÁMICO %%%%%%% INICIO
-\section{Algoritmo Dinámico}
-\subsection{Descripción}
 
-El algoritmo de programación dinámica aplicado en este proyecto busca minimizar el conflicto interno dentro de una red social, bajo la restricción de un presupuesto limitado de esfuerzo (denotado como $R_{\text{max}}$). Este conflicto surge de las diferencias de opinión entre los agentes de distintos grupos, y puede ser mitigado parcialmente moderando a algunos de estos agentes, a costa de cierto esfuerzo.
 
-A diferencia de enfoques exhaustivos como la fuerza bruta, que evalúan todas las combinaciones posibles de moderación, este algoritmo divide el problema en subproblemas más pequeños y los resuelve de manera progresiva y óptima, reutilizando resultados previamente calculados para construir la solución global.
+    \section{Algoritmo Dinámico}
 
-El proceso se fundamenta en el principio de \textit{optimalidad de Bellman}, que asegura que una solución óptima para el problema completo puede ser construida a partir de soluciones óptimas de sus subproblemas.
+    \subsection{Descripción}
 
-A cada paso, el algoritmo evalúa todas las opciones posibles de moderación para un grupo específico —desde no moderar a ningún agente hasta moderar a todos— y calcula el conflicto y esfuerzo que implicaría esa decisión. Luego, actualiza de forma eficiente una estructura de datos que almacena, para cada cantidad de esfuerzo acumulado, la mejor configuración encontrada hasta ese punto.
+    El algoritmo de programación dinámica aplicado en este proyecto busca minimizar el conflicto interno dentro de una red social, bajo la restricción de un presupuesto limitado de esfuerzo (denotado como $R_{\text{max}}$). Este conflicto surge de las diferencias de opinión entre los agentes de distintos grupos, y puede ser mitigado parcialmente moderando a algunos de estos agentes, a costa de cierto esfuerzo.
 
-Al finalizar, se selecciona la estrategia que, sin superar el esfuerzo disponible, logra el menor conflicto interno posible.
+    A diferencia de enfoques exhaustivos como la fuerza bruta, que evalúan todas las combinaciones posibles de moderación, este algoritmo divide el problema en subproblemas más pequeños y los resuelve de manera progresiva y óptima, reutilizando resultados previamente calculados para construir la solución global.
 
-Este enfoque garantiza que la solución obtenida es óptima dentro de las restricciones definidas, y resulta mucho más escalable que evaluar explícitamente todas las combinaciones posibles, especialmente en redes sociales con un número elevado de grupos o agentes.
+    El proceso se fundamenta en el principio de \textit{optimalidad de Bellman}, que asegura que una solución óptima para el problema completo puede ser construida a partir de soluciones óptimas de sus subproblemas.
 
-\subsection{Pasos Programación Dinámica}
-Sabemos que para calcular la solución óptima para un algoritmo dinámico se deben 
-cumplir ciertos aspectos:
-\begin{enumerate}
-    \item Caracterizar la solución óptima (Subestructura óptima) 
-    \item Definir recursivamente el valor de la solución óptima
-    \item Calcular el valor de la solución óptima (algoritmo) 
-    \item Construir la solución óptima (algoritmo)
-\end{enumerate}
+    A cada paso, el algoritmo evalúa todas las opciones posibles de moderación para un grupo específico —desde no moderar a ningún agente hasta moderar a todos— y calcula el conflicto y esfuerzo que implicaría esa decisión. Luego, actualiza de forma eficiente una estructura de datos que almacena, para cada cantidad de esfuerzo acumulado, la mejor configuración encontrada hasta ese punto.
 
-\subsubsection{Caracterizando la Estructura de una Solución Óptima}
+    Al finalizar, se selecciona la estrategia que, sin superar el esfuerzo disponible, logra el menor conflicto interno posible.
 
-Para resolver el problema de minimizar el conflicto interno en una red social bajo una restricción de esfuerzo máximo permitido ($R_{\text{max}}$), es necesario comprender cómo se construye la solución óptima a partir de decisiones locales en cada grupo de agentes.
+    Este enfoque garantiza que la solución obtenida es óptima dentro de las restricciones definidas, y resulta mucho más escalable que evaluar explícitamente todas las combinaciones posibles, especialmente en redes sociales con un número elevado de grupos o agentes.
 
-\begin{itemize}
-    \item \textbf{Definición del problema original:}
-    
-    Denotamos el problema general como:
-    \[
-        \text{MinCI}(Grupos_n, R_{\text{max}})
-    \]
-    donde:
+    \subsection{Pasos Programación Dinámica}
+    Sabemos que para calcular la solución óptima para un algoritmo dinámico se deben
+    cumplir ciertos aspectos:
+    \begin{enumerate}
+        \item Caracterizar la solución óptima (Subestructura óptima)
+        \item Definir recursivamente el valor de la solución óptima
+        \item Calcular el valor de la solución óptima (algoritmo)
+        \item Construir la solución óptima (algoritmo)
+    \end{enumerate}
+
+    \subsubsection{Caracterizando la Estructura de una Solución Óptima}
+
+    Para resolver el problema de minimizar el conflicto interno en una red social bajo una restricción de esfuerzo máximo permitido ($R_{\text{max}}$), es necesario comprender cómo se construye la solución óptima a partir de decisiones locales en cada grupo de agentes.
+
     \begin{itemize}
-        \item $Grupos_n$: conjunto de $n$ grupos sociales.
-        \item $R_{\text{max}}$: esfuerzo total máximo permitido.
-        \item $\text{MinCI}$: equivale a la función objetivo del problema, que llamamos \texttt{ModCI}.
-    \end{itemize}
-    
-    \item \textbf{Subproblemas:}
-    
-    El enfoque de programación dinámica divide el problema en subproblemas de la forma:
-    \[
-        \text{MinCI}(Grupos_i, R_j)
-    \]
-    donde:
-    \begin{itemize}
-        \item $i$ representa los primeros $i$ grupos, con $1 \leq i \leq n$
-        \item $R_j$ representa el esfuerzo disponible en ese momento, con $0 \leq j \leq R_{\text{max}}$
-    \end{itemize}
-    
-    \item \textbf{Recurrencia y decisiones:}
-    
-    Para cada grupo $i$, se evalúan todas las decisiones posibles de moderación: desde moderar a $0$ hasta moderar a $n_i$ agentes (cantidad total del grupo). A cada opción le corresponde un coste de esfuerzo $e$ y un conflicto potencial.
-    
-    La decisión óptima para el subproblema $\text{MinCI}(Grupos_i, R_j)$ se construye a partir de:
-    \begin{itemize}
-        \item Las decisiones óptimas de los subproblemas anteriores ($i - 1$).
-        \item Comparando todas las combinaciones posibles de moderación:
+        \item \textbf{Definición del problema original:}
+
+        Denotamos el problema general como:
         \[
-            e \in [0, n_i]
+            \text{MinCI}(Grupos_n, R_{\text{max}})
         \]
-        \item Solo se consideran las combinaciones que cumplen:
-        \[
-            Costo(e) \leq R_j
-        \]
-    \end{itemize}
-    
-    Para cada combinación válida, se calcula:
-    \[
-        CI_{\text{acumulado}} = CI_{\text{previo}} + (n_i - e)(o_{1i} - o_{2i})^2
-    \]
-    
-    donde:
-    \begin{itemize}
-        \item $CI_{\text{acumulado}}$: conflicto total acumulado hasta el grupo actual $i$, considerando la estrategia de esfuerzo aplicada.
-        \item $CI_{\text{previo}}$: conflicto acumulado hasta el grupo $i - 1$, correspondiente a una asignación de esfuerzo previa.
-        \item $n_i$: número total de agentes en el grupo $i$.
-        \item $e$: número de agentes moderados en el grupo $i$.
-        \item $n_i - e$: número de agentes no moderados en el grupo $i$.
-        \item $(o_{1i} - o_{2i})$: diferencia cuadrática entre las dos opiniones del grupo. Refleja la intensidad del conflicto si no se modera ese grupo.
-    \end{itemize}
-    
-    \item \textbf{Estructura óptima:}
-    
-    Así, la solución óptima para el problema completo:
-    \[
-        \text{MinCI}(Grupos_n, R_{\text{max}})
-    \]
-    se obtiene reutilizando las mejores soluciones de los subproblemas previos, considerando todas las configuraciones posibles de esfuerzo y moderación por grupo.
-\end{itemize}
-
-Esto permite:
-\begin{itemize}
-    \item Mantener un historial de las mejores decisiones hasta cada punto.
-    \item Evitar recalcular combinaciones ya exploradas.
-    \item Garantizar una solución óptima dentro del límite de esfuerzo.
-\end{itemize}
-
-\subsubsection{Definiendo Recursivamente el Valor de la Solución Óptima}
-
-Una vez caracterizada la subestructura óptima, necesitamos definir una fórmula recursiva que describa cómo se calcula el valor de la solución óptima a partir de los subproblemas.
-
-\begin{itemize}
-    \item \textbf{Variables:}
-    \begin{itemize}
-        \item $i$: índice del grupo actual ($0$-indexado)
-        \item $e$: número de agentes moderados en el grupo $i$ ($0 \leq e \leq n_i$)
-        \item $c(i, e)$: esfuerzo necesario para moderar $e$ agentes en el grupo $i$
-        \item $(o_{1i}, o_{2i})$: distancia cuadrática de opiniones en el grupo $i$
-        \item $S(i, j)$: valor mínimo del conflicto interno al considerar los primeros $i$ grupos con un total de esfuerzo $j$
-    \end{itemize}
-
-    \item \textbf{Recurrencia:}
-    \[
-    S(i, j) = \min_{0 \leq e \leq n_i,\, c(i,e) \leq j} \left\{ S(i - 1, j - c(i, e)) + (n_i - e) \cdot d_i \right\}
-    \]
-
-    \item \textbf{Explicación:}
-    \begin{itemize}
-        \item Para cada grupo $i$, evaluamos todas las posibles cantidades de agentes $e$ que podrían moderarse.
-        \item El costo en esfuerzo por moderar $e$ agentes se calcula como:
-        \[
-            c(i, e) = \lceil |o_{1i} - o_{2i}| \cdot rigidez_i \cdot e \rceil
-        \]
-        \item Si ese esfuerzo no supera el total disponible $j$, entonces actualizamos el conflicto acumulado:
+        donde:
         \begin{itemize}
-            \item Se agrega el impacto de los $n_i - e$ agentes no moderados, que contribuyen al conflicto interno con el factor $d_i$.
+            \item $Grupos_n$: conjunto de $n$ grupos sociales.
+            \item $R_{\text{max}}$: esfuerzo total máximo permitido.
+            \item $\text{MinCI}$: equivale a la función objetivo del problema, que llamamos \texttt{ModCI}.
         \end{itemize}
-        \item De todas las combinaciones viables, nos quedamos con la que minimice el conflicto total.
+
+        \item \textbf{Subproblemas:}
+
+        El enfoque de programación dinámica divide el problema en subproblemas de la forma:
+        \[
+            \text{MinCI}(Grupos_i, R_j)
+        \]
+        donde:
+        \begin{itemize}
+            \item $i$ representa los primeros $i$ grupos, con $1 \leq i \leq n$
+            \item $R_j$ representa el esfuerzo disponible en ese momento, con $0 \leq j \leq R_{\text{max}}$
+        \end{itemize}
+
+        \item \textbf{Recurrencia y decisiones:}
+
+        Para cada grupo $i$, se evalúan todas las decisiones posibles de moderación: desde moderar a $0$ hasta moderar a $n_i$ agentes (cantidad total del grupo). A cada opción le corresponde un coste de esfuerzo $e$ y un conflicto potencial.
+
+        La decisión óptima para el subproblema $\text{MinCI}(Grupos_i, R_j)$ se construye a partir de:
+        \begin{itemize}
+            \item Las decisiones óptimas de los subproblemas anteriores ($i - 1$).
+            \item Comparando todas las combinaciones posibles de moderación:
+            \[
+                e \in [0, n_i]
+            \]
+            \item Solo se consideran las combinaciones que cumplen:
+            \[
+                Costo(e) \leq R_j
+            \]
+        \end{itemize}
+
+        Para cada combinación válida, se calcula:
+        \[
+            CI_{\text{acumulado}} = CI_{\text{previo}} + (n_i - e)(o_{1i} - o_{2i})^2
+        \]
+
+        donde:
+        \begin{itemize}
+            \item $CI_{\text{acumulado}}$: conflicto total acumulado hasta el grupo actual $i$, considerando la estrategia de esfuerzo aplicada.
+            \item $CI_{\text{previo}}$: conflicto acumulado hasta el grupo $i - 1$, correspondiente a una asignación de esfuerzo previa.
+            \item $n_i$: número total de agentes en el grupo $i$.
+            \item $e$: número de agentes moderados en el grupo $i$.
+            \item $n_i - e$: número de agentes no moderados en el grupo $i$.
+            \item $(o_{1i} - o_{2i})$: diferencia cuadrática entre las dos opiniones del grupo. Refleja la intensidad del conflicto si no se modera ese grupo.
+        \end{itemize}
+
+        \item \textbf{Estructura óptima:}
+
+        Así, la solución óptima para el problema completo:
+        \[
+            \text{MinCI}(Grupos_n, R_{\text{max}})
+        \]
+        se obtiene reutilizando las mejores soluciones de los subproblemas previos, considerando todas las configuraciones posibles de esfuerzo y moderación por grupo.
     \end{itemize}
 
-    \item \textbf{Condiciones triviales:}
-    \[
-    S(-1, 0) = 0
-    \]
-    \[
-    S(-1, j) = \infty, \quad \text{si } j > 0
-    \]
+    Esto permite:
+    \begin{itemize}
+        \item Mantener un historial de las mejores decisiones hasta cada punto.
+        \item Evitar recalcular combinaciones ya exploradas.
+        \item Garantizar una solución óptima dentro del límite de esfuerzo.
+    \end{itemize}
 
-    Esto indica que al inicio, sin haber procesado ningún grupo, solo se puede tener un conflicto acumulado 0 si no se ha usado esfuerzo. Todo lo demás es inválido.
+    \subsubsection{Definiendo Recursivamente el Valor de la Solución Óptima}
 
-    \subsubsection{Calculando el Valor de la Solución Óptima}
-    \subsubsection{Construyendo la Solución Óptima}
-    \subsubsection{¿Cuántos Subproblemas Hay?}
-    \subsection{Implementación}
-    \subsection{Pseudocódigo}
-    \subsection{Complejidad}
-    \subsubsection{Complejidad Temporal}
-    \subsubsection{Complejidad Espacial}
-    \subsubsection{¿Es Útil en la Práctica}
-    \paragraph{Hipótesis}
-    \paragraph{Conclusión Hipótesis Temporal}
-    \paragraph{Conclusión Hipótesis Espacial}
-    \subsection{¿El Algoritmo Siempre da la Respuesta Correcta al Problema}
-    \subsection{Análisis}
-    \subsection{Impacto en El Rendimiento}
-    
-\end{itemize}
+    Una vez caracterizada la subestructura óptima, necesitamos definir una fórmula recursiva que describa cómo se calcula el valor de la solución óptima a partir de los subproblemas.
+
+    \begin{itemize}
+        \item \textbf{Variables:}
+        \begin{itemize}
+            \item $i$: índice del grupo actual ($0$-indexado)
+            \item $e$: número de agentes moderados en el grupo $i$ ($0 \leq e \leq n_i$)
+            \item $c(i, e)$: esfuerzo necesario para moderar $e$ agentes en el grupo $i$
+            \item $(o_{1i}, o_{2i})$: distancia cuadrática de opiniones en el grupo $i$
+            \item $S(i, j)$: valor mínimo del conflicto interno al considerar los primeros $i$ grupos con un total de esfuerzo $j$
+        \end{itemize}
+
+        \item \textbf{Recurrencia:}
+        \[
+            S(i, j) = \min_{0 \leq e \leq n_i,\, c(i,e) \leq j} \left\{ S(i - 1, j - c(i, e)) + (n_i - e) \cdot d_i \right\}
+        \]
+
+        \item \textbf{Explicación:}
+        \begin{itemize}
+            \item Para cada grupo $i$, evaluamos todas las posibles cantidades de agentes $e$ que podrían moderarse.
+            \item El costo en esfuerzo por moderar $e$ agentes se calcula como:
+            \[
+                c(i, e) = \lceil |o_{1i} - o_{2i}| \cdot rigidez_i \cdot e \rceil
+            \]
+            \item Si ese esfuerzo no supera el total disponible $j$, entonces actualizamos el conflicto acumulado:
+            \begin{itemize}
+                \item Se agrega el impacto de los $n_i - e$ agentes no moderados, que contribuyen al conflicto interno con el factor $d_i$.
+            \end{itemize}
+            \item De todas las combinaciones viables, nos quedamos con la que minimice el conflicto total.
+        \end{itemize}
+
+        \item \textbf{Condiciones triviales:}
+        \[
+            S(-1, 0) = 0
+        \]
+        \[
+            S(-1, j) = \infty, \quad \text{si } j > 0
+        \]
+
+        Esto indica que al inicio, sin haber procesado ningún grupo, solo se puede tener un conflicto acumulado 0 si no se ha usado esfuerzo. Todo lo demás es inválido.
+
+        \subsubsection{Calculando el Valor de la Solución Óptima}
+
+        \subsubsection{Construyendo la Solución Óptima}
+
+        \subsubsection{¿Cuántos Subproblemas Hay?}
+
+        \subsection{Implementación}
+
+        \subsection{Pseudocódigo}
+
+        \subsection{Complejidad}
+
+        \subsubsection{Complejidad Temporal}
+
+        \subsubsection{Complejidad Espacial}
+
+        \subsubsection{¿Es Útil en la Práctica}
+
+        \paragraph{Hipótesis}
+
+        \paragraph{Conclusión Hipótesis Temporal}
+
+        \paragraph{Conclusión Hipótesis Espacial}
+
+        \subsection{¿El Algoritmo Siempre da la Respuesta Correcta al Problema}
+
+        \subsection{Análisis}
+
+        \subsection{Impacto en El Rendimiento}
+
+    \end{itemize}
 
 %%%%%%% ALGORITMO DINÁMICO %%%%%%% FIN
 
-\newpage
+    \newpage
 
 %%%%%%% ALGORITMO VORAZ %%%%%%% INICIO
-\section{Algoritmo Voraz}
-
-\subsection{Descripción}
-El algoritmo voraz implementado aborda el problema de minimizar el conflicto interno dentro de una red social, sujeto a una restricción presupuestal de esfuerzo (denotada como $R_{max}$). El conflicto surge a partir de las discrepancias entre las opiniones que los agentes expresan sobre dos afirmaciones, y puede ser reducido moderando a ciertos agentes, aunque dicha acción implica un costo en términos de esfuerzo.
-
-A diferencia del enfoque de fuerza bruta, que explora exhaustivamente todas las combinaciones posibles de moderación, y del enfoque de programación dinámica, que construye soluciones óptimas a partir de subproblemas más pequeños, este enfoque se basa en una estrategia de decisión secuencial que busca aprovechar el esfuerzo disponible de la forma más eficiente posible. Para ello, cada grupo de agentes es evaluado según un criterio heurístico que estima la utilidad relativa de intervenir sobre él.
-
-Este enfoque no garantiza encontrar la solución óptima al problema, ya que no explora todo el espacio de posibilidades. Sin embargo, en muchos casos ofrece soluciones de buena calidad con un costo computacional mucho menor, lo que lo convierte en una opción atractiva para redes sociales de mayor tamaño o para situaciones donde el tiempo de cómputo es limitado.
-
-\subsection{Definición de la heurística}
-
-La toma de decisiones del algoritmo voraz se fundamenta en una heurística que asigna una utilidad a cada grupo de agentes, con el propósito de priorizar aquellos cuya moderación podría ser más efectiva en términos de reducción del conflicto interno por unidad de esfuerzo.
-
-La utilidad asignada a cada grupo se define como:
-
-\[
-\text{utilidad}_i = \frac{|op1_i - op2_i|}{\max(rigidez_i, \varepsilon)}
-\]
-
-donde:
-\begin{itemize}
-    \item $op1_i$ y $op2_i$ son las opiniones del grupo $i$ frente a las dos afirmaciones del problema,
-    \item $rigidez_i$ es el nivel de resistencia al cambio de opinión del grupo $i$,
-    \item $\varepsilon$ es una constante positiva muy pequeña que evita divisiones por cero.
-\end{itemize}
-
-Esta función favorece a los grupos que presentan una alta discrepancia de opiniones y baja rigidez, es decir, aquellos en los que intervenir podría tener mayor impacto y menor costo relativo.
-
-Una vez calculadas las utilidades para todos los grupos, se ordenan en orden descendente y se asigna el esfuerzo disponible comenzando por los grupos más rentables, hasta agotar el presupuesto permitido $R_{max}$ o no poder realizar más asignaciones viables.
-
-\subsection{¿Entendimos el Algoritmo?}
-\subsubsection{Solución del Ejercicio 2.3.1}
-\subsubsection{Solución del Ejercicio 2.3.2}
-
-\subsection{Implementación}
-
-La implementación del algoritmo voraz se realizó empleando una representación estructurada de la red social como una lista de tuplas. Cada tupla representa un grupo de agentes e incluye cuatro elementos: la cantidad de individuos en el grupo, sus opiniones frente a dos afirmaciones específicas y su nivel de rigidez al cambio de opinión.
-
-El proceso se estructura en dos fases principales:
-
-\begin{enumerate}
-    \item \textbf{Cálculo de Utilidades y Priorización:} Para cada grupo, se calcula una utilidad basada en una heurística que considera la diferencia entre sus opiniones y su rigidez al cambio. Esta utilidad refleja cuán conveniente sería moderar a un grupo determinado en términos de impacto por unidad de esfuerzo. Luego, todos los grupos son ordenados en orden descendente según esta utilidad.
-
-    \item \textbf{Asignación Voraz de Esfuerzo:} Siguiendo el orden de prioridad determinado, se asigna a cada grupo la cantidad máxima posible de agentes a moderar, respetando el esfuerzo restante disponible. Esta asignación se realiza considerando el costo unitario de moderar un agente en cada grupo, el cual depende de su rigidez y diferencia de opiniones. El proceso continúa hasta agotar el presupuesto de esfuerzo $R_{max}$ o no poder realizar más asignaciones viables.
-\end{enumerate}
-
-Al finalizar, la función auxiliar \texttt{calcular\_ci\_esfuerzo} se utiliza para evaluar el conflicto interno y el esfuerzo total correspondiente a la estrategia construida. El resultado final es una tupla que contiene el conflicto interno resultante, el esfuerzo total utilizado y la estrategia voraz de asignación de esfuerzos.
-
-\subsection{Pseudocódigo}
-\begin{algorithm}[H]
-\caption{modciPV: Estrategia voraz basada en utilidad heurística}
-\KwIn{Una red social $RS$ como lista de tuplas $(n_i, op1_i, op2_i, rigidez_i)$ para cada grupo $i$, y un esfuerzo máximo permitido $R_{max}$}
-\KwOut{Tupla $(CI, Esfuerzo_{\text{total}}, Estrategia)$}
-
-$estrategia \leftarrow [0, 0, \ldots, 0]$ \tcp*[r]{Inicializar estrategia vacía de tamaño $|RS|$}
-$esfuerzoRestante \leftarrow R_{max}$
-
-$utilidades \leftarrow []$ \tcp*[r]{Lista de utilidades heurísticas}
-
-\ForEach{grupo $g_i$ en $RS$}{
-    \If{$n_i = 0$}{\textbf{continue}}
-    
-    $utilidad \leftarrow utilidad\_base(op1_i, op2_i, rigidez_i)$ \\
-    $costoUnitario \leftarrow \max(1, \lceil |op1_i - op2_i| \cdot rigidez_i \rceil)$ \\
-    $utilidades.\text{append}((utilidad, i, costoUnitario))$
-}
-
-$utilidades \leftarrow$ ordenar\_descendente(utilidades, clave=utilidad)
-
-\ForEach{$(utilidad, i, costoUnitario)$ en $utilidades$}{
-    \If{$esfuerzoRestante \leq 0$}{\textbf{break}}
-
-    $maxAsignable \leftarrow \min(n_i, \lfloor \frac{esfuerzoRestante}{costoUnitario} \rfloor)$ \\
-    $estrategia[i] \leftarrow maxAsignable$ \\
-    $esfuerzoRestante \leftarrow esfuerzoRestante - maxAsignable \cdot costoUnitario$
-}
-
-$(CI, esfuerzoTotal) \leftarrow calcular\_ci\_esfuerzo(RS, estrategia)$
-
-\Return $(CI, esfuerzoTotal, estrategia)$
-\end{algorithm}
-\subsection{Complejidad}
-
-\subsubsection{Complejidad temporal}
-
-El algoritmo voraz \texttt{modciPV} realiza las siguientes operaciones principales:
-
-\begin{itemize}
-    \item Recorre todos los grupos de la red social (de tamaño $n$) para calcular una utilidad heurística y el esfuerzo unitario por agente. Esto toma ${O}(n)$.
-    \item Ordena la lista de grupos por utilidad en orden descendente, lo cual tiene una complejidad de ${O}(n \log n)$.
-    \item Itera sobre la lista ordenada para asignar agentes a moderar mientras haya esfuerzo disponible. En el peor caso, esta operación es lineal: ${O}(n)$.
-    \item Finalmente, calcula el conflicto interno total y el esfuerzo utilizado, operación que, puede tomar ${O}(n)$.
-\end{itemize}
-
-Por lo tanto, la complejidad temporal total está dominada por el ordenamiento de la lista de grupos, lo cual nos da una complejidad de:
-
-\[
-{O}(n \log n)
-\]
-
-\subsubsection{Complejidad espacial}
-
-Respecto al uso de memoria, el algoritmo:
-
-\begin{itemize}
-    \item Almacena información de utilidad por grupo en una lista auxiliar de tamaño $n$.
-    \item Genera una lista de estrategias de tamaño $n$ (uno por grupo).
-\end{itemize}
-
-No se utilizan estructuras de datos anidadas ni matrices adicionales, por lo que el uso de espacio crece linealmente con el número de grupos.
-
-La complejidad espacial del algoritmo es entonces:
-
-\[
-{O}(n)
-\]
-
-\subsection{Corrección}
-
-El algoritmo voraz implementado para el problema ModCI proporciona una estrategia de moderación factible dentro del límite de esfuerzo permitido. Para ello, calcula una utilidad heurística para cada grupo de la red social y, en función de este valor, prioriza la asignación de recursos a aquellos grupos que se consideran más "rentables" en términos de impacto por unidad de esfuerzo.
-
-En cada paso, el algoritmo garantiza que:
-\begin{itemize}
-    \item El esfuerzo total asignado no excede el presupuesto disponible $R_{max}$.
-    \item Las asignaciones de agentes a moderar respetan los límites de cada grupo.
-    \item La estrategia final generada es válida y puede ser evaluada con la función de conflicto interno.
-\end{itemize}
-
-Desde el punto de vista funcional, el algoritmo es correcto, ya que produce soluciones viables que cumplen con las restricciones del problema. No obstante, al tratarse de una heurística, no explora todo el espacio de soluciones posibles, por lo que no garantiza la obtención de la solución óptima global.
-
-A pesar de esta limitación, el enfoque voraz resulta especialmente útil en contextos donde la eficiencia computacional es prioritaria. Gracias a su bajo costo computacional y a su capacidad para generar soluciones razonables en tiempos reducidos, se convierte en una alternativa práctica y escalable frente a enfoques más costosos como la fuerza bruta.
-
-Para evaluar la calidad de sus soluciones, se ejecutó la batería de pruebas comparando los resultados del algoritmo voraz con las soluciones óptimas obtenidas por fuerza bruta o programación dinámica. En cada caso, se calculó el valor relativo de la diferencia mediante la fórmula:
-
-\[
-\frac{CI_{\text{voraz}}}{CI_{\text{óptima}}} - 1
-\]
-\vspace{0.5cm}
-
-A partir de estas pruebas, se obtuvo un promedio de aproximadamente $0{,}0162$, lo cual indica que, en promedio, la solución voraz fue apenas un 1,62\% peor que la óptima. Este bajo margen de desviación sugiere que el algoritmo voraz, aunque no exacto, puede ser altamente competitivo para resolver instancias del problema de forma eficiente.
 
 
-Teniendo en cuenta las complejidades de los tres enfoques se tiene que el enfoque voraz ofrece una excelente relación entre eficiencia y calidad de solución, especialmente cuando se busca un equilibrio entre rendimiento y precisión en redes sociales de gran tamaño.
+    \section{Algoritmo Voraz}
 
-\subsubsection{¿Cuándo da la Respuesta Correcta?}
-\subsubsection{¿Cuándo no da la Respuesta Correcta?}
-\subsection{Análisis}
+    \subsection{Descripción}
+    El algoritmo voraz implementado aborda el problema de minimizar el conflicto interno dentro de una red social, sujeto a una restricción presupuestal de esfuerzo (denotada como $R_{max}$). El conflicto surge a partir de las discrepancias entre las opiniones que los agentes expresan sobre dos afirmaciones, y puede ser reducido moderando a ciertos agentes, aunque dicha acción implica un costo en términos de esfuerzo.
+
+    A diferencia del enfoque de fuerza bruta, que explora exhaustivamente todas las combinaciones posibles de moderación, y del enfoque de programación dinámica, que construye soluciones óptimas a partir de subproblemas más pequeños, este enfoque se basa en una estrategia de decisión secuencial que busca aprovechar el esfuerzo disponible de la forma más eficiente posible. Para ello, cada grupo de agentes es evaluado según un criterio heurístico que estima la utilidad relativa de intervenir sobre él.
+
+    Este enfoque no garantiza encontrar la solución óptima al problema, ya que no explora todo el espacio de posibilidades. Sin embargo, en muchos casos ofrece soluciones de buena calidad con un costo computacional mucho menor, lo que lo convierte en una opción atractiva para redes sociales de mayor tamaño o para situaciones donde el tiempo de cómputo es limitado.
+
+    \subsection{Definición de la heurística}
+
+    La toma de decisiones del algoritmo voraz se fundamenta en una heurística que asigna una utilidad a cada grupo de agentes, con el propósito de priorizar aquellos cuya moderación podría ser más efectiva en términos de reducción del conflicto interno por unidad de esfuerzo.
+
+    La utilidad asignada a cada grupo se define como:
+
+    \[
+        \text{utilidad}_i = \frac{|op1_i - op2_i|}{\max(rigidez_i, \varepsilon)}
+    \]
+
+    donde:
+    \begin{itemize}
+        \item $op1_i$ y $op2_i$ son las opiniones del grupo $i$ frente a las dos afirmaciones del problema,
+        \item $rigidez_i$ es el nivel de resistencia al cambio de opinión del grupo $i$,
+        \item $\varepsilon$ es una constante positiva muy pequeña que evita divisiones por cero.
+    \end{itemize}
+
+    Esta función favorece a los grupos que presentan una alta discrepancia de opiniones y baja rigidez, es decir, aquellos en los que intervenir podría tener mayor impacto y menor costo relativo.
+
+    Una vez calculadas las utilidades para todos los grupos, se ordenan en orden descendente y se asigna el esfuerzo disponible comenzando por los grupos más rentables, hasta agotar el presupuesto permitido $R_{max}$ o no poder realizar más asignaciones viables.
+
+    \subsection{¿Entendimos el Algoritmo?}
+
+    \subsubsection{Solución del Ejercicio 2.3.1}
+
+    \subsubsection{Solución del Ejercicio 2.3.2}
+
+    \subsection{Implementación}
+
+    La implementación del algoritmo voraz se realizó empleando una representación estructurada de la red social como una lista de tuplas. Cada tupla representa un grupo de agentes e incluye cuatro elementos: la cantidad de individuos en el grupo, sus opiniones frente a dos afirmaciones específicas y su nivel de rigidez al cambio de opinión.
+
+    El proceso se estructura en dos fases principales:
+
+    \begin{enumerate}
+        \item \textbf{Cálculo de Utilidades y Priorización:} Para cada grupo, se calcula una utilidad basada en una heurística que considera la diferencia entre sus opiniones y su rigidez al cambio. Esta utilidad refleja cuán conveniente sería moderar a un grupo determinado en términos de impacto por unidad de esfuerzo. Luego, todos los grupos son ordenados en orden descendente según esta utilidad.
+
+        \item \textbf{Asignación Voraz de Esfuerzo:} Siguiendo el orden de prioridad determinado, se asigna a cada grupo la cantidad máxima posible de agentes a moderar, respetando el esfuerzo restante disponible. Esta asignación se realiza considerando el costo unitario de moderar un agente en cada grupo, el cual depende de su rigidez y diferencia de opiniones. El proceso continúa hasta agotar el presupuesto de esfuerzo $R_{max}$ o no poder realizar más asignaciones viables.
+    \end{enumerate}
+
+    Al finalizar, la función auxiliar \texttt{calcular\_ci\_esfuerzo} se utiliza para evaluar el conflicto interno y el esfuerzo total correspondiente a la estrategia construida. El resultado final es una tupla que contiene el conflicto interno resultante, el esfuerzo total utilizado y la estrategia voraz de asignación de esfuerzos.
+
+    \subsection{Pseudocódigo}
+    \begin{algorithm}[H]
+        \caption{modciPV: Estrategia voraz basada en utilidad heurística}
+        \KwIn{Una red social $RS$ como lista de tuplas $(n_i, op1_i, op2_i, rigidez_i)$ para cada grupo $i$, y un esfuerzo máximo permitido $R_{max}$}
+        \KwOut{Tupla $(CI, Esfuerzo_{\text{total}}, Estrategia)$}
+
+        $estrategia \leftarrow [0, 0, \ldots, 0]$ \tcp*[r]{Inicializar estrategia vacía de tamaño $|RS|$}
+        $esfuerzoRestante \leftarrow R_{max}$
+
+        $utilidades \leftarrow []$ \tcp*[r]{Lista de utilidades heurísticas}
+
+        \ForEach{grupo $g_i$ en $RS$}{
+            \If{$n_i = 0$}{\textbf{continue}}
+
+            $utilidad \leftarrow utilidad\_base(op1_i, op2_i, rigidez_i)$ \\
+            $costoUnitario \leftarrow \max(1, \lceil |op1_i - op2_i| \cdot rigidez_i \rceil)$ \\
+            $utilidades.\text{append}((utilidad, i, costoUnitario))$
+        }
+
+        $utilidades \leftarrow$ ordenar\_descendente(utilidades, clave=utilidad)
+
+        \ForEach{$(utilidad, i, costoUnitario)$ en $utilidades$}{
+            \If{$esfuerzoRestante \leq 0$}{\textbf{break}}
+
+            $maxAsignable \leftarrow \min(n_i, \lfloor \frac{esfuerzoRestante}{costoUnitario} \rfloor)$ \\
+            $estrategia[i] \leftarrow maxAsignable$ \\
+            $esfuerzoRestante \leftarrow esfuerzoRestante - maxAsignable \cdot costoUnitario$
+        }
+
+        $(CI, esfuerzoTotal) \leftarrow calcular\_ci\_esfuerzo(RS, estrategia)$
+
+        \Return $(CI, esfuerzoTotal, estrategia)$
+    \end{algorithm}
+
+    \subsection{Complejidad}
+
+    \subsubsection{Complejidad temporal}
+
+    El algoritmo voraz \texttt{modciPV} realiza las siguientes operaciones principales:
+
+    \begin{itemize}
+        \item Recorre todos los grupos de la red social (de tamaño $n$) para calcular una utilidad heurística y el esfuerzo unitario por agente. Esto toma ${O}(n)$.
+        \item Ordena la lista de grupos por utilidad en orden descendente, lo cual tiene una complejidad de ${O}(n \log n)$.
+        \item Itera sobre la lista ordenada para asignar agentes a moderar mientras haya esfuerzo disponible. En el peor caso, esta operación es lineal: ${O}(n)$.
+        \item Finalmente, calcula el conflicto interno total y el esfuerzo utilizado, operación que, puede tomar ${O}(n)$.
+    \end{itemize}
+
+    Por lo tanto, la complejidad temporal total está dominada por el ordenamiento de la lista de grupos, lo cual nos da una complejidad de:
+
+    \[
+            {O}(n \log n)
+    \]
+
+    \subsubsection{Complejidad espacial}
+
+    Respecto al uso de memoria, el algoritmo:
+
+    \begin{itemize}
+        \item Almacena información de utilidad por grupo en una lista auxiliar de tamaño $n$.
+        \item Genera una lista de estrategias de tamaño $n$ (uno por grupo).
+    \end{itemize}
+
+    No se utilizan estructuras de datos anidadas ni matrices adicionales, por lo que el uso de espacio crece linealmente con el número de grupos.
+
+    La complejidad espacial del algoritmo es entonces:
+
+    \[
+            {O}(n)
+    \]
+
+    \subsection{Corrección}
+
+    El algoritmo voraz implementado para el problema ModCI proporciona una estrategia de moderación factible dentro del límite de esfuerzo permitido. Para ello, calcula una utilidad heurística para cada grupo de la red social y, en función de este valor, prioriza la asignación de recursos a aquellos grupos que se consideran más "rentables" en términos de impacto por unidad de esfuerzo.
+
+    En cada paso, el algoritmo garantiza que:
+    \begin{itemize}
+        \item El esfuerzo total asignado no excede el presupuesto disponible $R_{max}$.
+        \item Las asignaciones de agentes a moderar respetan los límites de cada grupo.
+        \item La estrategia final generada es válida y puede ser evaluada con la función de conflicto interno.
+    \end{itemize}
+
+    Desde el punto de vista funcional, el algoritmo es correcto, ya que produce soluciones viables que cumplen con las restricciones del problema. No obstante, al tratarse de una heurística, no explora todo el espacio de soluciones posibles, por lo que no garantiza la obtención de la solución óptima global.
+
+    A pesar de esta limitación, el enfoque voraz resulta especialmente útil en contextos donde la eficiencia computacional es prioritaria. Gracias a su bajo costo computacional y a su capacidad para generar soluciones razonables en tiempos reducidos, se convierte en una alternativa práctica y escalable frente a enfoques más costosos como la fuerza bruta.
+
+    Para evaluar la calidad de sus soluciones, se ejecutó la batería de pruebas comparando los resultados del algoritmo voraz con las soluciones óptimas obtenidas por fuerza bruta o programación dinámica. En cada caso, se calculó el valor relativo de la diferencia mediante la fórmula:
+
+    \[
+        \frac{CI_{\text{voraz}}}{CI_{\text{óptima}}} - 1
+    \]
+    \vspace{0.5cm}
+
+    A partir de estas pruebas, se obtuvo un promedio de aproximadamente $0{,}0162$, lo cual indica que, en promedio, la solución voraz fue apenas un 1,62\% peor que la óptima. Este bajo margen de desviación sugiere que el algoritmo voraz, aunque no exacto, puede ser altamente competitivo para resolver instancias del problema de forma eficiente.
+
+
+    Teniendo en cuenta las complejidades de los tres enfoques se tiene que el enfoque voraz ofrece una excelente relación entre eficiencia y calidad de solución, especialmente cuando se busca un equilibrio entre rendimiento y precisión en redes sociales de gran tamaño.
+
+    \subsubsection{¿Cuándo da la Respuesta Correcta?}
+
+    \subsubsection{¿Cuándo no da la Respuesta Correcta?}
+
+    \subsection{Análisis}
 
 %%%%%%% ALGORITMO VORAZ %%%%%%% FIN
 
-\newpage
+    \newpage
 
 %%%%%%% COMPARACIÓN ALGORITMOS %%%%%%% INICIO
-\section{Comparación de Algoritmos}
-\subsection{Solución Óptima}
-\subsection{Tiempos de Ejecución}
-\subsection{Ventajas y Desventajas}
-\subsubsection{Fuerza Bruta}
-\subsubsection{Dinámico}
-\subsubsection{Voraz}
+
+
+    \section{Comparación de Algoritmos}
+
+    Haremos una comparativa de los tres algoritmos con las pruebas que se nos han proporcionado. La idea es entender mejor cómo se comporta cada uno, qué tan eficiente es y qué tipo de resultado podemos esperar en distintos escenarios.
+
+    \subsection{Solución Óptima}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{resources/conflictos.png}
+        \caption{Comparativa gráfica del conflicto interno generado por cada algoritmo.}
+    \end{figure}
+
+    Al evaluar la precisión de los algoritmos, se compararon sus resultados con el valor de la solución (CI) obtenido para cada prueba y la comparación con los resultados de cada algoritmo permite medir su exactitud.
+
+    \begin{itemize}
+        \item \textbf{Fuerza bruta:}
+        \begin{itemize}
+            \item Garantiza la solución óptima siempre que logra completarse. En todas las pruebas donde arrojó un resultado, este coincidió exactamente con el valor de la solución óptima esperada.
+            \item Sin embargo, falló en 23 de las 30 pruebas, marcadas con "X", lo que indica que no logró encontrar una solución dentro del tiempo razonable (especialmente a partir de 10 o más grupos de agentes).
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{resources/conflicto1.jpeg}
+            \caption{Gráfica del conflicto interno generado por fuerza bruta.}
+        \end{figure}
+        \item \textbf{Programación dinámica:}
+        \begin{itemize}
+            \item Siempre encontró la solución óptima, incluso en instancias donde la fuerza bruta no completó.
+            \item Solo falló en 2 pruebas, no retornando respuesta en Prueba29.txt, Prueba30.txt.
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{resources/conflicto2.jpeg}
+            \caption{Gráfica del conflicto interno generado por programación dinámica.}
+        \end{figure}
+        \item \textbf{Algoritmo voraz:}
+        \begin{itemize}
+            \item Fue el más rápido en todas las pruebas, con tiempos del orden de milisegundos.
+            \item No garantiza solución óptima: en todas las pruebas arrojó una solución, pero esta no siempre coincidió con el CI mínimo real, sin embargo, en promedio difiere de la respuesta óptima que arroja la programación dinámica en un 1,62 \%.
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{resources/conflicto3.jpeg}
+            \caption{Gráfica del conflicto interno generado por algoritmo voraz.}
+        \end{figure}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{resources/conflicto4.jpeg}
+            \caption{Gráfica del conflicto interno comparando los tres metodos.}
+        \end{figure}
+    \end{itemize}
+    \vspace{1cm}
+    \textbf{En resumen:}
+    \begin{itemize}
+        \item Fuerza bruta y dinámica aseguran la precisión máxima, pero no siempre pueden ejecutarse eficientemente.
+        \item Voraz, aunque no garantiza optimalidad, ofrece soluciones rápidas y suficientemente cercanas a la óptima, incluso en escenarios con muchos agentes.
+    \end{itemize}
+
+    \subsection{Tiempos de Ejecución}
+
+    \subsection{Ventajas y Desventajas}
+
+    \subsubsection{Fuerza Bruta}
+
+    \subsubsection{Dinámico}
+
+    \subsubsection{Voraz}
 %%%%%%% COMPARACIÓN ALGORITMOS %%%%%%% FIN
 
-\newpage
+    \newpage
 
 %%%%%%% CASOS DE PRUEBA %%%%%%% INICIO
-\section{Casos de Prueba}
-\subsection{Caso de Prueba 1}
-\subsection{Caso de Prueba 2}
-\subsection{Caso de Prueba 3}
-\subsection{Caso de Prueba 4}
-\subsection{Caso de Prueba 5}
+
+
+    \section{Casos de Prueba}
+
+    \subsection{Caso de Prueba 1}
+
+    \subsection{Caso de Prueba 2}
+
+    \subsection{Caso de Prueba 3}
+
+    \subsection{Caso de Prueba 4}
+
+    \subsection{Caso de Prueba 5}
 %%%%%%% CASOS DE PRUEBA %%%%%%% INICIO
 
 
