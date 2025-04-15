@@ -65,6 +65,7 @@
   <!-- Resultado -->
   <div *ngIf="resultado" class="mt-4">
     <h3>Resultados:</h3>
+    <p><strong>Algoritmo Usado:</strong> {{ metodoUsado }}</p>
     <p><strong>Tiempo Ejecución:</strong> {{ resultado.Tiempo }} segundos</p>
     <p><strong>Estrategia Aplicada:</strong> {{ resultado.Estrategia?.join(', ') }}</p>
     <p><strong>Conflicto Interno:</strong> {{ resultado.CI }}</p>
