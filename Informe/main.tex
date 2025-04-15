@@ -62,6 +62,13 @@
 % Hipervínculos (último siempre que sea posible)
 \usepackage{hyperref}
 
+%Para dar ancho a tabla
+\usepackage{tabularx}
+
+% Centrado de tablas
+\usepackage{array}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} % Centrado horizontal y vertical
+
 %%%%%%% PAQUETES Y CONFIGURACIONES %%%%%%% FIN
 
 
@@ -308,7 +315,7 @@
     \subsection{Análisis}
 
     A continuación se presenta un análisis concreto que permite ilustrar el funcionamiento paso a paso del algoritmo de fuerza bruta
-
+    \par\vspace{1cm}
     \textbf{Datos de entrada:}
 
     \begin{table}[ht]
@@ -848,7 +855,7 @@
             \caption{Gráfica del conflicto interno comparando los tres metodos.}
         \end{figure}
     \end{itemize}
-    \vspace{1cm}
+
     \textbf{En resumen:}
     \begin{itemize}
         \item Fuerza bruta y dinámica aseguran la precisión máxima, pero no siempre pueden ejecutarse eficientemente.
@@ -857,13 +864,141 @@
 
     \subsection{Tiempos de Ejecución}
 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{resources/tiempos.png}
+        \caption{Comparativa gráfica del tiempo de respuesta obtenido por cada algoritmo.}
+    \end{figure}
+
+    En cuanto a los tiempos, es claro en la tabla que los tiempos del algoritmo voraz son mucho menores que de los demás algoritmos. A Continuación una representación gráfica de los tiempos de los tres algoritmos:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{resources/tiempo1.jpeg}
+        \caption{Gráfica comparativa del tiempo de respuesta obtenido por cada algoritmo.}
+    \end{figure}
+
+    \begin{itemize}
+        \item \textbf{Fuerza bruta:}
+        \begin{itemize}
+            \item Su tiempo de ejecución crece exponencialmente con el número de agentes.
+            \item Aunque fue rápido para pequeños casos (5 o 10 grupos), superó los 100 segundos en algunas pruebas (Prueba6.txt) y no logró 73% de las pruebas.
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{resources/tiempo2.jpeg}
+            \caption{Gráfica del tiempo de respuesta obtenido por fuerza bruta.}
+        \end{figure}
+        \item \textbf{Programación dinámica:}
+        \begin{itemize}
+            \item Presenta un crecimiento más moderado, pero aún significativo en problemas grandes.
+            \item Tiempos mayores a 1 minuto se observaron en los archivos con más de 50 grupos.
+            \item Solo falló en 2 pruebas (Prueba29.txt, Prueba30.txt), mostrando una alta escalabilidad en comparación con fuerza bruta.
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{resources/tiempo3.jpeg}
+            \caption{Gráfica del tiempo de respuesta obtenido por programación dinámica.}
+        \end{figure}
+        \item \textbf{Algoritmo voraz:}
+        \begin{itemize}
+            \item Extremadamente eficiente en tiempo. Todos los tiempos son inferiores a 0.0003 segundos.
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.8\textwidth]{resources/tiempo4.jpeg}
+            \caption{Gráfica del tiempo de respuesta obtenido por algoritmo voraz.}
+        \end{figure}
+    \end{itemize}
+
+    \textbf{Conclusión:}
+    \begin{itemize}
+        \item Si se prioriza el tiempo de ejecución, el algoritmo voraz es ideal, resolviendo virtualmente al instante.
+        \item Para situaciones donde la calidad de la solución es crítica, puede preferirse programación dinámica, aunque con tiempos más elevados.
+        \item Fuerza bruta solo es viable para instancias pequeñas, siendo impráctico para escenarios reales por su excesivo tiempo.
+    \end{itemize}
+
+    La siguiente tabla presenta una comparación general entre los tres enfoques implementados: fuerza bruta, programación dinámica y algoritmo voraz. Se analizan aspectos clave como eficiencia, escalabilidad y adecuación al problema:
+
+    \begin{table}[H]
+        \centering
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{C{4cm} C{3cm} C{3.5cm} C{3.5cm}}
+            \toprule
+            \textbf{Criterio}                              & \textbf{Fuerza Bruta}                   & \textbf{Programación Dinámica} & \textbf{Algoritmo Voraz}              \\
+            \midrule
+            Complejidad Temporal                           & \( O(n(k+1)^n) \)                       & No se sabe aún                 & \( O(n \log n) \)                     \\
+            Complejidad Espacial                           & \( O((k+1)^n) \)                        & No se sabe aún                 & \( O(n) \)                            \\
+            ¿Siempre da la solución óptima?                & Sí                                      & Sí                             & No                                    \\
+            ¿Es capaz de manejar gran cantidad de agentes? & No                                      & No se sabe aún                 & Alta                                  \\
+            Aplicación recomendada                         & Problemas pequeños                      & no se aun                      & Problemas grandes                     \\
+            Eficiencia en Tiempo                           & Muy baja (crece exponencialmente)       & no se aun                      & Alta (tiempo lineal o logarítmico)    \\
+            Eficiencia en Espacio                          & Muy baja, requiere mucho almacenamiento & no se aun                      & Alta, requiere poco espacio adicional \\
+            \bottomrule
+        \end{tabular}
+        \caption{Comparación general entre algoritmos.}
+    \end{table}
+
+    \textbf{Análisis general:}
+    \begin{itemize}
+        \item \textbf{Fuerza Bruta} es útil como referencia o verificación para instancias pequeñas. Su exactitud es total, pero su alto costo computacional limita su uso práctico a casos muy reducidos.
+        \item \textbf{Programación Dinámica} logra mantener la precisión y mejorar la eficiencia respecto a la fuerza bruta. Aun así, su uso intensivo de memoria y tiempo en casos grandes representa una limitación.
+        \item \textbf{Algoritmo Voraz}, aunque no garantiza la solución óptima, ofrece resultados de buena calidad en tiempos extremadamente bajos, por lo que es ideal para escenarios donde se necesita una respuesta rápida y lo más cercana a la óptima.
+    \end{itemize}
+
     \subsection{Ventajas y Desventajas}
+
+    El análisis de los tres algoritmos propuestos para resolver el problema de moderación del conflicto interno en redes sociales permite establecer comparaciones fundamentales en cuanto a precisión, eficiencia y aplicabilidad práctica. A continuación, se sintetizan las ventajas y desventajas más relevantes de cada enfoque:
 
     \subsubsection{Fuerza Bruta}
 
-    \subsubsection{Dinámico}
+    \begin{itemize}
+        \item \textbf{Ventajas:}
+        \begin{itemize}
+            \item Garantiza encontrar la solución óptima, al evaluar todas las posibles combinaciones.
+            \item Es útil como referencia o punto de comparación para validar otros algoritmos aproximados.
+            \item Implementación directa y sencilla desde el punto de vista conceptual.
+        \end{itemize}
+        \item \textbf{Desventajas:}
+        \begin{itemize}
+            \item Su complejidad temporal es exponencial, lo que lo vuelve inviable para instancias grandes.
+            \item Requiere un tiempo de ejecución considerable incluso para tamaños de entrada moderados.
+            \item No escala con eficiencia a redes sociales reales con cientos o miles de agentes.
+        \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Programación Dinámica}
+
+    \begin{itemize}
+        \item \textbf{Ventajas:}
+        \begin{itemize}
+            \item  Debido a que se divide el problema en subproblemas y se resuelve cada uno, se garantiza encontrar la solución óptima, en las pruebas realizadas, la solución siempre es la óptima como se puede ver.
+            \item  La complejidad espacial es reducida significativamente a diferencia de fuerza bruta.
+            \item Se evita hacer cálculos repetidos ya que utiliza los que ya ha hecho en otros subproblemas, haciendolá más adecuada para redes medianas y grandes donde se requiere precisión y rendimiento.
+        \end{itemize}
+        \item \textbf{Desventajas:}
+        \begin{itemize}
+            \item  Aunque su complejidad temporal mejora, se ve afectado el espacio en memoria, la complejidad espacial, con el fin de almacenar las soluciones parciales
+        \end{itemize}
+    \end{itemize}
 
     \subsubsection{Voraz}
+
+    \begin{itemize}
+        \item \textbf{Ventajas:}
+        \begin{itemize}
+            \item  Su ejecución es rápida y consume pocos recursos, ideal para entornos donde el tiempo de respuesta es crítico.
+            \item  La implementación es sencilla y generalmente más comprensible.
+            \item Escala bien para redes sociales grandes.
+        \end{itemize}
+        \item \textbf{Desventajas:}
+        \begin{itemize}
+            \item  No garantiza obtener la solución óptima, ya que toma decisiones locales sin evaluar el impacto global.
+        \end{itemize}
+    \end{itemize}
+
+    \textbf{Comparación Global:} El algoritmo de fuerza bruta actúa como una línea base teórica inigualable en precisión, pero ineficiente. La programación dinámica logra un balance adecuado entre eficiencia y exactitud, mientras que el enfoque voraz se justifica principalmente cuando se requiere velocidad y se puede tolerar una aproximación. La elección del algoritmo adecuado dependerá del tamaño del problema, los recursos disponibles y el nivel de precisión requerido por la aplicación práctica.
+
 %%%%%%% COMPARACIÓN ALGORITMOS %%%%%%% FIN
 
     \newpage
@@ -873,15 +1008,33 @@
 
     \section{Casos de Prueba}
 
+    Se realizan casos de prueba para los diferentes tipos de algoritmos (fuerza bruta, programación dinámica y voraz) con el objetivo de evaluar su eficiencia, exactitud y comportamiento en diversas condiciones. Esto permite comparar qué algoritmo es más eficiente en determinados casos, poniendo a prueba su desempeño en situaciones donde el uso de memoria y capacidad de procesamiento son claves para su correcto funcionamiento. Se han llevado a cabo los siguientes casos de pruebas:
+
     \subsection{Caso de Prueba 1}
+    \begin{flushleft}
+        \includegraphics[width=\linewidth]{resources/cp1.jpeg}
+    \end{flushleft}
 
     \subsection{Caso de Prueba 2}
+    \begin{flushleft}
+        \includegraphics[width=\linewidth]{resources/cp2.jpeg}
+    \end{flushleft}
 
     \subsection{Caso de Prueba 3}
+    \begin{flushleft}
+        \includegraphics[width=\linewidth]{resources/cp3.jpeg}
+    \end{flushleft}
 
     \subsection{Caso de Prueba 4}
+    \begin{flushleft}
+        \includegraphics[width=\linewidth]{resources/cp4.jpeg}
+    \end{flushleft}
 
     \subsection{Caso de Prueba 5}
+    \begin{flushleft}
+        \includegraphics[width=\linewidth]{resources/cp5.jpeg}
+    \end{flushleft}
+
 %%%%%%% CASOS DE PRUEBA %%%%%%% INICIO
 
 
