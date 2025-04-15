@@ -14,6 +14,8 @@ export class AppComponent {
   procesando: boolean = false;
   archivoCargado: boolean = false;
   mostrandoSpinner: boolean = false;
+  metodoUsado: string | null = null;
+
 
   contenidoArchivo: string = '';
   gruposResumen: { personas: number, opinion1: number, opinion2: number, terquedad: number }[] = [];
@@ -87,14 +89,9 @@ export class AppComponent {
     this.procesando = true;
     this.mostrandoSpinner = true;
 
-    let endpoint = '';
-    if (metodo === 'fuerzaBruta') {
-      endpoint = '/fuerzaBruta';
-    } else if (metodo === 'voraz') {
-      endpoint = '/voraz';
-    } else if (metodo === 'dinamico') {
-      endpoint = '/dinamico';
-    }
+
+    let endpoint = `${metodo}`;
+    this.metodoUsado = metodo;
 
     this.apiService.enviarArchivo(this.archivo, endpoint).subscribe(
       (response) => {
