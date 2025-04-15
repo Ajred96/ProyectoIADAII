@@ -7,7 +7,7 @@ import {Observable} from 'rxjs';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://127.0.0.1:5000/procesar';
+  private apiUrl = 'http://127.0.0.1:5000';
 
   constructor(private http: HttpClient) {
   }
@@ -15,6 +15,12 @@ export class ApiService {
   enviarArchivo(archivo: File, endpoint: string): Observable<any> {
     const formData = new FormData();
     formData.append('file', archivo);
-    return this.http.post<any>(`${this.apiUrl}${endpoint}`, formData);
+    return this.http.post<any>(`${this.apiUrl}/procesar/${endpoint}`, formData);
+  }
+
+  calcularConflicto(archivo: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', archivo);
+    return this.http.post<any>(`${this.apiUrl}/calcular_ci`, formData);
   }
 }

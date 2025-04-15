@@ -12,25 +12,6 @@ def utilidad_base(o1, o2, rigidez):
     diferencia = abs(o1 - o2)
     return diferencia / rigidez
 
-def utilidad_reduccion_absoluta(o1, o2, rigidez):
-    """
-    Heurística alternativa: (o1 - o2)^2 / (rigidez * e).
-    Prioriza reducción absoluta del conflicto por esfuerzo.
-    """
-    rigidez = max(rigidez, 1e-6)
-    reduccion = (o1 - o2) ** 2
-    esfuerzo = max(1, math.ceil(abs(o1 - o2) * rigidez))  # Evita esfuerzo 0
-    return reduccion / esfuerzo
-
-def utilidad_solo_extremos(o1, o2, rigidez):
-    """
-    Heurística para priorizar agentes extremos (|o1 - o2| > 50).
-    Si no son extremos, utilidad = 0.
-    """
-    rigidez = max(rigidez, 1e-6)
-    diferencia = abs(o1 - o2)
-    return diferencia / rigidez if diferencia > 50 else 0
-
 def modciPV(red_social, R_max):
     """
     Resuelve el problema ModCI usando un enfoque voraz.
