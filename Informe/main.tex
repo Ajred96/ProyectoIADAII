@@ -1053,9 +1053,43 @@ A partir de esta comparación, respondemos a las preguntas planteadas:
 
     \subsubsection{¿Cuándo da la Respuesta Correcta?}
 
-    \subsubsection{¿Cuándo no da la Respuesta Correcta?}
+    Existen ciertos escenarios en los que la estrategia voraz garantiza la obtención de la solución óptima. Estos casos son estructuralmente simples y no requieren decisiones complejas de distribución del esfuerzo. A continuación, se describen los más relevantes:
+    
+    \begin{itemize}
+        \item \textbf{Red social con un único grupo.}  
+        Si la red contiene un solo grupo de agentes, cualquier cantidad de esfuerzo se destinará únicamente a él. Como no hay necesidad de priorizar entre grupos, la estrategia voraz y la óptima coinciden necesariamente.
 
+    
+        \item \textbf{El esfuerzo disponible permite moderar completamente a todos los grupos.}  
+        Cuando el presupuesto de esfuerzo es suficiente para aplicar el máximo nivel de moderación posible en todos los grupos, no es necesario priorizar. En este caso, todos los algoritmos —incluido el voraz— aplicarán la misma estrategia completa y óptima.
+    
+    \end{itemize}
+        \subsubsection{¿Cuándo no da la Respuesta Correcta?}
+    
+    Aunque el algoritmo voraz ofrece una solución válida y eficiente al problema ModCI, su naturaleza heurística implica que no garantiza la obtención del conflicto interno mínimo en todos los casos. A continuación, se detallan algunos escenarios típicos en los que esta estrategia puede generar soluciones subóptimas:
+    
+    
+    \begin{itemize}
+    
+    \item \textbf{Distribución óptima del esfuerzo requiere intervenir en varios grupos de forma parcial.}  
+    El enfoque voraz concentra el esfuerzo en el grupo que ofrece la mayor utilidad individual, incluso si esto implica intervenir completamente en un solo grupo. Sin embargo, en muchos casos, distribuir parcialmente ese mismo esfuerzo entre varios grupos puede reducir más el conflicto general. Por ejemplo, usar todo el presupuesto en un grupo con solo dos agentes con mayor utilidad deja sin cubrir a grupos más numerosos donde podrían haberse moderado más individuos con el mismo costo total.
+    
+    \end{itemize}
+    
+        
+    
+    
     \subsection{Análisis}
+    El algoritmo voraz implementado para el problema ModCI constituye una solución computacionalmente eficiente que, en la mayoría de casos, entrega resultados cercanos al óptimo. Su lógica de priorización basada en utilidad permite obtener estrategias factibles de forma rápida, lo cual es especialmente valioso en redes sociales de gran tamaño o cuando el tiempo de cómputo es una restricción.
+    
+    A pesar de su eficiencia, el algoritmo presenta limitaciones estructurales debido a su enfoque local. Al no evaluar el impacto global de sus decisiones, puede generar soluciones subóptimas en escenarios donde el esfuerzo debe ser distribuido cuidadosamente entre múltiples grupos.
+    
+    No obstante, la calidad de sus soluciones fue evaluada sistemáticamente mediante una métrica relativa de comparación con soluciones óptimas de la batería de pruebas. Los resultados mostraron que, en promedio, la solución generada por el algoritmo voraz se alejó apenas un 1{,}62\% de la óptima. Esta baja desviación sugiere que, a pesar de no explorar todo el espacio de soluciones, el enfoque voraz logra capturar buena parte de la estructura del problema y construir respuestas competitivas.
+    
+    En resumen, el algoritmo ofrece un equilibrio notable entre velocidad y calidad de solución. Si bien no garantiza optimalidad, su comportamiento consistente y su bajo margen de error lo hacen una herramienta efectiva y escalable para abordar el problema ModCI en contextos prácticos.
+    \begin{tcolorbox}[colback=red!5!white, colframe=red!50!black, title=Advertencia sobre la correctitud]
+            La principal debilidad del enfoque voraz radica en que realiza asignaciones de forma secuencial y local, sin considerar la interacción global entre grupos y el impacto acumulado que puede tener una distribución alternativa del esfuerzo. Por ello, si bien en muchos casos ofrece soluciones cercanas al óptimo, existen configuraciones donde se aleja de la mejor estrategia posible. 
+        \end{tcolorbox}
 
 %%%%%%% ALGORITMO VORAZ %%%%%%% FIN
 
