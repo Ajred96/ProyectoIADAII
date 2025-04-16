@@ -674,11 +674,271 @@
 
     Una vez calculadas las utilidades para todos los grupos, se ordenan en orden descendente y se asigna el esfuerzo disponible comenzando por los grupos más rentables, hasta agotar el presupuesto permitido $R_{max}$ o no poder realizar más asignaciones viables.
 
-    \subsection{¿Entendimos el Algoritmo?}
+\subsection{¿Entendimos el Algoritmo?}
+\subsubsection{Solución del Ejercicio 2.3.1}
 
-    \subsubsection{Solución del Ejercicio 2.3.1}
+Consideramos la red social $\mathcal{RS}_1 = ( \langle 3, -100, 50, 0.5 \rangle, \langle 1, 100, 80, 0.1 \rangle, \langle 1, -10, 0, 0.5 \rangle, R_{max} = 80 )$, compuesta por tres grupos de agentes. La información detallada de los grupos es la siguiente:
 
-    \subsubsection{Solución del Ejercicio 2.3.2}
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c|c|c}
+\textbf{Grupo} & $n_i$ (agentes) & $o_{i1}$ & $o_{i2}$ & $r_i $ (rigidez) \\
+\hline
+0 & 3 & -100 & 50 & 0.5 \\
+1 & 1 & 100 & 80 & 0.1 \\
+2 & 1 & -10 & 0 & 0.5 \\
+\end{tabular}
+\caption{Datos de entrada de la red social $\mathcal{RS}_1$}
+\end{table}
+
+\subsubsection*{Paso 1: Cálculo de utilidad y costo unitario}
+
+Calculamos para cada grupo su utilidad según la \nameref{sec:Definición de la Heurística}) y el costo de moderar a un solo agente:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c}
+\textbf{Grupo} & Utilidad heurística & Costo unitario por agente \\
+\hline
+0 & $\frac{|-100 - 50|}{0.5} = 300$ & $\lceil 150 \cdot 0.5 \rceil = 75$ \\
+1 & $\frac{|100 - 80|}{0.1} = 200$ & $\lceil 20 \cdot 0.1 \rceil = 2$ \\
+2 & $\frac{|-10 - 0|}{0.5} = 20$ & $\lceil 10 \cdot 0.5 \rceil = 5$ \\
+\end{tabular}
+\caption{Utilidades y costos unitarios de la red social $\mathcal{RS}_1$}
+\end{table}
+
+\subsubsection*{Paso 2: Orden de prioridad por utilidad}
+
+Ordenamos los grupos en orden descendente según su utilidad:
+
+\begin{enumerate}
+    \item Grupo 0: utilidad 300
+    \item Grupo 1: utilidad 200
+    \item Grupo 2: utilidad 20
+\end{enumerate}
+
+\subsubsection*{Paso 3: Asignación de esfuerzo}
+
+Inicializamos $R_{\text{max}} = 80$.
+
+\begin{itemize}
+    \item \textbf{Grupo 0}:
+        \begin{itemize}
+            \item Costo unitario: 75
+            \item Máximo posible: $\left\lfloor \frac{80}{75} \right\rfloor = 1$ agente
+            \item Se asigna: 1 agente
+            \item Nuevo $R_{\text{max}} = 80 - 75 = 5$
+        \end{itemize}
+
+    \item \textbf{Grupo 1}:
+        \begin{itemize}
+            \item Costo unitario: 2
+            \item Máximo posible: $\left\lfloor \frac{5}{2} \right\rfloor = 2$, pero el grupo tiene solo 1 agente
+            \item Se asigna: 1 agente
+            \item Nuevo $R_{\text{max}} = 5 - 2 = 3$
+        \end{itemize}
+
+    \item \textbf{Grupo 2}:
+        \begin{itemize}
+            \item Costo unitario: 5
+            \item Máximo posible: $\left\lfloor \frac{3}{5} \right\rfloor = 0$
+            \item No se asignan agentes
+        \end{itemize}
+\end{itemize}
+
+\subsubsection*{Resultado parcial de la estrategia}
+
+\begin{itemize}
+    \item \textbf{Estrategia aplicada ($E_V$): } $[1, 1, 0]$
+    \item \textbf{Esfuerzo total utilizado:} $75 + 2 = 77$
+\end{itemize}
+
+\subsubsection*{Cálculo del conflicto interno}
+
+La siguiente tabla muestra, grupo por grupo, cómo se calcula el conflicto interno de la red tras aplicar la estrategia $E_V = [1, 1, 0]$:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c|c|c|c}
+\textbf{Grupo} & $n_i$ & $e_i$ & $n_i - e_i$ (no moderados) & $(o_{i1} - o_{i2})^2$ & Aporte al CI \\
+\hline
+0 & 3 & 1 & 2 & $(-100 - 50)^2 = 22500$ & $2 \cdot 22500 = 45000$ \\
+1 & 1 & 1 & 0 & $(100 - 80)^2 = 400$ & $0 \cdot 400 = 0$ \\
+2 & 1 & 0 & 1 & $(-10 - 0)^2 = 100$ & $1 \cdot 100 = 100$ \\
+\hline
+\multicolumn{5}{r|}{\textbf{Suma total}} & 45100 \\
+\end{tabular}
+\caption{Cálculo del conflicto interno con la estrategia $E_V$ para $\mathcal{RS}_1$}
+\end{table}
+
+\textbf{Conflicto interno resultante:} $\frac{45100}{3} \approx 15033.33$
+
+\subsubsection*{Resultado final}
+
+\begin{itemize}
+    \item \textbf{Estrategia aplicada:} $[1, 1, 0]$
+    \item \textbf{Esfuerzo total utilizado:} $77$
+    \item \textbf{Conflicto interno resultante:} $\approx 15033.33$
+\end{itemize}
+
+\subsubsection*{Análisis final y respuestas a las preguntas del ejercicio}
+
+Para la red social $\mathcal{RS}_1$ se compararon tres estrategias:
+
+\begin{itemize}
+    \item \textbf{Estrategia $E_1$}: $[0, 1, 1]$, con esfuerzo total $7$ y conflicto interno $22500$
+    \item \textbf{Estrategia $E_2$}: $[1, 0, 0]$, con esfuerzo total $75$ y conflicto interno $15166.66$
+    \item \textbf{Estrategia $E_V$}: $[1, 1, 0]$, con esfuerzo total $77$ y conflicto interno $\approx 15033.33$
+\end{itemize}
+
+A partir de estos resultados, respondemos las preguntas planteadas:
+
+\begin{itemize}
+    \item \textbf{¿Habrá mejores soluciones que $E_2$?} \\
+    Sí. La estrategia $E_V$ encontrada por el algoritmo voraz logra un menor nivel de conflicto interno ($\approx 15033.33$) que $E_2$ ($15166.66$), y sigue siendo aplicable dentro del esfuerzo permitido ($77 \leq 80$). Además, esta estrategia fue verificada con el enfoque de fuerza bruta, confirmando que es la solución óptima para esta instancia.
+
+    \item \textbf{¿Habrá estrategias de moderación no aplicables?} \\
+    Sí. Por ejemplo, la estrategia $[2, 1, 1]$ (es decir, moderar a 2 agentes del grupo 0, 1 del grupo 1 y 1 del grupo 2) resulta en un esfuerzo total de:
+    \[
+    \lceil 150 \cdot 0.5 \cdot 2 \rceil + \lceil 20 \cdot 0.1 \cdot 1 \rceil + \lceil 10 \cdot 0.5 \cdot 1 \rceil = 150 + 2 + 5 = 157
+    \]
+    lo cual excede el límite $R_{max} = 80$. Por tanto, no es aplicable.
+
+\end{itemize}
+
+
+
+\subsubsection{Solución del Ejercicio 2.3.2}
+
+Consideramos la red social $RS2 = ( \langle 3, -100, 100, 0.8 \rangle, \langle 2, 100, 80, 0.5 \rangle, \langle 4, -10, 10, 0.5 \rangle, R_{max} = 400 )$, compuesta por tres grupos de agentes. La información detallada de los grupos es la siguiente:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c|c|c}
+\textbf{Grupo} & $n_i$ (agentes) & $o_{i1}$ & $op_{i2}$ & $r_i$ (rigidez) \\
+\hline
+0 & 3 & -100 & 100 & 0.8 \\
+1 & 2 & 100 & 80 & 0.5 \\
+2 & 4 & -10 & 10 & 0.5 \\
+\end{tabular}
+\caption{Datos de entrada de la red social $\mathcal{RS}_2$}
+\end{table}
+
+\subsubsection*{Paso 1: Cálculo de utilidad y costo unitario}
+
+Calculamos para cada grupo su utilidad según la \nameref{sec:Definición de la Heurística}) y el costo de moderar a un solo agente:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c}
+\textbf{Grupo} & Utilidad heurística & Costo unitario por agente \\
+\hline
+0 & $\frac{|-100 - 100|}{0.8} = 250$ & $\lceil 200 \cdot 0.8 \rceil = 160$ \\
+1 & $\frac{|100 - 80|}{0.5} = 40$ & $\lceil 20 \cdot 0.5 \rceil = 10$ \\
+2 & $\frac{|-10 - 10|}{0.5} = 40$ & $\lceil 20 \cdot 0.5 \rceil = 10$ \\
+\end{tabular}
+\caption{Utilidades y costos unitarios de la red social $\mathcal{RS}_2$}
+\end{table}
+
+\subsubsection*{Paso 2: Orden de prioridad por utilidad}
+
+Ordenamos los grupos en orden descendente según su utilidad:
+
+\begin{enumerate}
+    \item Grupo 0: utilidad 250
+    \item Grupo 1: utilidad 40
+    \item Grupo 2: utilidad 40
+\end{enumerate}
+
+\subsubsection*{Paso 3: Asignación de esfuerzo}
+
+Inicializamos $R_{\text{max}} = 400$.
+
+\begin{itemize}
+    \item \textbf{Grupo 0}:
+        \begin{itemize}
+            \item Costo unitario: 160
+            \item Máximo posible: $\left\lfloor \frac{400}{160} \right\rfloor = 2$, pero el grupo tiene solo 3 agentes
+            \item Se asigna: 2 agentes
+            \item Nuevo $R_{\text{max}} = 400 - 2 \cdot 160 = 80$
+        \end{itemize}
+
+    \item \textbf{Grupo 1}:
+        \begin{itemize}
+            \item Costo unitario: 10
+            \item Máximo posible: $\left\lfloor \frac{80}{10} \right\rfloor = 8$, pero el grupo tiene solo 2 agentes
+            \item Se asigna: 2 agentes
+            \item Nuevo $R_{\text{max}} = 80 - 2 \cdot 10 = 60$
+        \end{itemize}
+
+    \item \textbf{Grupo 2}:
+        \begin{itemize}
+            \item Costo unitario: 10
+            \item Máximo posible: $\left\lfloor \frac{60}{10} \right\rfloor = 6$, pero el grupo tiene solo 4 agentes
+            \item Se asigna: 4 agentes
+            \item Nuevo $R_{\text{max}} = 60 - 4 \cdot 10 = 20$
+        \end{itemize}
+\end{itemize}
+
+\subsubsection*{Resultado parcial de la estrategia}
+
+\begin{itemize}
+    \item \textbf{Estrategia aplicada ($E_V$): } $[2, 2, 4]$
+    \item \textbf{Esfuerzo total utilizado:} $2 \cdot 160 + 2 \cdot 10 + 4 \cdot 10 = 320 + 20 + 40 = 380$
+\end{itemize}
+
+\subsubsection*{Cálculo del conflicto interno}
+
+La siguiente tabla muestra, grupo por grupo, cómo se calcula el conflicto interno de la red tras aplicar la estrategia $E = [2, 2, 4]$:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c|c|c|c}
+\textbf{Grupo} & $n_i$ & $e_i$ & $n_i - c_i$ (no moderados) & $(o1_i - o2_i)^2$ & Aporte al CI \\
+\hline
+0 & 3 & 2 & 1 & $( -100 - 100 )^2 = 40000$ & $1 \cdot 40000 = 40000$ \\
+1 & 2 & 2 & 0 & $(100 - 80)^2 = 400$ & $0$ \\
+2 & 4 & 4 & 0 & $(-10 - 10)^2 = 400$ & $0$ \\
+\hline
+\multicolumn{5}{r|}{\textbf{Suma total}} & 40000 \\
+\end{tabular}
+\caption{Cálculo del conflicto interno con la estrategia $E_V$ para $\mathcal{RS}_2$}
+\end{table}
+
+\textbf{Conflicto interno resultante:} $\frac{40000}{3} \approx 13333.33$
+
+\subsubsection*{Resultado final}
+
+\begin{itemize}
+    \item \textbf{Estrategia aplicada:} $[2, 2, 4]$
+    \item \textbf{Esfuerzo total utilizado:} $380$
+    \item \textbf{Conflicto interno resultante:} $\approx 13333.33$
+\end{itemize}
+
+\subsubsection*{Análisis final y respuestas a las preguntas del ejercicio}
+
+En este ejercicio se compararon tres estrategias de moderación aplicables a la red social $RS2$:
+
+\begin{itemize}
+    \item \textbf{Estrategia $E_1$}: $[0, 1, 2]$ con esfuerzo total $30$ y conflicto interno $40400$
+    \item \textbf{Estrategia $E_2$}: $[2, 2, 2]$ con esfuerzo total $360$ y conflicto interno $13600$
+    \item \textbf{Estrategia $E_{V}$}: $[2, 2, 4]$ con esfuerzo total $380$ y conflicto interno $\approx 13333.33$
+\end{itemize}
+
+A partir de esta comparación, respondemos a las preguntas planteadas:
+
+\begin{itemize}
+    \item \textbf{¿Habrá mejores soluciones que $E_2$?} \\
+    Sí. La estrategia encontrada mediante el algoritmo voraz $E_V$ logra un conflicto interno menor ($\approx 13333.33$ frente a $13600$) y cumple con el límite de esfuerzo ($380 \leq 400$). Además, se verificó que esta estrategia también fue identificada por el algoritmo de fuerza bruta como la solución óptima, lo que confirma su calidad.
+
+    \item \textbf{¿Habrá estrategias de moderación no aplicables?} \\
+    Sí. Existen muchas estrategias que no son viables porque requieren más esfuerzo del disponible. Por ejemplo, la estrategia $[3, 2, 4]$, que intenta moderar completamente a todos los grupos:
+    \[
+    \lceil 200 \cdot 0.8 \cdot 3 \rceil + \lceil 20 \cdot 0.5 \cdot 2 \rceil + \lceil 20 \cdot 0.5 \cdot 4 \rceil = 480 + 20 + 40 = 540
+    \]
+    lo cual supera el presupuesto de $R_{max} = 400$, y por tanto no es aplicable.
+\end{itemize}
+
 
     \subsection{Implementación}
 
