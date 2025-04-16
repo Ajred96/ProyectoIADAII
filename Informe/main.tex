@@ -49,15 +49,21 @@
 \usepackage{booktabs}
 \usepackage[most]{tcolorbox}
 \usepackage{mdframed}
+\usepackage{adjustbox}
 
 % Algoritmos y código
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\renewcommand{\listalgorithmcfname}{Lista de Algoritmos}
+\renewcommand{\algorithmcfname}{Algoritmo}
 \usepackage{listings}
+
 
 % Referencias y notas
 \usepackage{nameref}
 \usepackage{natbib}
 \usepackage{endnotes}
+\usepackage[backend=biber,style=apa]{biblatex}
+\addbibresource{bibliografia.bib}
 
 % Hipervínculos (último siempre que sea posible)
 \usepackage{hyperref}
@@ -68,6 +74,17 @@
 % Centrado de tablas
 \usepackage{array}
 \newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} % Centrado horizontal y vertical
+
+\definecolor{verde}{RGB}{199,233,192}
+\definecolor{rosado}{RGB}{255,199,206}
+\definecolor{grisazul}{RGB}{218,227,243}
+\definecolor{grisclaro}{RGB}{242,242,242}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{float}
+\usepackage{multirow}
 
 %%%%%%% PAQUETES Y CONFIGURACIONES %%%%%%% FIN
 
@@ -105,6 +122,13 @@
 
 %%%%%%% INDICE %%%%%%% INICIO
     \tableofcontents
+    \newpage
+    \listoftables
+    \newpage
+    \listoffigures
+    \newpage
+    \listofalgorithms
+
 %%%%%%% INDICE %%%%%%% FIN
     \newpage
 
@@ -996,7 +1020,7 @@ A partir de esta comparación, respondemos a las preguntas planteadas:
 
     \begin{itemize}
         \item Recorre todos los grupos de la red social (de tamaño $n$) para calcular una utilidad heurística y el esfuerzo unitario por agente. Esto toma ${O}(n)$.
-        \item Ordena la lista de grupos por utilidad en orden descendente, lo cual tiene una complejidad de ${O}(n \log n)$.
+        \item Ordena la lista de grupos por utilidad en orden descendente, usando la función \texttt{sort} de python la cual implementa el algoritmo \texttt{Timsort} (\cite{python_sorting}) que tiene una complejidad de ${O}(n \log n)$ en el peor de los casos \cite{Auger2018}.
         \item Itera sobre la lista ordenada para asignar agentes a moderar mientras haya esfuerzo disponible. En el peor caso, esta operación es lineal: ${O}(n)$.
         \item Finalmente, calcula el conflicto interno total y el esfuerzo utilizado, operación que, puede tomar ${O}(n)$.
     \end{itemize}
@@ -1062,7 +1086,14 @@ A partir de esta comparación, respondemos a las preguntas planteadas:
     
         \item \textbf{El esfuerzo disponible permite moderar completamente a todos los grupos.}  
         Cuando el presupuesto de esfuerzo es suficiente para aplicar el máximo nivel de moderación posible en todos los grupos, no es necesario priorizar. En este caso, todos los algoritmos —incluido el voraz— aplicarán la misma estrategia completa y óptima.
-    
+  
+    \item \textbf{Escenario favorable para la elección voraz.}  
+En ciertos escenarios, el presupuesto disponible coincide de forma precisa con el esfuerzo necesario para moderar completamente a los grupos más eficientes, es decir, aquellos con mayor utilidad y menor costo por agente. En estos casos, el enfoque voraz —que asigna esfuerzo de forma secuencial comenzando por los grupos más rentables— toma las mismas decisiones que una estrategia óptima. Por ejemplo, si moderar tres grupos de alta utilidad consume exactamente el esfuerzo total, y los grupos restantes son menos eficientes o demasiado costosos, no hay necesidad de considerar combinaciones parciales. La estrategia voraz, al seguir su ordenamiento local, construye la solución correcta sin evaluaciones adicionales.
+
+\textit{Ejemplo:} Este comportamiento se observa en la red de la Prueba 5 de la batería de pruebas: 5 grupos con esfuerzo disponible 460. El algoritmo voraz aplica 456 unidades de esfuerzo en los grupos 2, 4 y 1, que presentan la mejor utilidad por agente, logrando la misma solución que un algoritmo óptimo. No es necesario distribuir el esfuerzo parcialmente entre grupos, ni dejar fuera algún grupo más eficiente.
+
+\textit{Sin embargo, este caso no es representativo de una generalidad.} El hecho de que el esfuerzo disponible encaje exactamente con la cantidad necesaria para cubrir completamente los grupos más eficientes es una coincidencia estructural que no se presenta con frecuencia y no es facilmente replicable. En la mayoría de instancias reales, es común que el esfuerzo óptimo deba distribuirse entre varios grupos de forma parcial, situación en la que la estrategia voraz no suele ser óptima, aunque se acerca bastante.
+
     \end{itemize}
         \subsubsection{¿Cuándo no da la Respuesta Correcta?}
     
@@ -1104,11 +1135,79 @@ A partir de esta comparación, respondemos a las preguntas planteadas:
 
     \subsection{Solución Óptima}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.8\textwidth]{resources/conflictos.png}
-        \caption{Comparativa gráfica del conflicto interno generado por cada algoritmo.}
-    \end{figure}
+\begin{table}[H]
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{|l|c|c|c|c|c|c|}
+\hline
+Prueba & N. Grupos de Agentes & Valor Solución (CI) & Fuerza Bruta & Dinamica & Voraz & Diferencia de las soluciones \\
+\hline
+Prueba1.txt & 5 & 0 & \cellcolor{verde}0.0 & \cellcolor{verde}0.000 & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba2.txt & 5 & 19616.4 & \cellcolor{verde}19616.4 & \cellcolor{verde}19616.400 & \cellcolor{rosado}19667.600 & 0.002610061 \\
+\hline
+Prueba3.txt & 5 & 1621.6 & \cellcolor{verde}1621.6 & \cellcolor{verde}1621.600 & \cellcolor{rosado}1720.200 & 0.060804144 \\
+\hline
+Prueba4.txt & 5 & 5103.8 & \cellcolor{verde}5103.8 & \cellcolor{verde}5103.800 & \cellcolor{rosado}5219.000 & 0.022571417 \\
+\hline
+Prueba5.txt & 5 & 14369 & \cellcolor{verde}14369.0 & \cellcolor{verde}14369.000 & \cellcolor{verde}14369.000 & 0 \\
+\hline
+Prueba6.txt & 10 & 31002.7 & \cellcolor{verde}31002.7 & \cellcolor{verde}31002.700 & \cellcolor{rosado}32040.200 & 0.033464827 \\
+\hline
+Prueba7.txt & 10 & 2762.9 & \cellcolor{verde}2762.9 & \cellcolor{verde}2762.900 & \cellcolor{rosado}2844.800 & 0.029642767 \\
+\hline
+Prueba8.txt & 10 & 21948.9 & \cellcolor{rosado}X & \cellcolor{verde}21948.900 & \cellcolor{rosado}22165.900 & 0.0098866 \\
+\hline
+Prueba9.txt & 10 & 75544.6 & \cellcolor{rosado}X & \cellcolor{verde}75544.600 & \cellcolor{rosado}75934.600 & 0.005162513 \\
+\hline
+Prueba10.txt & 10 & 0 & \cellcolor{rosado}X & \cellcolor{verde}0.000 & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba11.txt & 15 & 19391.933 & \cellcolor{rosado}X & \cellcolor{verde}19391.933 & \cellcolor{rosado}19639.933 & 0.012788823 \\
+\hline
+Prueba12.txt & 15 & 16558.266 & \cellcolor{rosado}X & \cellcolor{verde}16558.266 & \cellcolor{rosado}16689.733 & 0.00793966 \\
+\hline
+Prueba13.txt & 15 & 43861 & \cellcolor{rosado}X & \cellcolor{verde}43861.000 & \cellcolor{rosado}43931.533 & 0.001608103 \\
+\hline
+Prueba14.txt & 15 & 22694.266 & \cellcolor{rosado}X & \cellcolor{verde}22694.266 & \cellcolor{rosado}23016.466 & 0.014197419 \\
+\hline
+Prueba15.txt & 15 & 68944.399 & \cellcolor{rosado}X & \cellcolor{verde}68944.399 & \cellcolor{rosado}69209.000 & 0.00383789 \\
+\hline
+Prueba16.txt & 20 & 0 & \cellcolor{rosado}X & \cellcolor{verde}0.000 & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba17.txt & 20 & 771.15 & \cellcolor{rosado}X & \cellcolor{verde}771.150 & \cellcolor{rosado}916.950 & 0.189068275 \\
+\hline
+Prueba18.txt & 25 & 28058.12 & \cellcolor{rosado}X & \cellcolor{verde}28058.120 & \cellcolor{rosado}28093.720 & 0.001268795 \\
+\hline
+Prueba19.txt & 25 & 0 & \cellcolor{rosado}X & \cellcolor{verde}0.000 & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba20.txt & 25 & 12431.4 & \cellcolor{rosado}X & \cellcolor{verde}12431.400 & \cellcolor{rosado}12683.600 & 0.020287337 \\
+\hline
+Prueba21.txt & 50 & 0 & \cellcolor{rosado}X & \cellcolor{verde}0.000 & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba22.txt & 50 & 0 & \cellcolor{rosado}X & \cellcolor{verde}0.000 & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba23.txt & 50 & 0 & \cellcolor{rosado}X & \cellcolor{verde}0.000 & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba24.txt & 50 & 0 & \cellcolor{rosado}X & \cellcolor{verde}0.000 & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba25.txt & 50 & 0 & \cellcolor{rosado}X & \cellcolor{verde}0.000 & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba26.txt & 50 & 28988.24 & \cellcolor{rosado}X & \cellcolor{verde}28988.240 & \cellcolor{rosado}29189.540 & 0.006944195 \\
+\hline
+Prueba27.txt & 50 & 25102.36 & \cellcolor{rosado}X & \cellcolor{verde}25102.360 & \cellcolor{rosado}25306.720 & 0.008141067 \\
+\hline
+Prueba28.txt & 100 & 930.02 & \cellcolor{rosado}X & \cellcolor{verde}930.020 & \cellcolor{rosado}982.060 & 0.055955786 \\
+\hline
+Prueba29.txt & 100 & 0 & \cellcolor{rosado}X & \cellcolor{rosado}X & \cellcolor{verde}0.000 & 0 \\
+\hline
+Prueba30.txt & 100 & - & \cellcolor{rosado}X & \cellcolor{rosado}X & \cellcolor{verde}0.000 & 0 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{Comparación de los resultados obtenidos por los distintos algoritmos para los diferentes archivos de prueba}
+\end{table}
+
+
 
     Al evaluar la precisión de los algoritmos, se compararon sus resultados con el valor de la solución (CI) obtenido para cada prueba y la comparación con los resultados de cada algoritmo permite medir su exactitud.
 
@@ -1158,11 +1257,78 @@ A partir de esta comparación, respondemos a las preguntas planteadas:
 
     \subsection{Tiempos de Ejecución}
 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.8\textwidth]{resources/tiempos.png}
-        \caption{Comparativa gráfica del tiempo de respuesta obtenido por cada algoritmo.}
-    \end{figure}
+\begin{table}[H]
+\centering
+\begin{adjustbox}{width=\textwidth}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+Prueba & N. Grupos de Agentes & Fuerza Bruta Tiempo seg & Dinamica Tiempo seg & Voraz Tiempo seg \\
+\hline
+Prueba1.txt & 5 & \cellcolor{rosado}0,0051 & \cellcolor{verde}0,0037 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba2.txt & 5 & \cellcolor{rosado}0,0358 & \cellcolor{verde}0,0065 & \cellcolor{verde}0,0001 \\
+\hline
+Prueba3.txt & 5 & \cellcolor{rosado}0,0117 & \cellcolor{verde}0,0073 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba4.txt & 5 & \cellcolor{rosado}0,0065 & \cellcolor{verde}0,0021 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba5.txt & 5 & \cellcolor{rosado}0,0421 & \cellcolor{verde}0,0041 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba6.txt & 10 & \cellcolor{rosado}115,9665 & \cellcolor{verde}0,0029 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba7.txt & 10 & \cellcolor{rosado}35,1900 & \cellcolor{verde}0,0559 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba8.txt & 10 & \cellcolor{rosado}X & \cellcolor{verde}0,5037 & \cellcolor{verde}0,0001 \\
+\hline
+Prueba9.txt & 10 & \cellcolor{rosado}X & \cellcolor{verde}0,4903 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba10.txt & 10 & \cellcolor{rosado}X & \cellcolor{verde}0,9360 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba11.txt & 15 & \cellcolor{rosado}X & \cellcolor{verde}0,9360 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba12.txt & 15 & \cellcolor{rosado}X & \cellcolor{verde}0,0402 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba13.txt & 15 & \cellcolor{rosado}X & \cellcolor{verde}0,5627 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba14.txt & 15 & \cellcolor{rosado}X & \cellcolor{verde}5,1563 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba15.txt & 15 & \cellcolor{rosado}X & \cellcolor{verde}0,7574 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba16.txt & 20 & \cellcolor{rosado}X & \cellcolor{verde}3,3455 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba17.txt & 20 & \cellcolor{rosado}X & \cellcolor{verde}8,9823 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba18.txt & 25 & \cellcolor{rosado}X & \cellcolor{verde}5,4816 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba19.txt & 25 & \cellcolor{rosado}X & \cellcolor{verde}10,1032 & \cellcolor{verde}0,0001 \\
+\hline
+Prueba20.txt & 25 & \cellcolor{rosado}X & \cellcolor{verde}12,4681 & \cellcolor{verde}0,0000 \\
+\hline
+Prueba21.txt & 50 & \cellcolor{rosado}X & \cellcolor{verde}29,3461 & \cellcolor{verde}0,0001 \\
+\hline
+Prueba22.txt & 50 & \cellcolor{rosado}X & \cellcolor{verde}25,0628 & \cellcolor{verde}0,0001 \\
+\hline
+Prueba23.txt & 50 & \cellcolor{rosado}X & \cellcolor{verde}160,8041 & \cellcolor{verde}0,0001 \\
+\hline
+Prueba24.txt & 50 & \cellcolor{rosado}X & \cellcolor{verde}174,4527 & \cellcolor{verde}0,0001 \\
+\hline
+Prueba25.txt & 50 & \cellcolor{rosado}X & \cellcolor{verde}131,9559 & \cellcolor{verde}0,0001 \\
+\hline
+Prueba26.txt & 50 & \cellcolor{rosado}X & \cellcolor{verde}71,8948 & \cellcolor{verde}0,0001 \\
+\hline
+Prueba27.txt & 100 & \cellcolor{rosado}X & \cellcolor{verde}553,2430 & \cellcolor{verde}0,0002 \\
+\hline
+Prueba28.txt & 100 & \cellcolor{rosado}X & \cellcolor{verde}296,0398 & \cellcolor{verde}0,0002 \\
+\hline
+Prueba29.txt & 100 & \cellcolor{rosado}X & \cellcolor{rosado}X & \cellcolor{verde}0,0002 \\
+\hline
+Prueba30.txt & 100 & \cellcolor{rosado}X & \cellcolor{rosado}X & \cellcolor{verde}0,0002 \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\caption{Tiempos de ejecución para los distintos algoritmos en cada archivo de prueba}
+\end{table}
+
 
     En cuanto a los tiempos, es claro en la tabla que los tiempos del algoritmo voraz son mucho menores que de los demás algoritmos. A Continuación una representación gráfica de los tiempos de los tres algoritmos:
 
@@ -1331,5 +1497,8 @@ A partir de esta comparación, respondemos a las preguntas planteadas:
 
 %%%%%%% CASOS DE PRUEBA %%%%%%% INICIO
 
+\newpage
+\nocite{*}
+\printbibliography
 
 \end{document}
