@@ -98,6 +98,8 @@ def procesar_metodo(metodo):
         respuesta = {"CI": ci, "Esfuerzo": esfuerzo, "Estrategia": estrategia, "Tiempo": tiempo}
 
         nombre_archivo = f"../BateriaPruebas_Proyecto1_2025-I/ResultadosPruebas/{nombre_base}_{metodo}.txt"
+        carpeta = os.path.dirname(nombre_archivo)
+        os.makedirs(carpeta, exist_ok=True)
         with open(nombre_archivo, 'w') as f:
             f.write(f"{ci}\n")
             f.write(f"{esfuerzo}\n")
