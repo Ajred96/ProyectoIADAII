@@ -678,7 +678,7 @@
     Este enfoque no garantiza encontrar la solución óptima al problema, ya que no explora todo el espacio de posibilidades. Sin embargo, en muchos casos ofrece soluciones de buena calidad con un costo computacional mucho menor, lo que lo convierte en una opción atractiva para redes sociales de mayor tamaño o para situaciones donde el tiempo de cómputo es limitado.
 
     \subsection{Definición de la heurística}
-
+    \label{sec:heuristica}
     La toma de decisiones del algoritmo voraz se fundamenta en una heurística que asigna una utilidad a cada grupo de agentes, con el propósito de priorizar aquellos cuya moderación podría ser más efectiva en términos de reducción del conflicto interno por unidad de esfuerzo.
 
     La utilidad asignada a cada grupo se define como:
@@ -717,7 +717,7 @@ Consideramos la red social $\mathcal{RS}_1 = ( \langle 3, -100, 50, 0.5 \rangle,
 
 \subsubsection*{Paso 1: Cálculo de utilidad y costo unitario}
 
-Calculamos para cada grupo su utilidad según la \nameref{sec:Definición de la Heurística}) y el costo de moderar a un solo agente:
+Calculamos para cada grupo su utilidad según la \nameref{sec:heuristic}) y el costo de moderar a un solo agente:
 
 \begin{table}[H]
 \centering
@@ -850,7 +850,7 @@ Consideramos la red social $RS2 = ( \langle 3, -100, 100, 0.8 \rangle, \langle 2
 
 \subsubsection*{Paso 1: Cálculo de utilidad y costo unitario}
 
-Calculamos para cada grupo su utilidad según la \nameref{sec:Definición de la Heurística}) y el costo de moderar a un solo agente:
+Calculamos para cada grupo su utilidad según la \nameref{sec:heuristica}) y el costo de moderar a un solo agente:
 
 \begin{table}[H]
 \centering
@@ -1470,30 +1470,46 @@ Prueba30.txt & 100 & \cellcolor{rosado}X & \cellcolor{rosado}X & \cellcolor{verd
 
     Se realizan casos de prueba para los diferentes tipos de algoritmos (fuerza bruta, programación dinámica y voraz) con el objetivo de evaluar su eficiencia, exactitud y comportamiento en diversas condiciones. Esto permite comparar qué algoritmo es más eficiente en determinados casos, poniendo a prueba su desempeño en situaciones donde el uso de memoria y capacidad de procesamiento son claves para su correcto funcionamiento. Se han llevado a cabo los siguientes casos de pruebas:
 
-    \subsection{Caso de Prueba 1}
-    \begin{flushleft}
-        \includegraphics[width=\linewidth]{resources/cp1.jpeg}
-    \end{flushleft}
+\subsection{Caso de Prueba 1}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{resources/cp1.jpeg}
+    \caption{Caso de Prueba 1}
+    \label{fig:cp1}
+\end{figure}
 
-    \subsection{Caso de Prueba 2}
-    \begin{flushleft}
-        \includegraphics[width=\linewidth]{resources/cp2.jpeg}
-    \end{flushleft}
+\subsection{Caso de Prueba 2}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{resources/cp2.jpeg}
+    \caption{Caso de Prueba 2}
+    \label{fig:cp2}
+\end{figure}
 
-    \subsection{Caso de Prueba 3}
-    \begin{flushleft}
-        \includegraphics[width=\linewidth]{resources/cp3.jpeg}
-    \end{flushleft}
+\subsection{Caso de Prueba 3}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{resources/cp3.jpeg}
+    \caption{Caso de Prueba 3}
+    \label{fig:cp3}
+\end{figure}
 
-    \subsection{Caso de Prueba 4}
-    \begin{flushleft}
-        \includegraphics[width=\linewidth]{resources/cp4.jpeg}
-    \end{flushleft}
+\subsection{Caso de Prueba 4}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{resources/cp4.jpeg}
+    \caption{Caso de Prueba 4}
+    \label{fig:cp4}
+\end{figure}
 
-    \subsection{Caso de Prueba 5}
-    \begin{flushleft}
-        \includegraphics[width=\linewidth]{resources/cp5.jpeg}
-    \end{flushleft}
+\subsection{Caso de Prueba 5}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{resources/cp5.jpeg}
+    \caption{Caso de Prueba 5}
+    \label{fig:cp5}
+\end{figure}
+
 
 %%%%%%% CASOS DE PRUEBA %%%%%%% INICIO
 
