@@ -15,7 +15,7 @@ def actualizar_dp(dp, i, used_effort, total_rem, S, decisions, n, opiniones_1, o
                 dp[i+1][new_effort] = {}
             if new_total not in dp[i+1][new_effort] or new_S < dp[i+1][new_effort][new_total][0]:
                 dp[i+1][new_effort][new_total] = (new_S, new_decisions)
-                
+
 def seleccionar_mejor_estrategia(dp, num_grupos):
     """Devuelve solo el conflicto y las decisiones óptimas."""
     best_conflict = float('inf')
@@ -55,3 +55,4 @@ def modciPD(red_social, R_max):
         return float('inf'), 0, []
 
     return calcular_ci_esfuerzo(red_social, best_decisions) + (best_decisions,)
+

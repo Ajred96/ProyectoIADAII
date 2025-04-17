@@ -457,185 +457,390 @@
 
 %%%%%%% ALGORITMO DINÁMICO %%%%%%% INICIO
 
+\section{Algoritmo Dinámico}
+\subsection{Descripción}
 
-    \section{Algoritmo Dinámico}
+El algoritmo de programación dinámica aplicado en este proyecto busca minimizar el conflicto interno dentro de una red social, bajo la restricción de un presupuesto limitado de esfuerzo (denotado como $R_{\text{max}}$). Este conflicto surge de las diferencias de opinión entre los agentes de distintos grupos, y puede ser mitigado parcialmente moderando a algunos de estos agentes, a costa de cierto esfuerzo.
 
-    \subsection{Descripción}
+A diferencia de enfoques exhaustivos como la fuerza bruta, que evalúan todas las combinaciones posibles de moderación, este algoritmo divide el problema en subproblemas más pequeños y los resuelve de manera progresiva y óptima, reutilizando resultados previamente calculados para construir la solución global.
 
-    El algoritmo de programación dinámica aplicado en este proyecto busca minimizar el conflicto interno dentro de una red social, bajo la restricción de un presupuesto limitado de esfuerzo (denotado como $R_{\text{max}}$). Este conflicto surge de las diferencias de opinión entre los agentes de distintos grupos, y puede ser mitigado parcialmente moderando a algunos de estos agentes, a costa de cierto esfuerzo.
+El proceso se fundamenta en el principio de \textit{optimalidad de Bellman}, que asegura que una solución óptima para el problema completo puede ser construida a partir de soluciones óptimas de sus subproblemas.
 
-    A diferencia de enfoques exhaustivos como la fuerza bruta, que evalúan todas las combinaciones posibles de moderación, este algoritmo divide el problema en subproblemas más pequeños y los resuelve de manera progresiva y óptima, reutilizando resultados previamente calculados para construir la solución global.
+A cada paso, el algoritmo evalúa todas las opciones posibles de moderación para un grupo específico —desde no moderar a ningún agente hasta moderar a todos— y calcula el conflicto y esfuerzo que implicaría esa decisión. Luego, actualiza de forma eficiente una estructura de datos que almacena, para cada cantidad de esfuerzo acumulado, la mejor configuración encontrada hasta ese punto.
 
-    El proceso se fundamenta en el principio de \textit{optimalidad de Bellman}, que asegura que una solución óptima para el problema completo puede ser construida a partir de soluciones óptimas de sus subproblemas.
+Al finalizar, se selecciona la estrategia que, sin superar el esfuerzo disponible, logra el menor conflicto interno posible.
 
-    A cada paso, el algoritmo evalúa todas las opciones posibles de moderación para un grupo específico —desde no moderar a ningún agente hasta moderar a todos— y calcula el conflicto y esfuerzo que implicaría esa decisión. Luego, actualiza de forma eficiente una estructura de datos que almacena, para cada cantidad de esfuerzo acumulado, la mejor configuración encontrada hasta ese punto.
+Este enfoque garantiza que la solución obtenida es óptima dentro de las restricciones definidas, y resulta mucho más escalable que evaluar explícitamente todas las combinaciones posibles, especialmente en redes sociales con un número elevado de grupos o agentes.
 
-    Al finalizar, se selecciona la estrategia que, sin superar el esfuerzo disponible, logra el menor conflicto interno posible.
+\subsection{Pasos Programación Dinámica}
+Sabemos que para calcular la solución óptima para un algoritmo dinámico se deben
+cumplir ciertos aspectos:
+\begin{enumerate}
+    \item Caracterizar la solución óptima (Subestructura óptima)
+    \item Definir recursivamente el valor de la solución óptima
+    \item Calcular el valor de la solución óptima (algoritmo)
+    \item Construir la solución óptima (algoritmo)
+\end{enumerate}
 
-    Este enfoque garantiza que la solución obtenida es óptima dentro de las restricciones definidas, y resulta mucho más escalable que evaluar explícitamente todas las combinaciones posibles, especialmente en redes sociales con un número elevado de grupos o agentes.
+\subsubsection{Caracterizando la Estructura de una Solución Óptima}
 
-    \subsection{Pasos Programación Dinámica}
-    Sabemos que para calcular la solución óptima para un algoritmo dinámico se deben
-    cumplir ciertos aspectos:
+Para resolver el problema de minimizar el conflicto interno en una red social bajo una restricción de esfuerzo máximo permitido ($R_{\text{max}}$), es necesario comprender cómo se construye la solución óptima a partir de decisiones locales en cada grupo de agentes.
+
+\begin{itemize}
+    \item \textbf{Definición del problema original:}
+
+    Denotamos el problema general como:
+    \[
+        \text{MinCI}(Grupos_n, R_{\text{max}})
+    \]
+    donde:
+    \begin{itemize}
+        \item $Grupos_n$: conjunto de $n$ grupos sociales.
+        \item $R_{\text{max}}$: esfuerzo total máximo permitido.
+        \item $\text{MinCI}$: equivale a la función objetivo del problema, que llamamos \texttt{ModCI}.
+    \end{itemize}
+
+    \item \textbf{Subproblemas:}
+
+    El enfoque de programación dinámica divide el problema en subproblemas de la forma:
+    \[
+        \text{MinCI}(Grupos_i, R_j)
+    \]
+    donde:
+    \begin{itemize}
+        \item $i$ representa los primeros $i$ grupos, con $1 \leq i \leq n$
+        \item $R_j$ representa el esfuerzo disponible en ese momento, con $0 \leq j \leq R_{\text{max}}$
+    \end{itemize}
+
+    \item \textbf{Recurrencia y decisiones:}
+
+    Para cada grupo $i$, se evalúan todas las decisiones posibles de moderación: desde moderar a $0$ hasta moderar a $n_i$ agentes (cantidad total del grupo). A cada opción le corresponde un coste de esfuerzo $e$ y un conflicto potencial.
+
+    La decisión óptima para el subproblema $\text{MinCI}(Grupos_i, R_j)$ se construye a partir de:
+    \begin{itemize}
+        \item Las decisiones óptimas de los subproblemas anteriores ($i - 1$).
+        \item Comparando todas las combinaciones posibles de moderación:
+        \[
+            e \in [0, n_i]
+        \]
+        \item Solo se consideran las combinaciones que cumplen:
+        \[
+            Costo(e) \leq R_j
+        \]
+    \end{itemize}
+
+    Para cada combinación válida, se calcula:
+    \[
+        CI_{\text{acumulado}} = CI_{\text{previo}} + (n_i - e)(o_{1i} - o_{2i})^2
+    \]
+
+    donde:
+    \begin{itemize}
+        \item $CI_{\text{acumulado}}$: conflicto total acumulado hasta el grupo actual $i$, considerando la estrategia de esfuerzo aplicada.
+        \item $CI_{\text{previo}}$: conflicto acumulado hasta el grupo $i - 1$, correspondiente a una asignación de esfuerzo previa.
+        \item $n_i$: número total de agentes en el grupo $i$.
+        \item $e$: número de agentes moderados en el grupo $i$.
+        \item $n_i - e$: número de agentes no moderados en el grupo $i$.
+        \item $(o_{1i} - o_{2i})$: diferencia cuadrática entre las dos opiniones del grupo. Refleja la intensidad del conflicto si no se modera ese grupo.
+    \end{itemize}
+
+    \item \textbf{Estructura óptima:}
+
+    Así, la solución óptima para el problema completo:
+    \[
+        \text{MinCI}(Grupos_n, R_{\text{max}})
+    \]
+    se obtiene reutilizando las mejores soluciones de los subproblemas previos, considerando todas las configuraciones posibles de esfuerzo y moderación por grupo.
+\end{itemize}
+
+Esto permite:
+\begin{itemize}
+    \item Mantener un historial de las mejores decisiones hasta cada punto.
+    \item Evitar recalcular combinaciones ya exploradas.
+    \item Garantizar una solución óptima dentro del límite de esfuerzo.
+\end{itemize}
+
+\subsubsection{Definiendo Recursivamente el Valor de la Solución Óptima}
+
+Una vez caracterizada la subestructura óptima, necesitamos definir una fórmula recursiva que describa cómo se calcula el valor de la solución óptima a partir de los subproblemas.
+
+\begin{itemize}
+    \item \textbf{Variables:}
+    \begin{itemize}
+        \item $i$: índice del grupo actual ($0$-indexado)
+        \item $e$: número de agentes moderados en el grupo $i$ ($0 \leq e \leq n_i$)
+        \item $c(i, e)$: esfuerzo necesario para moderar $e$ agentes en el grupo $i$
+        \item $(o_{1i}, o_{2i})$: distancia cuadrática de opiniones en el grupo $i$
+        \item $S(i, j)$: valor mínimo del conflicto interno al considerar los primeros $i$ grupos con un total de esfuerzo $j$
+    \end{itemize}
+
+    \item \textbf{Recurrencia:}
+    \[
+    S(i, j) = \min_{0 \leq e \leq n_i,\, c(i,e) \leq j} \left\{ S(i - 1, j - c(i, e)) + (n_i - e) \cdot d_i \right\}
+    \]
+
+    \item \textbf{Explicación:}
+    \begin{itemize}
+        \item Para cada grupo $i$, evaluamos todas las posibles cantidades de agentes $e$ que podrían moderarse.
+        \item El costo en esfuerzo por moderar $e$ agentes se calcula como:
+        \[
+            c(i, e) = \lceil |o_{1i} - o_{2i}| \cdot rigidez_i \cdot e \rceil
+        \]
+        \item Si ese esfuerzo no supera el total disponible $j$, entonces actualizamos el conflicto acumulado:
+        \begin{itemize}
+            \item Se agrega el impacto de los $n_i - e$ agentes no moderados, que contribuyen al conflicto interno con el factor $d_i$.
+        \end{itemize}
+        \item De todas las combinaciones viables, nos quedamos con la que minimice el conflicto total.
+    \end{itemize}
+
+    \item \textbf{Condiciones triviales:}
+    \[
+    S(-1, 0) = 0
+    \]
+    \[
+    S(-1, j) = \infty, \quad \text{si } j > 0
+    \]
+
+    Esto indica que al inicio, sin haber procesado ningún grupo, solo se puede tener un conflicto acumulado 0 si no se ha usado esfuerzo. Todo lo demás es inválido.
+
+    \subsubsection{Calculando el Valor de la Solución Óptima}
+    La construcción de la solución óptima se fundamenta en el almacenamiento y la actualización de la lista de decisiones (\textbf{decisions}). Cada vez que se actualiza el estado en $dp[i+1]$, se guarda la decisión tomada para el grupo $i$. Al finalizar el proceso, la función \textbf{seleccionar\_mejor\_estrategia} recorre los estados finales y recupera la secuencia de decisiones que produjo el menor conflicto, dando como resultado la reconstrucción de la solución óptima.
+    \subsubsection{Construyendo la Solución Óptima}
+    \subsubsection{¿Cuántos Subproblemas Hay?}
+    El número de subproblemas esta ligado a:
+    \begin{itemize}
+    \item La cantidad de grupos $(n+1)$
+    \item Los esfuerzos utilizados los cuales estan en el rango de $[0, R_{max}]$ el cual se representa como $R_{max}+1$
+    \item El número total de agentes restantes hasta el momento el cual esta determinado por \textbf{total\_rem} ($K+1$)
+\end{itemize}
+Por ende el total de subproblemas será:
+    \[
+        (n+1)\cdot(R_{max}+1)\cdot(K+1)
+    \]
+K es considerado ya que refleja mejor la cantidad de estados realmente guardados, no sólo el rango de posibles valores el cual implica considerar todos los agentes de la red social.
+
+    \subsection{Implementación}
+    La implemenctación de \textbf{modciPD.py} sigue los siguientes pasos:
     \begin{enumerate}
-        \item Caracterizar la solución óptima (Subestructura óptima)
-        \item Definir recursivamente el valor de la solución óptima
-        \item Calcular el valor de la solución óptima (algoritmo)
-        \item Construir la solución óptima (algoritmo)
-    \end{enumerate}
 
-    \subsubsection{Caracterizando la Estructura de una Solución Óptima}
-
-    Para resolver el problema de minimizar el conflicto interno en una red social bajo una restricción de esfuerzo máximo permitido ($R_{\text{max}}$), es necesario comprender cómo se construye la solución óptima a partir de decisiones locales en cada grupo de agentes.
-
+    \item \textbf{Inicialización de DP:}
     \begin{itemize}
-        \item \textbf{Definición del problema original:}
+        \item Se crea la tabla $dp$ como una lista de diccionarios, la cual será la encargada de guardar los pasos que lleven a la solución óptima.
 
-        Denotamos el problema general como:
-        \[
-            \text{MinCI}(Grupos_n, R_{\text{max}})
-        \]
-        donde:
-        \begin{itemize}
-            \item $Grupos_n$: conjunto de $n$ grupos sociales.
-            \item $R_{\text{max}}$: esfuerzo total máximo permitido.
-            \item $\text{MinCI}$: equivale a la función objetivo del problema, que llamamos \texttt{ModCI}.
-        \end{itemize}
-
-        \item \textbf{Subproblemas:}
-
-        El enfoque de programación dinámica divide el problema en subproblemas de la forma:
-        \[
-            \text{MinCI}(Grupos_i, R_j)
-        \]
-        donde:
-        \begin{itemize}
-            \item $i$ representa los primeros $i$ grupos, con $1 \leq i \leq n$
-            \item $R_j$ representa el esfuerzo disponible en ese momento, con $0 \leq j \leq R_{\text{max}}$
-        \end{itemize}
-
-        \item \textbf{Recurrencia y decisiones:}
-
-        Para cada grupo $i$, se evalúan todas las decisiones posibles de moderación: desde moderar a $0$ hasta moderar a $n_i$ agentes (cantidad total del grupo). A cada opción le corresponde un coste de esfuerzo $e$ y un conflicto potencial.
-
-        La decisión óptima para el subproblema $\text{MinCI}(Grupos_i, R_j)$ se construye a partir de:
-        \begin{itemize}
-            \item Las decisiones óptimas de los subproblemas anteriores ($i - 1$).
-            \item Comparando todas las combinaciones posibles de moderación:
-            \[
-                e \in [0, n_i]
-            \]
-            \item Solo se consideran las combinaciones que cumplen:
-            \[
-                Costo(e) \leq R_j
-            \]
-        \end{itemize}
-
-        Para cada combinación válida, se calcula:
-        \[
-            CI_{\text{acumulado}} = CI_{\text{previo}} + (n_i - e)(o_{1i} - o_{2i})^2
-        \]
-
-        donde:
-        \begin{itemize}
-            \item $CI_{\text{acumulado}}$: conflicto total acumulado hasta el grupo actual $i$, considerando la estrategia de esfuerzo aplicada.
-            \item $CI_{\text{previo}}$: conflicto acumulado hasta el grupo $i - 1$, correspondiente a una asignación de esfuerzo previa.
-            \item $n_i$: número total de agentes en el grupo $i$.
-            \item $e$: número de agentes moderados en el grupo $i$.
-            \item $n_i - e$: número de agentes no moderados en el grupo $i$.
-            \item $(o_{1i} - o_{2i})$: diferencia cuadrática entre las dos opiniones del grupo. Refleja la intensidad del conflicto si no se modera ese grupo.
-        \end{itemize}
-
-        \item \textbf{Estructura óptima:}
-
-        Así, la solución óptima para el problema completo:
-        \[
-            \text{MinCI}(Grupos_n, R_{\text{max}})
-        \]
-        se obtiene reutilizando las mejores soluciones de los subproblemas previos, considerando todas las configuraciones posibles de esfuerzo y moderación por grupo.
     \end{itemize}
 
-    Esto permite:
+    \item \textbf{Actualización de estados:}
     \begin{itemize}
-        \item Mantener un historial de las mejores decisiones hasta cada punto.
-        \item Evitar recalcular combinaciones ya exploradas.
-        \item Garantizar una solución óptima dentro del límite de esfuerzo.
+        \item Para cada grupo dentro de la red, se recorren las posibles decisiones (pasos) y estas son almacenadas solo si cumplen con el criterio de que al aplicar las mismas no se puede superar el esfuerzo máximo proporcionado por la red.
     \end{itemize}
 
-    \subsubsection{Definiendo Recursivamente el Valor de la Solución Óptima}
+    \item \textbf{Selección de la estrategia óptima:}
+     \begin{itemize}
+        \item Una vez procesados todos los grupos, la función \textbf{seleccionar\_mejor\_estrategia} recorre las soluciones guardadas y selecciona la que tenga un menor conflicto interno, finalmente la función reconstruye los pasos que llevaron a dicha solución, el valor del conflicto de la misma y el esfuerzo necesario para aplicarla.
+    \end{itemize}
 
-    Una vez caracterizada la subestructura óptima, necesitamos definir una fórmula recursiva que describa cómo se calcula el valor de la solución óptima a partir de los subproblemas.
+    \item \textbf{Calculo final:}
+     \begin{itemize}
+        \item Finalmente, la función \textbf{calcular\_ci\_esfuerzo } se  encarga de calcular el conflicto final y se retorna la solución óptima.
+    \end{itemize}
+\end{enumerate}
+
+    \subsection{Pseudocódigo}
+    \begin{algorithm}[H]
+    \caption{modciPD: Estrategia óptima con programación dinámica}
+    \KwIn{Una red social $RS$ como lista de tuplas $(n_i, op1_i, op2_i, rigidez_i)$ para cada grupo $i$, y un esfuerzo máximo permitido $R_{max}$}
+    \KwOut{Tupla $(CI_{\min}, Esfuerzo_{\text{total}}, Estrategia_{\text{óptima}})$}
+
+    $n \leftarrow$ cantidades por grupo, $op1$, $op2$, $rigidez$ extraídos de $RS$ \\
+    $d_i \leftarrow (op1_i - op2_i)^2$ para cada grupo $i$ \tcp*[r]{Desacuerdo cuadrático}
+
+    Inicializar $dp[0][0][0] \leftarrow (0.0, [])$ \tcp*[r]{Suma $S$, decisiones}
+
+    \For{$i \leftarrow 0$ \KwTo $|RS| - 1$}{
+        \ForEach{$usedEffort$ en $dp[i]$}{
+            \ForEach{$rem, (S, decisions)$ en $dp[i][usedEffort]$}{
+                \For{$e \leftarrow 0$ \KwTo $n_i$}{
+                    $cost \leftarrow \lceil |op1_i - op2_i| \cdot rigidez_i \cdot e \rceil$ \\
+                    $newEffort \leftarrow usedEffort + cost$ \\
+                    \If{$newEffort \leq R_{max}$}{
+                        $newRem \leftarrow n_i - e$ \\
+                        $newTotal \leftarrow rem + newRem$ \\
+                        $newS \leftarrow S + newRem \cdot d_i$ \\
+                        $newDecisions \leftarrow decisions + [e]$ \\
+                        \If{$newEffort$ no está en $dp[i+1]$}{
+                            Crear $dp[i+1][newEffort] \leftarrow \{\}$
+                        }
+                        \If{$newTotal$ no está en $dp[i+1][newEffort]$ \textbf{or} $newS < dp[i+1][newEffort][newTotal].S$}{
+                            $dp[i+1][newEffort][newTotal] \leftarrow (newS, newDecisions)$
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    $mejorCI \leftarrow \infty$, $mejorEstrategia \leftarrow$ \texttt{None} \\
+    \ForEach{$usedEffort$ en $dp[num\_grupos]$}{
+        \ForEach{$totalRem, (S, decisions)$ en $dp[num\_grupos][usedEffort]$}{
+            $conflict \leftarrow S / num\_grupos$ \\
+            \If{$conflict < mejorCI$}{
+                $mejorCI \leftarrow conflict$ \\
+                $mejorEstrategia \leftarrow decisions$
+            }
+        }
+    }
+
+    \If{$mejorEstrategia = \texttt{None}$}{
+        \Return $(\infty, 0, [])$
+    }
+    \Else{
+        \Return calcular\_ci\_esfuerzo($RS$, $mejorEstrategia$) $+ (mejorEstrategia)$
+    }
+    \end{algorithm}
+
+    \subsection{Complejidad}
+    \subsubsection{Complejidad Temporal}
+
+    Las operaciones que principalmente realiza \textbf{modciPD} y que serán de ayuda para entender su complejidad temporal serán:
 
     \begin{itemize}
-        \item \textbf{Variables:}
-        \begin{itemize}
-            \item $i$: índice del grupo actual ($0$-indexado)
-            \item $e$: número de agentes moderados en el grupo $i$ ($0 \leq e \leq n_i$)
-            \item $c(i, e)$: esfuerzo necesario para moderar $e$ agentes en el grupo $i$
-            \item $(o_{1i}, o_{2i})$: distancia cuadrática de opiniones en el grupo $i$
-            \item $S(i, j)$: valor mínimo del conflicto interno al considerar los primeros $i$ grupos con un total de esfuerzo $j$
-        \end{itemize}
+        \item actualizar\_dp: $O(n[i])$ el recorrido que esta hace en su bucle interno depende de $n[i]$.
 
-        \item \textbf{Recurrencia:}
-        \[
-            S(i, j) = \min_{0 \leq e \leq n_i,\, c(i,e) \leq j} \left\{ S(i - 1, j - c(i, e)) + (n_i - e) \cdot d_i \right\}
-        \]
+        \item seleccionar\_mejor\_estrategia: $O(R_{max})$ el recorrido que esta hace en su bucle interno depende de $R_{max}$
+    \end{itemize}
 
-        \item \textbf{Explicación:}
-        \begin{itemize}
-            \item Para cada grupo $i$, evaluamos todas las posibles cantidades de agentes $e$ que podrían moderarse.
-            \item El costo en esfuerzo por moderar $e$ agentes se calcula como:
-            \[
-                c(i, e) = \lceil |o_{1i} - o_{2i}| \cdot rigidez_i \cdot e \rceil
-            \]
-            \item Si ese esfuerzo no supera el total disponible $j$, entonces actualizamos el conflicto acumulado:
-            \begin{itemize}
-                \item Se agrega el impacto de los $n_i - e$ agentes no moderados, que contribuyen al conflicto interno con el factor $d_i$.
-            \end{itemize}
-            \item De todas las combinaciones viables, nos quedamos con la que minimice el conflicto total.
-        \end{itemize}
+    Finalmente dado a que estas son llamadas dentro de la función dentro de un bucle el cual depende de $n$ la complejidad final estará dada por:
+    $$O(n\times n[i] \times R_{max})$$
 
-        \item \textbf{Condiciones triviales:}
-        \[
-            S(-1, 0) = 0
-        \]
-        \[
-            S(-1, j) = \infty, \quad \text{si } j > 0
-        \]
+    \subsubsection{Complejidad Espacial}
+    La complejidad espacial viene dada por el número de estados almacenados en la tabla $dp$. En el peor caso, se pueden almacenar estados para cada combinación de:
 
-        Esto indica que al inicio, sin haber procesado ningún grupo, solo se puede tener un conflicto acumulado 0 si no se ha usado esfuerzo. Todo lo demás es inválido.
+    \begin{itemize}
+        \item Grupos $(n)$.
+        \item Esfuerzo acumulado (hasta $R_{max}$).
+        \item Valores de total\_rem $K$
+    \end{itemize}
 
-        \subsubsection{Calculando el Valor de la Solución Óptima}
+    Esto implica una complejidad espacial del orden de:
 
-        \subsubsection{Construyendo la Solución Óptima}
+    \[
+        O(n \times R_{max} \times K)
+    \]
 
-        \subsubsection{¿Cuántos Subproblemas Hay?}
+    Donde $K$ es el factor derivado de los posibles valores para total\_rem. No obstante, la implementación optimiza este almacenamiento guardando únicamente estados que minimizan el conflicto.
 
-        \subsection{Implementación}
+    \subsubsection{¿Es Útil en la Práctica}
+    El enfoque de programación dinámica es útil para reducir drásticamente el número de combinaciones evaluadas en comparación con una busqueda exhaustiva, especialmente en instancias donde el número de grupos $n$ y el esfuerzo máximo $R_{max}$ son moderados.
 
-        \subsection{Pseudocódigo}
+    \paragraph{Hipótesis:}
 
-        \subsection{Complejidad}
+    La reutilización de resultados parciales mediante $DP$ permite calcular la solución óptima sin tener que explorar todo el campo de de las posibles estrategias que se puedan aplicar.
 
-        \subsubsection{Complejidad Temporal}
+    \paragraph{Conclusión Hipótesis Temporal:}
 
-        \subsubsection{Complejidad Espacial}
+    Cuando el número de grupos y el límite $R_{max}$ no son excesivamente altos, el $DP$ consigue una solución óptima en un tiempo razonable. Sin embargo, para parámetros muy grandes, la cantidad de estados podría crecer y afectar el tiempo de ejecución, aunque sigue siendo una mejora significativa a comparación de un algoritmo de fuerza bruta.
 
-        \subsubsection{¿Es Útil en la Práctica}
+    \paragraph{Conclusión Hipótesis Espacial:}
 
-        \paragraph{Hipótesis}
+    El uso de memoria adicional para almacenar la tabla $dp$ es el que mayor impacto tiene en cuanto al costo espacial del método. Aún así, en la práctica la poda de estados ineficientes y la restricción basada en el esfuerzo máximo $(R_{max})$ reducen considerablemente la cantidad de memoria requerida, haciendolo viable para redes con un tamaño significativamente grande.
 
-        \paragraph{Conclusión Hipótesis Temporal}
+    \subsection{¿El Algoritmo Siempre da la Respuesta Correcta al Problema?}
 
-        \paragraph{Conclusión Hipótesis Espacial}
+    Sí. Al basarse en programación dinámica, este método garantiza la obtención de la solución óptima para el problema de moderar el conflicto interno en una red social, siempre que se cumplan las siguientes condiciones:
 
-        \subsection{¿El Algoritmo Siempre da la Respuesta Correcta al Problema}
+    \begin{itemize}
 
-        \subsection{Análisis}
+      \item \textbf{Propiedad de subestructura óptima:}
+      El problema puede descomponerse en subproblemas cuya solución óptima se construye a partir de las soluciones óptimas de instancias más pequeñas. Cada decisión de moderar un grupo de agentes se basa en resultados parciales previamente calculados, de modo que ninguna combinación viable queda fuera del análisis.
 
-        \subsection{Impacto en El Rendimiento}
+      \item \textbf{Cobertura exhaustiva de las estrategias viables:}
+      Se consideran, para cada grupo, todas las cantidades posibles de agentes a moderar (desde cero hasta el tamaño del grupo), respetando siempre el límite de esfuerzo disponible. Esto asegura que no se descarte ninguna estrategia factible que pudiera conducir al mínimo conflicto.
+
+      \item \textbf{Comparación y selección global:}
+      Una vez evaluadas todas las combinaciones válidas, se selecciona aquella cuyo nivel de conflicto interno final es el más bajo. Al procesar sistemáticamente todos los subproblemas y reconstruir la mejor secuencia de moderación, la solución resultante es, por definición, la óptima.
 
     \end{itemize}
+
+    \paragraph{Limitaciones prácticas:}
+
+    En teoría, la corrección está garantizada mientras se exploren y almacenen todas las combinaciones de subproblemas. En la práctica, a medida que crecen el número de grupos y el presupuesto de esfuerzo, la cantidad de estados intermedios puede aumentar y exigir grandes recursos de memoria o tiempo. No obstante, en instancias de tamaño moderado, estas exigencias siguen siendo manejables y la estrategia conserva su garantía de optimalidad.
+
+    \subsection{Análisis}
+
+    El método de programación dinámica, aplicado al problema de moderación de opiniones, presenta las siguientes características de comportamiento:
+
+        \begin{itemize}
+
+    \item \textbf{Crecimiento polinómico controlado:}
+    El tiempo de cómputo crece de forma suave al aumentar el número de grupos, manteniéndose dentro de una escala práctica (desde milisegundos hasta minutos). Esto refleja que, aunque se exploran múltiples estados, la fusión de soluciones parciales evita la explosión exponencial.
+
+
+    \item \textbf{Estabilidad frente a variaciones de presupuesto:}
+    Para un mismo tamaño de red, la variación del límite de esfuerzo provoca oscilaciones en el tiempo (mayor esfuerzo → más estados a evaluar), pero nunca aumenta desproporcionadamente. Esto evidencia que la estructura de DP maneja eficientemente incluso presupuestos altos.
+
+    \item \textbf{Escalabilidad hasta instancias moderadas–grandes:}
+
+        \begin{itemize}
+
+          \item \textbf{Pequeñas ($n \leq 10$):}
+          tiempos imperceptibles ($<$ 1~ms–500~ms).
+
+          \item \textbf{Medianas ($10 < n \leq 25$):}
+          siempre por debajo de 13~s, adecuado para uso interactivo.
+
+          \item \textbf{Grandes ($25 < n \leq 50$):}
+          de decenas a centenares de segundos, aceptable en procesos batch o análisis offline.
+
+          \item \textbf{Muy grandes ($n \approx 100$):}
+          alrededor de 5~min, puede considerarse límite práctico sin optimizaciones adicionales.
+
+        \end{itemize}
+
+
+    \item \textbf{Equilibrio espacio-tiempo:}
+    El algoritmo sacrifica algo de memoria para almacenar la tabla de estados, pero a cambio evita recomputaciones y ofrece un rendimiento más predecible frente a heurísticos voraces o fuerza bruta.
+
+    \end{itemize}
+
+    \subsection{Impacto en El Rendimiento}
+    A continuación, los tiempos observados en diversas pruebas con presupuestos variados, medidos en segundos:
+
+        \begin{table}[h!]
+    \centering
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Grupos} & \textbf{Mínimo (s)} & \textbf{Máximo (s)} \\
+    \hline
+    5   & 0{,}0021 & 0{,}0073 \\
+    10  & 0{,}0029 & 0{,}5037 \\
+    15  & 0{,}0402 & 5{,}1563 \\
+    20  & 3{,}3455 & 8{,}9823 \\
+    25  & 5{,}4816 & 12{,}4681 \\
+    50  & 29{,}3461 & 174{,}4527 \\
+    100 & ---      & 296{,}0398 \\
+    \hline
+    \end{tabular}
+    \caption{Tiempos de ejecución mínimo y máximo por número de grupos}
+    \label{tab:tiempos-grupos}
+        \end{table}
+
+
+    \begin{itemize}
+
+         \item \textbf{Umbral interactivo:}
+        hasta 15 grupos se mantiene por debajo de 5 s incluso en el peor caso.
+
+        \item \textbf{Procesamiento batch:}
+        entre 20 y 50 grupos, cabe en un marco de decenas de segundos a pocos minutos.
+
+        \item \textbf{Límite práctico:}
+         alrededor de 100 grupos, el tiempo se acerca a los 5 min, recomendando optimizaciones o partición de la red si se precisa mayor escala.
+
+    \end{itemize}
+
+
+\end{itemize}
+
 
 %%%%%%% ALGORITMO DINÁMICO %%%%%%% FIN
 
