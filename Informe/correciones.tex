@@ -39,6 +39,14 @@
 % Hipervínculos (último siempre que sea posible)
 \usepackage{hyperref}
 
+%Para dar ancho a tabla
+\usepackage{tabularx}
+
+% Centrado de tablas
+\usepackage{array}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}m{#1}} % Centrado horizontal y vertical
+ 
+
 %%%%%%% PAQUETES Y CONFIGURACIONES %%%%%%% FIN
 
 
@@ -596,15 +604,45 @@ Una vez caracterizada la subestructura óptima, necesitamos definir una fórmula
     \subsubsection{¿Cuántos Subproblemas Hay?}
     El número de subproblemas esta ligado a:
     \begin{itemize}
-    \item La cantidad de grupos $(n+1)$
-    \item Los esfuerzos utilizados los cuales estan en el rango de $[0, R_{max}]$ el cual se representa como $R_{max}+1$
-    \item El número total de agentes restantes hasta el momento el cual esta determinado por \textbf{total\_rem} ($K+1$)
+    \item La cantidad de grupos $(n)$
+    \item El esfuerzo total acumulado \textbf{used\_effort} el cual será $R_{max}$
+    \item El número total de agentes no moderados restantes \textbf{total\_rem} el cual se denominara como $T$
 \end{itemize}
-Por ende el total de subproblemas será: 
+
+Entonces una buena estimación superior para la cantidad de subproblemas será:
+
+\[
+\text{#subproblemas} \leq n \cdot R_{\text{alcanzado}} \cdot k_{\text{alcanzado}}
+\]
+
+Donde:
+\begin{itemize}
+    \item $R\_alcanzado$: cantidad de valores de $used\_effort$ que realmente aparecen.
+    \item $k\_alcanzado$: cantidad de valores distintos de $total\_rem$ generados por esfuerzo.
+\end{itemize}
+
+\paragraph{Fórmula general para subproblemas calculados:}
+\[
+\# \text{subproblemas} \approx \sum_{i=0}^{n} \sum_{\text{used\_effort} \in \text{dp}[i]} \left| \text{dp}[i][\text{used\_effort}] \right|
+\]
+
+Esto se traduce a:
+\begin{itemize}
+    \item Recorro $n$ etapas
+    \item Para cada etapa, cuento cuántos esfuerzos $(used\_effort)$ hay
+    \item Y para cada uno, cuántos valores de $total\_rem$ (subproblemas reales) contiene
+\end{itemize}
+
+\paragraph{Resumen:}
+\begin{itemize}
+    \item Fórmula estimada de subproblemas:
     \[
-        (n+1)\cdot(R_{max}+1)\cdot(K+1)
+        O(n \cdot R_{\text{real}} \cdot k_{\text{real}})
     \]
-K es considerado ya que refleja mejor la cantidad de estados realmente guardados, no sólo el rango de posibles valores el cual implica considerar todos los agentes de la red social.
+    \item Acotado superiormente por la complejidad espacial e inferiormente por la temporal.
+\end{itemize}
+
+
 
     \subsection{Implementación}
     La implemenctación de \textbf{modciPD.py} sigue los siguientes pasos:
@@ -623,7 +661,7 @@ K es considerado ya que refleja mejor la cantidad de estados realmente guardados
     
     \item \textbf{Selección de la estrategia óptima:}
      \begin{itemize}
-        \item Una vez procesados todos los grupos, la función \textbf{seleccionar\_mejor\_estrategia} recorre las soluciones guardadas y selecciona la que tenga un menor conflicto interno, finalmente la función reconstruye los pasos que llevaron a dicha solución, el valor del conflicto de la misma y el esfuerzo necesario para aplicarla.
+        \item Una vez procesados todos los grupos, la función \textbf{seleccionar\_mejor\_estrategia} recorre las soluciones guardadas y selecciona la que tenga un menor conflicto interno, finalmente la función retorna la  reconstrucción de los pasos que llevaron a dicha solución, el valor del conflicto de la misma y el esfuerzo necesario para aplicarla.
     \end{itemize}
     
     \item \textbf{Calculo final:}
@@ -688,33 +726,33 @@ K es considerado ya que refleja mejor la cantidad de estados realmente guardados
     \subsection{Complejidad}
     \subsubsection{Complejidad Temporal}
     
-    Las operaciones que principalmente realiza \textbf{modciPD} y que serán de ayuda para entender su complejidad temporal serán:
+    Las operaciones que principalmente realiza \textbf{modciPD} dentro del bucle el cual se encarga de recorrer todos los grupos $n$ y que serán de ayuda para entender su complejidad temporal serán:
 
     \begin{itemize}
-        \item actualizar\_dp: $O(n[i])$ el recorrido que esta hace en su bucle interno depende de $n[i]$.
+        \item actualizar\_dp: $O(k)$ el recorrido que esta hace en su bucle interno depende del número de personas dentro de la red social $(k)$.
         
-        \item seleccionar\_mejor\_estrategia: $O(R_{max})$ el recorrido que esta hace en su bucle interno depende de $R_{max}$ 
+        \item seleccionar\_mejor\_estrategia: $O(R_{max}+1)$ el recorrido que esta hace en su bucle interno depende de $R_{max}$ 
     \end{itemize}
 
-    Finalmente dado a que estas son llamadas dentro de la función dentro de un bucle el cual depende de $n$ la complejidad final estará dada por:
-    $$O(n\times n[i] \times R_{max})$$
+    $$O\bigg(n\times (k+1) \times (R_{max}+1)\bigg)$$
     
     \subsubsection{Complejidad Espacial}
-    La complejidad espacial viene dada por el número de estados almacenados en la tabla $dp$. En el peor caso, se pueden almacenar estados para cada combinación de:
 
     \begin{itemize}
-        \item Grupos $(n)$.
-        \item Esfuerzo acumulado (hasta $R_{max}$).
-        \item Valores de total\_rem $K$ 
+        \item El tamaño de la matriz $dp$ el cual es $(n+1) \times (R_{max}+1)$, siendo $n$ la cantidad de grupos y $R_{max}$ el esfuerzo máximo, a estos se les suma $+1$ para la construcción de los casos triviales.
+        \item Dentro de la matriz existe un diccionario cuya función es almacenar la decisión tomada en cada subproblema, siendo de tamaño $n$.
+        \item $k+1$ siendo $k$ el total de agentes dentro de la red social y a este valor se le añade $1$ para la construcción del caso trivial. 
     \end{itemize}
 
     Esto implica una complejidad espacial del orden de:
 
     \[
-        O(n \times R_{max} \times K)
+        O\bigg((n+1) \times (R_{max}+1) \times n \times (k+1)\bigg)
     \]
-
-    Donde $K$ es el factor derivado de los posibles valores para total\_rem. No obstante, la implementación optimiza este almacenamiento guardando únicamente estados que minimizan el conflicto.
+    De manera simplificada esto se puede representar como:
+    \[
+        O(n^2 \times R_{max} \times k)
+    \]
     
     \subsubsection{¿Es Útil en la Práctica}
     El enfoque de programación dinámica es útil para reducir drásticamente el número de combinaciones evaluadas en comparación con una busqueda exhaustiva, especialmente en instancias donde el número de grupos $n$ y el esfuerzo máximo $R_{max}$ son moderados.
@@ -788,6 +826,7 @@ K es considerado ya que refleja mejor la cantidad de estados realmente guardados
     El algoritmo sacrifica algo de memoria para almacenar la tabla de estados, pero a cambio evita recomputaciones y ofrece un rendimiento más predecible frente a heurísticos voraces o fuerza bruta.
     
     \end{itemize}
+    
     
     \subsection{Impacto en El Rendimiento}
     A continuación, los tiempos observados en diversas pruebas con presupuestos variados, medidos en segundos:
@@ -1376,13 +1415,13 @@ A partir de esta comparación, respondemos a las preguntas planteadas:
             \toprule
             \textbf{Criterio}                              & \textbf{Fuerza Bruta}                   & \textbf{Programación Dinámica} & \textbf{Algoritmo Voraz}              \\
             \midrule
-            Complejidad Temporal                           & \( O(n(k+1)^n) \)                       & No se sabe aún                 & \( O(n \log n) \)                     \\
-            Complejidad Espacial                           & \( O((k+1)^n) \)                        & No se sabe aún                 & \( O(n) \)                            \\
+            Complejidad Temporal                           & \( O(n(k+1)^n) \)                       & \(O(n \cdot R_{\text{real}} \cdot k_{\text{real}})\)                 & \( O(n \log n) \)                     \\
+            Complejidad Espacial                           & \( O((k+1)^n) \)                        & \( O(n^2 \times R_{max} \times k)\)                 & \( O(n) \)                            \\
             ¿Siempre da la solución óptima?                & Sí                                      & Sí                             & No                                    \\
-            ¿Es capaz de manejar gran cantidad de agentes? & No                                      & No se sabe aún                 & Alta                                  \\
-            Aplicación recomendada                         & Problemas pequeños                      & no se aun                      & Problemas grandes                     \\
-            Eficiencia en Tiempo                           & Muy baja (crece exponencialmente)       & no se aun                      & Alta (tiempo lineal o logarítmico)    \\
-            Eficiencia en Espacio                          & Muy baja, requiere mucho almacenamiento & no se aun                      & Alta, requiere poco espacio adicional \\
+            ¿Es capaz de manejar gran cantidad de agentes? & No                                      & Moderada                 & Alta                                  \\
+            Aplicación recomendada                         & Problemas pequeños                      & Problemas moderados                      & Problemas grandes                     \\
+            Eficiencia en Tiempo                           & Muy baja (crece exponencialmente)       & Moderada (tiempo polinomial)                      & Alta (tiempo lineal o logarítmico)    \\
+            Eficiencia en Espacio                          & Muy baja, requiere mucho almacenamiento & Moderada, requiere una cantidad de almacenamiento moderada                      & Alta, requiere poco espacio adicional \\
             \bottomrule
         \end{tabular}
         \caption{Comparación general entre algoritmos.}
