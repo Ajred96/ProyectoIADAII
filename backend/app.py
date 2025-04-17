@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from modciFB import modciFB
 from modciPD import modciPD
@@ -9,6 +9,10 @@ import time
 
 app = Flask(__name__)
 CORS(app)
+
+# Aseguramos que la carpeta 'static' exista para servir los archivos
+if not os.path.exists(os.path.join(app.root_path, 'static')):
+    os.makedirs(os.path.join(app.root_path, 'static'))
 
 def procesar_archivo(archivo):
     """Lee el archivo de texto y convierte los datos a la estructura esperada."""
@@ -56,7 +60,7 @@ def ejecutar_metodo(metodo, red_social, r_max, nombre_archivo):
         if metodo == 'fuerzaBruta':
             ci, esfuerzo, estrategia = modciFB(red_social, r_max)
         elif metodo == 'dinamico':
-            ci, esfuerzo, estrategia = modciPD(red_social, r_max)  # Ahora retorna los mismos 3 valores
+            ci, esfuerzo, estrategia = modciPD(red_social, r_max)
         elif metodo == 'voraz':
             ci, esfuerzo, estrategia = modciPV(red_social, r_max)
         else:
@@ -68,8 +72,6 @@ def ejecutar_metodo(metodo, red_social, r_max, nombre_archivo):
         return jsonify(respuesta)
     except Exception as e:
         return jsonify({"error": f"Error al ejecutar el método: {str(e)}"}), 500
-    
-
 
 @app.route('/procesar/<metodo>', methods=['POST'])
 def procesar_metodo(metodo):
@@ -96,8 +98,7 @@ def procesar_metodo(metodo):
 
         tiempo = round(time.time() - tiempo_inicial, 4)
         respuesta = {"CI": ci, "Esfuerzo": esfuerzo, "Estrategia": estrategia, "Tiempo": tiempo}
-
-        nombre_archivo = f"../BateriaPruebas_Proyecto1_2025-I/ResultadosPruebas/{nombre_base}_{metodo}.txt"
+        nombre_archivo = f"static/ResultadosPruebas/{nombre_base}_{metodo}.txt"
         carpeta = os.path.dirname(nombre_archivo)
         os.makedirs(carpeta, exist_ok=True)
         with open(nombre_archivo, 'w') as f:
@@ -110,7 +111,7 @@ def procesar_metodo(metodo):
         return jsonify(respuesta)
     except Exception as e:
         return jsonify({"error": f"Error al ejecutar el método: {str(e)}"}), 500
-    
+
 @app.route('/calcular_ci', methods=['POST'])
 def calcular_ci_inicial():
     """Recibe el archivo y calcula el conflicto interno."""
@@ -126,6 +127,16 @@ def calcular_ci_inicial():
     ci = calcular_conflicto(red_social, estrategia)
     return jsonify({"CI": ci})
 
+@app.route('/descargar_archivo/<metodo>/<nombre_archivo>', methods=['GET'])
+def descargar_archivo(metodo, nombre_archivo):
+    """Descarga el archivo generado por el método."""
+    nombre_base = os.path.splitext(nombre_archivo)[0]
+    nombre_salida = f"{nombre_base}_{metodo}.txt"
+    print(f"Nombre de salida: {nombre_salida}")  # Depuración
+    ruta_archivo = os.path.join('static/ResultadosPruebas/', nombre_salida)
+    if not os.path.exists(ruta_archivo):
+        return jsonify({"error": "Archivo no encontrado"}), 404
+    return send_file(ruta_archivo, as_attachment=True)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-

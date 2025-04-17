@@ -23,4 +23,10 @@ export class ApiService {
     formData.append('file', archivo);
     return this.http.post<any>(`${this.apiUrl}/calcular_ci`, formData);
   }
+
+  descargarArchivo(metodo: string, nombreArchivo: string): Observable<Blob> {
+    const url = `${this.apiUrl}/descargar_archivo/${metodo}/${nombreArchivo}`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
+  
 }
