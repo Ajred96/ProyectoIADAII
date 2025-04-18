@@ -672,31 +672,31 @@ Esto se traduce a:
 
 
 
-    \subsection{Implementación}
-    Respecto a la implemenctación de \textbf{modciPD.py} es importante resaltar que esta utiliza una estrategia bottom-up dado a que la solución se genera  a partir de las soluciones de los subproblemas más pequeños hasta el problema más grande, a su vez esta sigue los siguientes pasos:
-    \begin{enumerate}
-     
-    \item \textbf{Inicialización de DP:}
-    \begin{itemize}
-        \item Se crea la tabla $dp$ como una lista de diccionarios, la cual será la encargada de guardar los pasos que lleven a la solución óptima.
-        
-    \end{itemize}
+\subsection{Implementación}
+Respecto a la implemenctación de \textbf{modciPD.py} es importante resaltar que esta utiliza una estrategia bottom-up dado a que la solución se genera  a partir de las soluciones de los subproblemas más pequeños hasta el problema más grande, a su vez esta sigue los siguientes pasos:
+\begin{enumerate}
+ 
+\item \textbf{Inicialización de DP:}
+\begin{itemize}
+    \item Se crea la tabla $dp$ como una lista de diccionarios, la cual será la encargada de guardar los pasos que lleven a la solución óptima.
     
-    \item \textbf{Actualización de estados:}
-    \begin{itemize}
-        \item Para cada grupo dentro de la red, se recorren las posibles decisiones (pasos) y estas son almacenadas solo si cumplen con el criterio de que al aplicar las mismas no se puede superar el esfuerzo máximo proporcionado por la red. 
-    \end{itemize}
-    
-    \item \textbf{Selección de la estrategia óptima:}
-     \begin{itemize}
-        \item Una vez procesados todos los grupos, se analiza el último nivel de la tabla $dp$ (el cuál corresponde a $dp[n]$, allí se encuentran todas las estrategias posibles que llegaron hasta el final respetando el esfuerzo máximo $(R_{max})$.
-        \item Cada una de estas estrategias cuenta con una cantidad de esfuerzo utilizado y un número total de personas que no fueron moderadas.
-        \item La función \textbf{seleccionar\_mejor\_estrategia} revisa todas las estrategias anteriormente mencionadas y para cada una de ellas recupera el valor acumulado del conflicto y las decisiones tomadas en cada grupo.
-        \item Con los conflictos recuperados, se calcula un conflicto promedio a partir de la división
-    \end{itemize}
+\end{itemize}
+
+\item \textbf{Actualización de estados:}
+\begin{itemize}
+    \item Para cada grupo dentro de la red, se recorren las posibles decisiones (pasos) y estas son almacenadas solo si cumplen con el criterio de que al aplicar las mismas no se puede superar el esfuerzo máximo proporcionado por la red. 
+\end{itemize}
+
+\item \textbf{Selección de la estrategia óptima:}
+ \begin{itemize}
+    \item Una vez procesados todos los grupos, se analiza el último nivel de la tabla $dp$ (el cual corresponde a $dp[n]$, allí se encuentran todas las estrategias posibles que llegaron hasta el final (significa que tomaron una decisión válida para todos los grupos respetando el esfuerzo máximo $(R_{max})$).
+    \item Cada una de estas estrategias esta asociada a un esfuerzo utilizado y un número total de personas que no fueron moderadas.
+    \item La función \textbf{seleccionar\_mejor\_estrategia} revisa todas las estrategias anteriormente mencionadas y para cada una de ellas recupera el valor acumulado del conflicto y las decisiones tomadas en cada grupo.
+    \item Luego, se calcula un conflicto promedio de cada estrategia (a partir de la división del conflicto acumulado entre el número de grupos) y se selecciona la estrategia que tenga el conflicto más bajo.
+    \item En esta etapa se determina cuál fue la mejor estrategia y se reconstruyen las decisiones que llevaron hasta ese punto.
+\end{itemize}    
 \end{enumerate}
 Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener el valor real del conflicto interno de la estrategia seleccionada y se retorna una tupla compuesta por: el conflicto interno total alcanzado por la estrategia, el esfuerzo total requerido para aplicarla y la lista de decisiones tomadas para moderar a los agentes.
-
     \subsection{Pseudocódigo}
     \begin{algorithm}[H]
     \caption{modciPD: Estrategia óptima con programación dinámica}
