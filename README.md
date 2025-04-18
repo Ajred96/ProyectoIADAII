@@ -36,18 +36,50 @@ MarkupSafe 3.0.2
 Werkzeug 3.1.3
 pip 24.3.1
 
-📂 Dependencias del Proyecto
-Para instalar todas las dependencias del proyecto, ejecutar:
-pip install -r requirements.txt
 
-Para correr el backend:
-1. Entrar a la carpeta backend
-2. Ejecutar python app.py
+## Ejecución del proyecto
 
-Para ejecutar el frontend 
-1. Luego de haber instalado dependencias con npm i
-2. Posiblemente sea necesario ejecutar $env:NODE_OPTIONS="--openssl-legacy-provider" para establecer 
-   la variable de entorno (Windows)
-3. Ejecutar ng serve
-4. Abrir el navegador en http://localhost:4200/
+La ejecución de este proyecto se apoya en contenedores Docker para garantizar un entorno aislado y reproducible. A continuación, se detallan los pasos necesarios para clonar, construir y lanzar la aplicación, tanto en sistemas Windows como Linux/macOS.
 
+### 1. Clonar el repositorio
+
+Abra una terminal o consola de comandos y ejecute:
+
+```bash
+git clone https://github.com/Ajred96/ProyectoIADAII.git
+cd ProyectoIADAII
+```
+
+### 2. Instalar Docker y Docker Compose
+
+Antes de continuar, asegúrese de tener instalado Docker en su sistema.
+
+- **Windows**: Instalar desde [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- **Linux/macOS**: Seguir instrucciones en [instalación de Docker](https://docs.docker.com/get-docker/)
+
+Una vez instalado, puede verificar la instalación ejecutando:
+
+```bash
+docker --version
+docker compose version
+```
+
+### 3. Construir y ejecutar el proyecto
+
+Desde la raíz del proyecto, ejecute el siguiente comando para construir e iniciar los contenedores:
+
+```bash
+docker compose up --build
+```
+
+Este comando descargará las imágenes necesarias y levantará automáticamente los servicios de la aplicación.
+
+### 4. Acceder a la aplicación
+
+Una vez que todos los servicios estén corriendo, la interfaz estará disponible en su navegador en:
+
+```bash
+http://localhost:4200
+```
+
+La aplicación quedará lista para ser utilizada sin necesidad de configuración adicional.

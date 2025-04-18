@@ -16,10 +16,10 @@
 
 ---
 
-### 3. Subir la imagen `universidad-del-valle.png` a la carpeta `resources`
+### 3. Subir los acrchivos de la carpeta `resources`
 - Haz clic derecho sobre la carpeta `resources`.
 - Selecciona **"Upload"**.
-- Elige el archivo `universidad-del-valle.png` desde tu computadora y súbelo.
+- Elige los archivos desde la carpeta local `resources`.
 
 ---
 
