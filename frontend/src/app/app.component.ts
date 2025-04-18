@@ -16,7 +16,6 @@ export class AppComponent {
   mostrandoSpinner: boolean = false;
   metodoUsado: string | null = null;
 
-
   contenidoArchivo: string = '';
   gruposResumen: { personas: number, opinion1: number, opinion2: number, terquedad: number }[] = [];
   esfuerzoTotal: number | null = null;
@@ -38,7 +37,6 @@ export class AppComponent {
       reader.onload = () => {
         this.contenidoArchivo = (reader.result as string).trim();
         const lineas = this.contenidoArchivo.split(/\r?\n/).map(l => l.trim()).filter(l => l !== '');
-
         const numGrupos = parseInt(lineas[0]);
         const grupos = lineas.slice(1, 1 + numGrupos);
 
@@ -56,20 +54,14 @@ export class AppComponent {
 
         this.esfuerzoTotal = parseInt(lineas[lineas.length - 1]);
 
-        // Calcular CI original
         this.apiService.calcularConflicto(this.archivo!).subscribe({
-          next: (res) => {
-            this.ciOriginal = res.CI;
-          },
-          error: (err) => {
-            console.error("❌ Error al calcular CI original:", err);
-          }
+          next: (res) => this.ciOriginal = res.CI,
+          error: (err) => console.error("❌ Error al calcular CI original:", err)
         });
       };
       reader.readAsText(this.archivo);
     }
   }
-  
 
   limpiar() {
     this.archivo = null;
@@ -86,18 +78,28 @@ export class AppComponent {
 
   ejecutarMetodo(metodo: string) {
     if (!this.archivo) return;
+
     this.procesando = true;
     this.mostrandoSpinner = true;
-
-
-    let endpoint = `${metodo}`;
     this.metodoUsado = metodo;
 
-    this.apiService.enviarArchivo(this.archivo, endpoint).subscribe(
+    this.apiService.enviarArchivo(this.archivo, metodo).subscribe(
       (response) => {
         this.resultado = response;
         this.procesando = false;
         this.mostrandoSpinner = false;
+
+        // Descargar automáticamente el archivo generado
+        const nombreBase = this.archivo!.name.split('.')[0];
+        const nombreDescarga = `${nombreBase}_${metodo}.txt`;
+
+        this.apiService.descargarArchivo(metodo, nombreBase).subscribe(blob => {
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = nombreDescarga;
+          link.click();
+          URL.revokeObjectURL(link.href);
+        });
       },
       (err) => {
         console.error("❌ Error al procesar el archivo:", err);
