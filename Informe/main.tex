@@ -786,38 +786,35 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
 
     \paragraph{Hipótesis:}
 
-    La reutilización de resultados parciales mediante $DP$ permite calcular la solución óptima sin tener que explorar todo el campo de de las posibles estrategias que se puedan aplicar.
+    La reutilización de resultados parciales mediante $PD$ permite calcular la solución óptima sin tener que explorar todo el campo de de las posibles estrategias que se puedan aplicar.
 
-    Teniendo en cuenta lo anterior, se crea la tabla que explica un poco mas a detalle como seria el uso de capacidad en KB y el tiempo en segundos aproximado teorico para cada una de las pruebas realizadas donde:
+    Teniendo en cuenta lo anterior, se realiza un análisisi teórico de cómo sería el uso de capacidad y tiempo aproximado para distintas instancias del problema. Teniendo en cuenta lo siguiente:
 
 \begin{itemize}
 
   \item \textbf{n:}
-  El cual esta en terminos de k y se representa de la manera $n=2^k$.
+  Cantidad de grupos, que está en terminos de k de la siguiente forma $n=2^k$.
 
-  \item \textbf{R\_max:}
+  \item \textbf{$R_{\text{max}}$:}
   Esfuerzo máximo permitido.
 
-  \item \textbf{K\_\{realmax\}:}
-  Mayor cantidad de agentes en un grupo dentro de la red social (sería el peor caso, donde no se modera ningún agente en un grupo).
+  \item \textbf{Tamaño de celda de memoria:}
+  Se asume como 4 Bytes por celda
 
-  \item \textbf{Tamaño de celda:}
-  El cual esta expresado como un tamaño de 4 Bytes (por celda)
+  \item \textbf{Rendimiento de la máquina en operaciones por minuto:}
+  Se estableció como $3 \times 10^8$ operaciones por minuto.
 
-  \item \textbf{$\mu$:}
-  Rendimiento de la máquina en operaciones por segundo, el cual se establecio como $3 \times 10^8$ en minutos  (ajustado a $\frac{3 \times 10^{8}}{60} = 5 \times 10^{6}$ para pasarlo a segundos).
-
-    \item \textbf{Cual es la formula del espacio teorico?}
-La formula utilizada en este caso es la de la complejidad espacial * el tamaño de celda, el cual quedaria de la siguiente manera:
+    \item \textbf{Fórmula del espacio teórico}
+La formula utilizada en este caso es la de la complejidad espacial multiplicado por el tamaño de celda:
     \[
-        n^2 \cdot R_{max} \cdot k \cdot 4 bytes
+        n^2 \cdot R_{max} \cdot k \cdot 4 bytes = 2^{2K} \cdot R_{max} \cdot k \cdot 4 bytes
     \]
 
-    \item \textbf{Cual es la formula del tiempo teorico?}
-La formula utilizada en este caso es la de la complejidad temporal / el rendimiento de la maquina en segundos ($\mu$) , el cual quedaria de la siguiente manera:
+    \item \textbf{Formula del tiempo teórico}
+La formula utilizada en este caso es la de la complejidad temporal dividido entre el rendimiento de la maquina:
 
 \[
-\frac{n \cdot (k+1) \cdot (R_{max}+1)}{5 \times 10^{6}}
+\frac{n \cdot (k+1) \cdot (R_{max}+1)}{3 \times 10^{8}} minutos = \frac{2^k \cdot (k+1) \cdot (R_{max}+1)}{3 \times 10^{8}} minutos
 \]
 
 
