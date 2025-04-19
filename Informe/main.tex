@@ -496,12 +496,12 @@ Al finalizar, se selecciona la estrategia que, sin superar el esfuerzo disponibl
 Este enfoque garantiza que la solución obtenida es óptima dentro de las restricciones definidas, y resulta mucho más escalable que evaluar explícitamente todas las combinaciones posibles, especialmente en redes sociales con un número elevado de grupos o agentes.
 
 \subsection{Pasos Programación Dinámica}
-Sabemos que para calcular la solución óptima para un algoritmo dinámico se deben 
+Sabemos que para calcular la solución óptima para un algoritmo dinámico se deben
 cumplir ciertos aspectos:
 \begin{enumerate}
-    \item Caracterizar la solución óptima (Subestructura óptima) 
+    \item Caracterizar la solución óptima (Subestructura óptima)
     \item Definir recursivamente el valor de la solución óptima
-    \item Calcular el valor de la solución óptima (algoritmo) 
+    \item Calcular el valor de la solución óptima (algoritmo)
     \item Construir la solución óptima (algoritmo)
 \end{enumerate}
 
@@ -511,7 +511,7 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
 
 \begin{itemize}
     \item \textbf{Definición del problema original:}
-    
+
     Denotamos el problema general como:
     \[
         \text{MinCI}(Grupos_n, R_{\text{max}})
@@ -522,9 +522,9 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
         \item $R_{\text{max}}$: esfuerzo total máximo permitido.
         \item $\text{MinCI}$: equivale a la función objetivo del problema, que llamamos \texttt{ModCI}.
     \end{itemize}
-    
+
     \item \textbf{Subproblemas:}
-    
+
     El enfoque de programación dinámica divide el problema en subproblemas de la forma:
     \[
         \text{MinCI}(Grupos_i, R_j)
@@ -534,11 +534,11 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
         \item $i$ representa los primeros $i$ grupos, con $1 \leq i \leq n$
         \item $R_j$ representa el esfuerzo disponible en ese momento, con $0 \leq j \leq R_{\text{max}}$
     \end{itemize}
-    
+
     \item \textbf{Recurrencia y decisiones:}
-    
+
     Para cada grupo $i$, se evalúan todas las decisiones posibles de moderación: desde moderar a $0$ hasta moderar a $n_i$ agentes (cantidad total del grupo). A cada opción le corresponde un coste de esfuerzo $e$ y un conflicto potencial.
-    
+
     La decisión óptima para el subproblema $\text{MinCI}(Grupos_i, R_j)$ se construye a partir de:
     \begin{itemize}
         \item Las decisiones óptimas de los subproblemas anteriores ($i - 1$).
@@ -551,12 +551,12 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
             Costo(e) \leq R_j
         \]
     \end{itemize}
-    
+
     Para cada combinación válida, se calcula:
     \[
         CI_{\text{acumulado}} = CI_{\text{previo}} + (n_i - e)(o_{1i} - o_{2i})^2
     \]
-    
+
     donde:
     \begin{itemize}
         \item $CI_{\text{acumulado}}$: conflicto total acumulado hasta el grupo actual $i$, considerando la estrategia de esfuerzo aplicada.
@@ -566,9 +566,9 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
         \item $n_i - e$: número de agentes no moderados en el grupo $i$.
         \item $(o_{1i} - o_{2i})$: diferencia cuadrática entre las dos opiniones del grupo. Refleja la intensidad del conflicto si no se modera ese grupo.
     \end{itemize}
-    
+
     \item \textbf{Estructura óptima:}
-    
+
     Así, la solución óptima para el problema completo:
     \[
         \text{MinCI}(Grupos_n, R_{\text{max}})
@@ -675,16 +675,16 @@ Esto se traduce a:
 \subsection{Implementación}
 Respecto a la implemenctación de \textbf{modciPD.py} es importante resaltar que esta utiliza una estrategia bottom-up dado a que la solución se genera  a partir de las soluciones de los subproblemas más pequeños hasta el problema más grande, a su vez esta sigue los siguientes pasos:
 \begin{enumerate}
- 
+
 \item \textbf{Inicialización de DP:}
 \begin{itemize}
     \item Se crea la tabla $dp$ como una lista de diccionarios, la cual será la encargada de guardar los pasos que lleven a la solución óptima.
-    
+
 \end{itemize}
 
 \item \textbf{Actualización de estados:}
 \begin{itemize}
-    \item Para cada grupo dentro de la red, se recorren las posibles decisiones (pasos) y estas son almacenadas solo si cumplen con el criterio de que al aplicar las mismas no se puede superar el esfuerzo máximo proporcionado por la red. 
+    \item Para cada grupo dentro de la red, se recorren las posibles decisiones (pasos) y estas son almacenadas solo si cumplen con el criterio de que al aplicar las mismas no se puede superar el esfuerzo máximo proporcionado por la red.
 \end{itemize}
 
 \item \textbf{Selección de la estrategia óptima:}
@@ -694,7 +694,7 @@ Respecto a la implemenctación de \textbf{modciPD.py} es importante resaltar que
     \item La función \textbf{seleccionar\_mejor\_estrategia} revisa todas las estrategias anteriormente mencionadas y para cada una de ellas recupera el valor acumulado del conflicto y las decisiones tomadas en cada grupo.
     \item Luego, se calcula un conflicto promedio de cada estrategia (a partir de la división del conflicto acumulado entre el número de grupos) y se selecciona la estrategia que tenga el conflicto más bajo.
     \item En esta etapa se determina cuál fue la mejor estrategia y se reconstruyen las decisiones que llevaron hasta ese punto.
-\end{itemize}    
+\end{itemize}
 \end{enumerate}
 Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener el valor real del conflicto interno de la estrategia seleccionada y se retorna una tupla compuesta por: el conflicto interno total alcanzado por la estrategia, el esfuerzo total requerido para aplicarla y la lista de decisiones tomadas para moderar a los agentes.
     \subsection{Pseudocódigo}
@@ -702,12 +702,12 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
     \caption{modciPD: Estrategia óptima con programación dinámica}
     \KwIn{Una red social $RS$ como lista de tuplas $(n_i, op1_i, op2_i, rigidez_i)$ para cada grupo $i$, y un esfuerzo máximo permitido $R_{max}$}
     \KwOut{Tupla $(CI_{\min}, Esfuerzo_{\text{total}}, Estrategia_{\text{óptima}})$}
-    
+
     $n \leftarrow$ cantidades por grupo, $op1$, $op2$, $rigidez$ extraídos de $RS$ \\
     $d_i \leftarrow (op1_i - op2_i)^2$ para cada grupo $i$ \tcp*[r]{Desacuerdo cuadrático}
-    
+
     Inicializar $dp[0][0][0] \leftarrow (0.0, [])$ \tcp*[r]{Suma $S$, decisiones}
-    
+
     \For{$i \leftarrow 0$ \KwTo $|RS| - 1$}{
         \ForEach{$usedEffort$ en $dp[i]$}{
             \ForEach{$rem, (S, decisions)$ en $dp[i][usedEffort]$}{
@@ -730,7 +730,7 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
             }
         }
     }
-    
+
     $mejorCI \leftarrow \infty$, $mejorEstrategia \leftarrow$ \texttt{None} \\
     \ForEach{$usedEffort$ en $dp[num\_grupos]$}{
         \ForEach{$totalRem, (S, decisions)$ en $dp[num\_grupos][usedEffort]$}{
@@ -741,7 +741,7 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
             }
         }
     }
-    
+
     \If{$mejorEstrategia = \texttt{None}$}{
         \Return $(\infty, 0, [])$
     }
@@ -783,7 +783,7 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
 
     \subsubsection{¿Es Útil en la Práctica?}
     El enfoque de programación dinámica es útil para reducir drásticamente el número de combinaciones evaluadas en comparación con una busqueda exhaustiva, especialmente en instancias donde el número de grupos $n$ y el esfuerzo máximo $R_{max}$ son moderados.
-    
+
     \paragraph{Hipótesis:}
 
     La reutilización de resultados parciales mediante $DP$ permite calcular la solución óptima sin tener que explorar todo el campo de de las posibles estrategias que se puedan aplicar.
@@ -793,119 +793,185 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
 \begin{itemize}
 
   \item \textbf{n:}
-  Representa el número total de grupos de agentes que hay dentro de la red.
+  El cual esta en terminos de k y se representa de la manera $n=2^k$.
 
   \item \textbf{R\_max:}
   Esfuerzo máximo permitido.
-
-  \item \textbf{n\_i:}
-  Grupos individuales que hay en la red.
 
   \item \textbf{K\_\{realmax\}:}
   Mayor cantidad de agentes en un grupo dentro de la red social (sería el peor caso, donde no se modera ningún agente en un grupo).
 
   \item \textbf{Tamaño de celda:}
-  Se indica como 8 Bytes, debido al uso de flotantes (en Python está preconfigurado como \texttt{float64}).
+  El cual esta expresado como un tamaño de 4 Bytes (por celda)
 
   \item \textbf{$\mu$:}
-  Rendimiento de la máquina en operaciones por segundo, el cual se establecio como $2.09 \times 10^5$  (ajustado según valores obtenidos del análisis).
+  Rendimiento de la máquina en operaciones por segundo, el cual se establecio como $3 \times 10^8$ en minutos  (ajustado a $\frac{3 \times 10^{8}}{60} = 5 \times 10^{6}$ para pasarlo a segundos).
 
     \item \textbf{Cual es la formula del espacio teorico?}
 La formula utilizada en este caso es la de la complejidad espacial * el tamaño de celda, el cual quedaria de la siguiente manera:
     \[
-        n^2 \cdot R_{max} \cdot k \cdot 8 bytes
+        n^2 \cdot R_{max} \cdot k \cdot 4 bytes
     \]
 
     \item \textbf{Cual es la formula del tiempo teorico?}
 La formula utilizada en este caso es la de la complejidad temporal / el rendimiento de la maquina en segundos ($\mu$) , el cual quedaria de la siguiente manera:
 
 \[
-\frac{n \cdot (k+1) \cdot (R_{max}+1)}{2.09 \times 10^5}
+\frac{n \cdot (k+1) \cdot (R_{max}+1)}{5 \times 10^{6}}
 \]
 
 
 Los cuales nos darian como resultante la siguiente tabla:
 \end{itemize}
 
-        \begin{figure}[H]
-        \centering
-        \includegraphics[width=0.8\textwidth]{resources/bytes-segundos.png}
-    \end{figure}
 
-    \paragraph{Conclusión Hipótesis Temporal:}
-    
-    Cuando el número de grupos y el límite $R_{max}$ no son excesivamente altos, el $DP$ consigue una solución óptima en un tiempo razonable. Sin embargo, para parámetros muy grandes, la cantidad de estados podría crecer y afectar el tiempo de ejecución, aunque sigue siendo una mejora significativa a comparación de un algoritmo de fuerza bruta.
+\begin{table}[H]
+    \centering
+    \small
+\begin{tabular}{|c|c|c|c|l|l|}
+\hline
+\# & k & $n=2^k$ & R\_max & Espacio Aproximado & Tiempo Aproximado\\
+\hline
+0  & 6  & 64      & 40     & 3.75 MB        & 0 s \\
+1  & 6  & 64      & 4044   & 379.13 MB      & 0.36 s \\
+2  & 7  & 128     & 388    & 169.75 MB      & 0.08 s \\
+3  & 7  & 128     & 365    & 159.69 MB      & 0.07 s \\
+4  & 7  & 128     & 315    & 137.81 MB      & 0.06 s \\
+5  & 9  & 512     & 460    & 4.14 GB        & 0.47 s \\
+6  & 9  & 512     & 64     & 576 MB         & 0.07 s \\
+7  & 8  & 256     & 819    & 1.64 GB        & 0.38 s \\
+8  & 12 & 4096    & 955    & 733.44 GB      & 10.18 s \\
+9  & 13 & 8192    & 39     & 129.79 GB      & 0.92 s \\
+10 & 14 & 16384   & 1223   & 17.53 TB       & 1.00 h \\
+11 & 9  & 512     & 798    & 7.18 GB        & 0.82 s \\
+12 & 9  & 512     & 116    & 1.04 GB        & 0.12 s \\
+13 & 19 & 524288  & 474    & 9443.48 TB     & 16.60 min \\
+14 & 18 & 262144  & 1809   & 8535.93 TB     & 30.05 min \\
+15 & 16 & 65536   & 734    & 192.41 TB      & 2.73 h \\
+16 & 8  & 256     & 4572   & 9.14 GB        & 2.11 s \\
+17 & 9  & 512     & 3313   & 29.82 GB       & 3.39 s \\
+18 & 9  & 512     & 1283   & 11.55 GB       & 1.31 s \\
+19 & 8  & 256     & 6465   & 12.93 GB       & 2.98 s \\
+20 & 9  & 512     & 2147   & 19.32 GB       & 2.20 s \\
+21 & 4  & 16      & 11905  & 46.50 MB       & 0.19 s \\
+22 & 4  & 16      & 7959   & 31.09 MB       & 0.13 s \\
+23 & 9  & 512     & 21052  & 189.47 GB      & 21.56 s \\
+24 & 9  & 512     & 16928  & 152.35 GB      & 17.34 s \\
+25 & 9  & 512     & 10403  & 93.63 GB       & 10.65 s \\
+26 & 19 & 524288  & 1375   & 27394.05 TB    & 48.09 min \\
+27 & 23 & 8388608 & 4345   & 26826.10 TB    & 48.61 h \\
+28 & 4  & 16      & 8097   & 31.63 MB       & 0.13 s \\
+29 & 9  & 512     & 47096  & 423.86 GB      & 48.23 s \\
+30 & 25 & 33554432 & 12114 & 1300730.85 TB  & 0.84 mes \\
+31 & 30 & 1073741824 & 1000 & 131941395.33 TB & 0.21 años \\
+32 & 40 & 1.09951E+12 & 1000 & 184467440737.10 TB & 290.16 años \\
+33 & 50 & 1.1259E+15 & 1000 & 241785163922926.00 TB & 369587.94 años \\
+\hline
+\end{tabular}
+    \caption{Espacio y tiempo teórico para diferentes configuraciones de prueba.}
+    \end{table}
 
-    \begin{quote}
-    Por ejemplo, con $n = 15$ y $R_{\text{max}} = 474$ el tiempo teórico estimado es $\approx 0{,}65\ \text{s}$; con $n = 25$ y $R_{\text{max}} = 6\,465$ sube a $\approx 6{,}2\ \text{s}$; y aun para $n = 100$ y $R_{\text{max}} = 121\,144$ el tiempo previsto sería $\approx 23{,}19\ \text{min}$.
-    \end{quote}
 
 
-    \paragraph{Conclusión Hipótesis Espacial:}
-    
-    El uso de memoria adicional para almacenar la tabla $dp$ es el que mayor impacto tiene en cuanto al costo espacial del método. Aún así, en la práctica la poda de estados ineficientes y la restricción basada en el esfuerzo máximo $(R_{max})$ reducen considerablemente la cantidad de memoria requerida, haciendolo viable para redes con un tamaño significativamente grande.
+\paragraph{Conclusión Hipótesis Temporal:}
+Los resultados indican que, para valores de \(k\) pequeños (por ejemplo, \(k \le 13\)), el tiempo de ejecución se mantiene en un rango totalmente aceptable (menos de 1 minuto), incluso cuando \(R_{\max}\) es considerable. Para \(k\) entre 14 y 19, el tiempo crece hasta decenas de minutos u horas, lo cual puede considerarse moderadamente aceptable dependiendo del contexto (por ejemplo, ejecución en segundo plano o procesamiento por lotes). No obstante, a partir de \(k \ge 20\), el tiempo asciende a varias horas, días, meses o incluso años, lo cual resulta inaceptable en la mayoría de los entornos prácticos.
 
-    \begin{quote}
-    Por ejemplo, para $n = 25$ y $R_{\text{max}} = 1\,283$ la tabla cabe en $\approx 55\ \text{MB}$; para $n = 50$ y $R_{\text{max}} = 7\,959$ ocupa $\approx 0{,}6\ \text{GB}$; y solo para $n = 100$ y $R_{\text{max}} = 47\,096$ llega a $\approx 32\ \text{GB}$.
-    \end{quote}
+\begin{itemize}
+  \item Para \(k=13\), \(n=8192\), \(R_{\max}=39\), el tiempo es \(\sim0.92\) minutos.
+  \item Para \(k=14\), \(n=16384\), \(R_{\max}=1223\), el tiempo asciende a \(\sim1\) hora.
+  \item Para \(k=19\), \(n=524288\), \(R_{\max}=1375\), el tiempo alcanza \(\sim48.09\) minutos.
+  \item Para \(k=25\), \(n=33\,554\,432\), \(R_{\max}=12114\), el tiempo sube a \(\sim0.84\) meses.
+  \item Para \(k=30\), \(n=1.07\times10^9\), \(R_{\max}=1000\), el tiempo estimado es \(\sim0.21\) años.
+\end{itemize}
+
+Esto confirma que la complejidad temporal escala agresivamente con el número de estados, y que \(R_{\max}\) también tiene un impacto significativo aunque no completamente predecible.
+
+\paragraph{Conclusión Hipótesis Espacial:}
+El espacio requerido crece desde unos pocos megabytes en casos pequeños, hasta petabytes o incluso exabytes cuando \(k\) se incrementa. Para \(k \le 10\), el consumo de memoria es manejable, pero incrementa drásticamente al aumentar \(R_max\). Además, a partir de \(k=14\), el crecimiento se vuelve dramático y rápidamente supera la capacidad de la mayoría de sistemas, alcanzando valores que solo serían viables en entornos de supercomputación.
+
+\begin{itemize}
+  \item Para \(k=13\), \(n=8192\), el espacio requerido es \(\sim129.79\) GB.
+  \item Para \(k=14\), \(n=16384\), se necesitan \(\sim17.53\) TB.
+  \item Para \(k=16\), \(n=65536\), el espacio asciende a \(\sim192.41\) TB.
+  \item Para \(k=19\), \(n=524288\), se requieren \(\sim27394.05\) TB.
+  \item Para \(k=30\), \(n=1.07\times10^9\), el almacenamiento estimado es \(\sim1.32\times10^8\) TB.
+\end{itemize}
+
+Aunque el uso de programación dinámica ya introduce una optimización significativa al evitar la recomputación de subproblemas, el crecimiento exponencial del número total de estados posibles sigue imponiendo una barrera severa a la escalabilidad espacial del enfoque. 
+
+
+\paragraph{Impacto del parámetro \texorpdfstring{$R_{\max}$}{Rmax}:}
+Aunque el parámetro \(k\) (y por ende \(n = 2^k\)) domina el crecimiento del tiempo y espacio, el valor de \(R_{\max}\) también influye notablemente en el tiempo de ejecución. En la tabla, se observa que dos configuraciones con el mismo \(k\) y \(n\) pueden diferir significativamente en tiempo según el valor de \(R_{\max}\), lo que sugiere que este parámetro afecta directamente la cantidad de subproblemas o combinaciones evaluadas por el algoritmo.
+
+\begin{itemize}
+  \item Para \(k=9\), \(n=512\), con \(R_{\max}=64\), el tiempo es de apenas \(\sim0.07\) s.
+  \item Para el mismo \(k=9\), con \(R_{\max}=47096\), el tiempo sube hasta \(\sim48.23\) s.
+  \item De forma similar, con \(k=8\), \(n=256\), \(R_{\max}=4572\), el tiempo es de \(\sim2.11\) s; pero si \(R_{\max}=819\), solo toma \(\sim0.38\) s.
+\end{itemize}
+
+Esto indica que \(R_{\max}\) afecta el tamaño del espacio de soluciones factibles y por tanto modificando el costo tanto temporal como espacial. Sin embargo, el impacto de \(R_{\max}\) no es completamente predecible ni proporcional: aumentar este parámetro no siempre implica un incremento lineal del tiempo. Esto se debe a que su efecto depende del comportamiento interno del algoritmo, es decir, de cuántos subproblemas adicionales son realmente considerados y almacenados como consecuencia de permitir soluciones más amplias.
+
 
 
     \subsection{¿El Algoritmo Siempre da la Respuesta Correcta al Problema?}
-    
+
     Sí. Al basarse en programación dinámica, este método garantiza la obtención de la solución óptima para el problema de moderar el conflicto interno en una red social, siempre que se cumplan las siguientes condiciones:
-    
+
     \begin{itemize}
-    
-      \item \textbf{Propiedad de subestructura óptima:} 
+
+      \item \textbf{Propiedad de subestructura óptima:}
       El problema puede descomponerse en subproblemas cuya solución óptima se construye a partir de las soluciones óptimas de instancias más pequeñas. Cada decisión de moderar un grupo de agentes se basa en resultados parciales previamente calculados, de modo que ninguna combinación viable queda fuera del análisis.
-    
-      \item \textbf{Cobertura exhaustiva de las estrategias viables:} 
+
+      \item \textbf{Cobertura exhaustiva de las estrategias viables:}
       Se consideran, para cada grupo, todas las cantidades posibles de agentes a moderar (desde cero hasta el tamaño del grupo), respetando siempre el límite de esfuerzo disponible. Esto asegura que no se descarte ninguna estrategia factible que pudiera conducir al mínimo conflicto.
-    
-      \item \textbf{Comparación y selección global:} 
+
+      \item \textbf{Comparación y selección global:}
       Una vez evaluadas todas las combinaciones válidas, se selecciona aquella cuyo nivel de conflicto interno final es el más bajo. Al procesar sistemáticamente todos los subproblemas y reconstruir la mejor secuencia de moderación, la solución resultante es, por definición, la óptima.
-    
+
     \end{itemize}
-    
-    \paragraph{Limitaciones prácticas:}
-    
-    En teoría, la corrección está garantizada mientras se exploren y almacenen todas las combinaciones de subproblemas. En la práctica, a medida que crecen el número de grupos y el presupuesto de esfuerzo, la cantidad de estados intermedios puede aumentar y exigir grandes recursos de memoria o tiempo. No obstante, en instancias de tamaño moderado, estas exigencias siguen siendo manejables y la estrategia conserva su garantía de optimalidad.
-    
+
+
+
+ \vspace{1em}
+    \noindent
+    \begin{tcolorbox}[colback=red!5!white, colframe=red!50!black, title=Limitaciones Prácticas]
+        En teoría, la corrección está garantizada mientras se exploren y almacenen todas las combinaciones de subproblemas. En la práctica, a medida que crecen el número de grupos y el presupuesto de esfuerzo, la cantidad de estados intermedios puede aumentar y exigir grandes recursos de memoria o tiempo. No obstante, en instancias de tamaño moderado, estas exigencias siguen siendo manejables y la estrategia conserva su garantía de optimalidad.
+    \end{tcolorbox}
     \subsection{Análisis}
 
     El método de programación dinámica, aplicado al problema de moderación de opiniones, presenta las siguientes características de comportamiento:
 
         \begin{itemize}
-    
-    \item \textbf{Crecimiento polinómico controlado:}  
+
+    \item \textbf{Crecimiento polinómico controlado:}
     El tiempo de cómputo crece de forma suave al aumentar el número de grupos, manteniéndose dentro de una escala práctica (desde milisegundos hasta minutos). Esto refleja que, aunque se exploran múltiples estados, la fusión de soluciones parciales evita la explosión exponencial.
 
 
-    \item \textbf{Estabilidad frente a variaciones de presupuesto:} 
+    \item \textbf{Estabilidad frente a variaciones de presupuesto:}
     Para un mismo tamaño de red, la variación del límite de esfuerzo provoca oscilaciones en el tiempo (mayor esfuerzo → más estados a evaluar), pero nunca aumenta desproporcionadamente. Esto evidencia que la estructura de DP maneja eficientemente incluso presupuestos altos.
 
-    \item \textbf{Escalabilidad hasta instancias moderadas–grandes:} 
-        
+    \item \textbf{Escalabilidad hasta instancias moderadas–grandes:}
+
         \begin{itemize}
-        
-          \item \textbf{Pequeñas ($n \leq 10$):}  
+
+          \item \textbf{Pequeñas ($n \leq 10$):}
           tiempos imperceptibles ($<$ 1~ms–500~ms).
-        
-          \item \textbf{Medianas ($10 < n \leq 25$):} 
+
+          \item \textbf{Medianas ($10 < n \leq 25$):}
           siempre por debajo de 13~s, adecuado para uso interactivo.
-        
-          \item \textbf{Grandes ($25 < n \leq 50$):} 
+
+          \item \textbf{Grandes ($25 < n \leq 50$):}
           de decenas a centenares de segundos, aceptable en procesos batch o análisis offline.
-        
-          \item \textbf{Muy grandes ($n \approx 100$):} 
+
+          \item \textbf{Muy grandes ($n \approx 100$):}
           alrededor de 5~min, puede considerarse límite práctico sin optimizaciones adicionales.
-        
+
         \end{itemize}
 
-    
-    \item \textbf{Equilibrio espacio-tiempo:}  
+
+    \item \textbf{Equilibrio espacio-tiempo:}
     El algoritmo sacrifica algo de memoria para almacenar la tabla de estados, pero a cambio evita recomputaciones y ofrece un rendimiento más predecible frente a heurísticos voraces o fuerza bruta.
-    
+
     \end{itemize}
 
 
@@ -933,16 +999,16 @@ Los cuales nos darian como resultante la siguiente tabla:
 
 
     \begin{itemize}
-    
-         \item \textbf{Umbral interactivo:} 
+
+         \item \textbf{Umbral interactivo:}
         hasta 15 grupos se mantiene por debajo de 5 s incluso en el peor caso.
 
-        \item \textbf{Procesamiento batch:} 
+        \item \textbf{Procesamiento batch:}
         entre 20 y 50 grupos, cabe en un marco de decenas de segundos a pocos minutos.
 
-        \item \textbf{Límite práctico:} 
+        \item \textbf{Límite práctico:}
          alrededor de 100 grupos, el tiempo se acerca a los 5 min, recomendando optimizaciones o partición de la red si se precisa mayor escala.
-    
+
     \end{itemize}
 
 
@@ -1366,16 +1432,16 @@ A partir de esta comparación, respondemos a las preguntas planteadas:
     \subsubsection{¿Cuándo da la Respuesta Correcta?}
 
     Existen ciertos escenarios en los que la estrategia voraz garantiza la obtención de la solución óptima. Estos casos son estructuralmente simples y no requieren decisiones complejas de distribución del esfuerzo. A continuación, se describen los más relevantes:
-    
+
     \begin{itemize}
-        \item \textbf{Red social con un único grupo.}  
+        \item \textbf{Red social con un único grupo.}
         Si la red contiene un solo grupo de agentes, cualquier cantidad de esfuerzo se destinará únicamente a él. Como no hay necesidad de priorizar entre grupos, la estrategia voraz y la óptima coinciden necesariamente.
 
-    
-        \item \textbf{El esfuerzo disponible permite moderar completamente a todos los grupos.}  
+
+        \item \textbf{El esfuerzo disponible permite moderar completamente a todos los grupos.}
         Cuando el presupuesto de esfuerzo es suficiente para aplicar el máximo nivel de moderación posible en todos los grupos, no es necesario priorizar. En este caso, todos los algoritmos —incluido el voraz— aplicarán la misma estrategia completa y óptima.
-  
-    \item \textbf{Escenario favorable para la elección voraz.}  
+
+    \item \textbf{Escenario favorable para la elección voraz.}
 En ciertos escenarios, el presupuesto disponible coincide de forma precisa con el esfuerzo necesario para moderar completamente a los grupos más eficientes, es decir, aquellos con mayor utilidad y menor costo por agente. En estos casos, el enfoque voraz —que asigna esfuerzo de forma secuencial comenzando por los grupos más rentables— toma las mismas decisiones que una estrategia óptima. Por ejemplo, si moderar tres grupos de alta utilidad consume exactamente el esfuerzo total, y los grupos restantes son menos eficientes o demasiado costosos, no hay necesidad de considerar combinaciones parciales. La estrategia voraz, al seguir su ordenamiento local, construye la solución correcta sin evaluaciones adicionales.
 
 \textit{Ejemplo:} Este comportamiento se observa en la red de la Prueba 5 de la batería de pruebas: 5 grupos con esfuerzo disponible 460. El algoritmo voraz aplica 456 unidades de esfuerzo en los grupos 2, 4 y 1, que presentan la mejor utilidad por agente, logrando la misma solución que un algoritmo óptimo. No es necesario distribuir el esfuerzo parcialmente entre grupos, ni dejar fuera algún grupo más eficiente.
@@ -1384,30 +1450,30 @@ En ciertos escenarios, el presupuesto disponible coincide de forma precisa con e
 
     \end{itemize}
         \subsubsection{¿Cuándo no da la Respuesta Correcta?}
-    
+
     Aunque el algoritmo voraz ofrece una solución válida y eficiente al problema ModCI, su naturaleza heurística implica que no garantiza la obtención del conflicto interno mínimo en todos los casos. A continuación, se detallan algunos escenarios típicos en los que esta estrategia puede generar soluciones subóptimas:
-    
-    
+
+
     \begin{itemize}
-    
-    \item \textbf{Distribución óptima del esfuerzo requiere intervenir en varios grupos de forma parcial.}  
+
+    \item \textbf{Distribución óptima del esfuerzo requiere intervenir en varios grupos de forma parcial.}
     El enfoque voraz concentra el esfuerzo en el grupo que ofrece la mayor utilidad individual, incluso si esto implica intervenir completamente en un solo grupo. Sin embargo, en muchos casos, distribuir parcialmente ese mismo esfuerzo entre varios grupos puede reducir más el conflicto general. Por ejemplo, usar todo el presupuesto en un grupo con solo dos agentes con mayor utilidad deja sin cubrir a grupos más numerosos donde podrían haberse moderado más individuos con el mismo costo total.
-    
+
     \end{itemize}
-    
-        
-    
-    
+
+
+
+
     \subsection{Análisis}
     El algoritmo voraz implementado para el problema ModCI constituye una solución computacionalmente eficiente que, en la mayoría de casos, entrega resultados cercanos al óptimo. Su lógica de priorización basada en utilidad permite obtener estrategias factibles de forma rápida, lo cual es especialmente valioso en redes sociales de gran tamaño o cuando el tiempo de cómputo es una restricción.
-    
+
     A pesar de su eficiencia, el algoritmo presenta limitaciones estructurales debido a su enfoque local. Al no evaluar el impacto global de sus decisiones, puede generar soluciones subóptimas en escenarios donde el esfuerzo debe ser distribuido cuidadosamente entre múltiples grupos.
-    
+
     No obstante, la calidad de sus soluciones fue evaluada sistemáticamente mediante una métrica relativa de comparación con soluciones óptimas de la batería de pruebas. Los resultados mostraron que, en promedio, la solución generada por el algoritmo voraz se alejó apenas un 1{,}62\% de la óptima. Esta baja desviación sugiere que, a pesar de no explorar todo el espacio de soluciones, el enfoque voraz logra capturar buena parte de la estructura del problema y construir respuestas competitivas.
-    
+
     En resumen, el algoritmo ofrece un equilibrio notable entre velocidad y calidad de solución. Si bien no garantiza optimalidad, su comportamiento consistente y su bajo margen de error lo hacen una herramienta efectiva y escalable para abordar el problema ModCI en contextos prácticos.
     \begin{tcolorbox}[colback=red!5!white, colframe=red!50!black, title=Advertencia sobre la correctitud]
-            La principal debilidad del enfoque voraz radica en que realiza asignaciones de forma secuencial y local, sin considerar la interacción global entre grupos y el impacto acumulado que puede tener una distribución alternativa del esfuerzo. Por ello, si bien en muchos casos ofrece soluciones cercanas al óptimo, existen configuraciones donde se aleja de la mejor estrategia posible. 
+            La principal debilidad del enfoque voraz radica en que realiza asignaciones de forma secuencial y local, sin considerar la interacción global entre grupos y el impacto acumulado que puede tener una distribución alternativa del esfuerzo. Por ello, si bien en muchos casos ofrece soluciones cercanas al óptimo, existen configuraciones donde se aleja de la mejor estrategia posible.
         \end{tcolorbox}
 
 %%%%%%% ALGORITMO VORAZ %%%%%%% FIN
@@ -1745,7 +1811,13 @@ La siguiente tabla presenta una comparación general entre los tres enfoques imp
         \end{itemize}
     \end{itemize}
 
-    \textbf{Comparación Global:} El algoritmo de fuerza bruta actúa como una línea base teórica inigualable en precisión, pero ineficiente. La programación dinámica logra un balance adecuado entre eficiencia y exactitud, mientras que el enfoque voraz se justifica principalmente cuando se requiere velocidad y se puede tolerar una aproximación. La elección del algoritmo adecuado dependerá del tamaño del problema, los recursos disponibles y el nivel de precisión requerido por la aplicación práctica.
+     \vspace{1em}
+    \noindent
+    \begin{tcolorbox}[colback=red!5!white, colframe=red!50!black, title=Comparación Global]
+        El algoritmo de fuerza bruta actúa como una línea base teórica inigualable en precisión, pero ineficiente. La programación dinámica logra un balance adecuado entre eficiencia y exactitud, mientras que el enfoque voraz se justifica principalmente cuando se requiere velocidad y se puede tolerar una aproximación. La elección del algoritmo adecuado dependerá del tamaño del problema, los recursos disponibles y el nivel de precisión requerido por la aplicación práctica.
+    \end{tcolorbox}
+
+    
 
 %%%%%%% COMPARACIÓN ALGORITMOS %%%%%%% FIN
 
@@ -1798,6 +1870,26 @@ La siguiente tabla presenta una comparación general entre los tres enfoques imp
     \label{fig:cp5}
 \end{figure}
 
+
+%%%%%%% CASOS DE PRUEBA %%%%%%% FIN
+
+\newpage
+
+\section*{Conclusiones}
+
+\begin{itemize}
+    \item \textbf{El algoritmo de fuerza bruta}: garantiza encontrar la solución óptima al problema, ya que explora exhaustivamente todas las combinaciones posibles de esfuerzo entre los grupos. Sin embargo, su principal desventaja es la complejidad exponencial, lo que lo hace inviable para redes con más de unos pocos grupos. En la práctica, su uso queda restringido a casos muy pequeños, donde se puede usar como referencia o para validar otros métodos.
+    
+    \item \textbf{El algoritmo de programación dinámica}: representa una mejora significativa en cuanto a eficiencia respecto al enfoque de fuerza bruta. Se basa en subproblemas más pequeños y permite reutilizar resultados intermedios, logrando una solución óptima dentro del presupuesto de esfuerzo. A pesar de que su complejidad temporal y espacial sigue siendo considerable, su rendimiento es aceptable en redes medianas, incluso con restricciones de tiempo o memoria. Permite alcanzar un equilibrio entre exactitud, rendimiento y escalabilidad.
+    
+    \item \textbf{El algoritmo voraz}: es el más rápido de los tres, ya que se basa en una heurística que prioriza grupos con alta discrepancia de opiniones y baja rigidez. Aunque no garantiza una solución óptima, ofrece resultados suficientemente buenos en tiempos muy bajos. Su bajo costo computacional lo hace ideal para redes grandes o situaciones donde se requiere una respuesta rápida. Sin embargo, su eficacia depende fuertemente de la calidad de la heurística utilizada, y puede no funcionar bien en ciertos casos.
+    
+    \item \textbf{En conclusión}: el análisis comparativo evidencia que cada enfoque tiene su nicho de aplicabilidad. La fuerza bruta es útil solo para instancias pequeñas y como referencia. La programación dinámica es preferible cuando se necesita precisión y aún se dispone de recursos moderados. El enfoque voraz es el más adecuado cuando se busca eficiencia y rapidez en contextos de gran escala. La elección del algoritmo debe estar guiada por el tamaño de la red, el presupuesto disponible y el nivel de precisión requerido.
+\end{itemize}
+
+
+\newpage
+
 \section{Ejecución del proyecto}
 
 La ejecución de este proyecto se apoya en contenedores Docker para garantizar un entorno aislado y reproducible. A continuación, se detallan los pasos necesarios para clonar, construir y lanzar la aplicación, tanto en sistemas Windows como Linux/macOS.
@@ -1848,7 +1940,6 @@ http://localhost:4200
 \noindent
 La aplicación quedará lista para ser utilizada sin necesidad de configuración adicional.
 
-%%%%%%% CASOS DE PRUEBA %%%%%%% FIN
 
 \newpage
 \nocite{*}
