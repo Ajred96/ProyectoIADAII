@@ -829,7 +829,7 @@ Los cuales nos darian como resultante la siguiente tabla:
 \hline
 \# & k & $n=2^k$ & R\_max & Espacio Aproximado & Tiempo Aproximado\\
 \hline
-0  & 6  & 64      & 40     & 3.75 MB        & 0 s \\
+0  & 6  & 64      & 40     & 3.75 MB        & 3.674 ms \\
 1  & 6  & 64      & 4044   & 379.13 MB      & 0.36 s \\
 2  & 7  & 128     & 388    & 169.75 MB      & 0.08 s \\
 3  & 7  & 128     & 365    & 159.69 MB      & 0.07 s \\
@@ -856,11 +856,11 @@ Los cuales nos darian como resultante la siguiente tabla:
 24 & 9  & 512     & 16928  & 152.35 GB      & 17.34 s \\
 25 & 9  & 512     & 10403  & 93.63 GB       & 10.65 s \\
 26 & 19 & 524288  & 1375   & 27394.05 TB    & 48.09 min \\
-27 & 23 & 8388608 & 4345   & 26826.10 TB    & 48.61 h \\
+27 & 23 & 8388608 & 4345   & 26826.10 TB    & 2 días \\
 28 & 4  & 16      & 8097   & 31.63 MB       & 0.13 s \\
 29 & 9  & 512     & 47096  & 423.86 GB      & 48.23 s \\
-30 & 25 & 33554432 & 12114 & 1300730.85 TB  & 0.84 mes \\
-31 & 30 & 1073741824 & 1000 & 131941395.33 TB & 0.21 años \\
+30 & 24 & 16777216 & 12114 & 1300730.85 TB  & 3.92 mes \\
+31 & 30 & 1073741824 & 1000 & 131941395.33 TB & 2.52 mes \\
 32 & 40 & 1.09951E+12 & 1000 & 184467440737.10 TB & 290.16 años \\
 33 & 50 & 1.1259E+15 & 1000 & 241785163922926.00 TB & 369587.94 años \\
 \hline
@@ -877,8 +877,8 @@ Los resultados indican que, para valores de \(k\) pequeños (por ejemplo, \(k \l
   \item Para \(k=13\), \(n=8192\), \(R_{\max}=39\), el tiempo es \(\sim0.92\) minutos.
   \item Para \(k=14\), \(n=16384\), \(R_{\max}=1223\), el tiempo asciende a \(\sim1\) hora.
   \item Para \(k=19\), \(n=524288\), \(R_{\max}=1375\), el tiempo alcanza \(\sim48.09\) minutos.
-  \item Para \(k=25\), \(n=33\,554\,432\), \(R_{\max}=12114\), el tiempo sube a \(\sim0.84\) meses.
-  \item Para \(k=30\), \(n=1.07\times10^9\), \(R_{\max}=1000\), el tiempo estimado es \(\sim0.21\) años.
+  \item Para \(k=24\), \(n=16\,777\,216\), \(R_{\max}=12114\), el tiempo sube a \(\sim3.92\) meses.
+  \item Para \(k=30\), \(n=107\,3741\,824\), \(R_{\max}=1000\), el tiempo estimado es \(\sim2.52\) meses.
 \end{itemize}
 
 Esto confirma que la complejidad temporal escala agresivamente con el número de estados, y que \(R_{\max}\) también tiene un impacto significativo aunque no completamente predecible.
@@ -891,7 +891,7 @@ El espacio requerido crece desde unos pocos megabytes en casos pequeños, hasta 
   \item Para \(k=14\), \(n=16384\), se necesitan \(\sim17.53\) TB.
   \item Para \(k=16\), \(n=65536\), el espacio asciende a \(\sim192.41\) TB.
   \item Para \(k=19\), \(n=524288\), se requieren \(\sim27394.05\) TB.
-  \item Para \(k=30\), \(n=1.07\times10^9\), el almacenamiento estimado es \(\sim1.32\times10^8\) TB.
+  \item Para \(k=30\), \(n=107\,3741\,824\), el almacenamiento estimado es \(\sim1.32\times10^8\) TB.
 \end{itemize}
 
 Aunque el uso de programación dinámica ya introduce una optimización significativa al evitar la recomputación de subproblemas, el crecimiento exponencial del número total de estados posibles sigue imponiendo una barrera severa a la escalabilidad espacial del enfoque. 
