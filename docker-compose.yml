@@ -1,17 +1,20 @@
+version: "3.8"
+
 services:
   backend:
     build: ./backend
     volumes:
-      - .:/app
+      - ./backend:/app
     ports:
       - "5000:5000"
-    working_dir: /app/backend
+    working_dir: /app
     command: python app.py
 
   frontend:
     build: ./frontend
-    volumes:
-      - .:/app
     ports:
       - "4200:4200"
-    working_dir: /app/frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
