@@ -497,10 +497,13 @@ Este enfoque garantiza que la solución obtenida es óptima dentro de las restri
 
 \subsection{Pasos Programación Dinámica}
 Sabemos que para calcular la solución óptima para un algoritmo dinámico se deben
+Sabemos que para calcular la solución óptima para un algoritmo dinámico se deben
 cumplir ciertos aspectos:
 \begin{enumerate}
     \item Caracterizar la solución óptima (Subestructura óptima)
+    \item Caracterizar la solución óptima (Subestructura óptima)
     \item Definir recursivamente el valor de la solución óptima
+    \item Calcular el valor de la solución óptima (algoritmo)
     \item Calcular el valor de la solución óptima (algoritmo)
     \item Construir la solución óptima (algoritmo)
 \end{enumerate}
@@ -511,6 +514,7 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
 
 \begin{itemize}
     \item \textbf{Definición del problema original:}
+
 
     Denotamos el problema general como:
     \[
@@ -523,7 +527,9 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
         \item $\text{MinCI}$: equivale a la función objetivo del problema, que llamamos \texttt{ModCI}.
     \end{itemize}
 
+
     \item \textbf{Subproblemas:}
+
 
     El enfoque de programación dinámica divide el problema en subproblemas de la forma:
     \[
@@ -535,9 +541,12 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
         \item $R_j$ representa el esfuerzo disponible en ese momento, con $0 \leq j \leq R_{\text{max}}$
     \end{itemize}
 
+
     \item \textbf{Recurrencia y decisiones:}
 
+
     Para cada grupo $i$, se evalúan todas las decisiones posibles de moderación: desde moderar a $0$ hasta moderar a $n_i$ agentes (cantidad total del grupo). A cada opción le corresponde un coste de esfuerzo $e$ y un conflicto potencial.
+
 
     La decisión óptima para el subproblema $\text{MinCI}(Grupos_i, R_j)$ se construye a partir de:
     \begin{itemize}
@@ -552,10 +561,12 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
         \]
     \end{itemize}
 
+
     Para cada combinación válida, se calcula:
     \[
         CI_{\text{acumulado}} = CI_{\text{previo}} + (n_i - e)(o_{1i} - o_{2i})^2
     \]
+
 
     donde:
     \begin{itemize}
@@ -567,7 +578,9 @@ Para resolver el problema de minimizar el conflicto interno en una red social ba
         \item $(o_{1i} - o_{2i})$: diferencia cuadrática entre las dos opiniones del grupo. Refleja la intensidad del conflicto si no se modera ese grupo.
     \end{itemize}
 
+
     \item \textbf{Estructura óptima:}
+
 
     Así, la solución óptima para el problema completo:
     \[
@@ -676,14 +689,17 @@ Esto se traduce a:
 Respecto a la implemenctación de \textbf{modciPD.py} es importante resaltar que esta utiliza una estrategia bottom-up dado a que la solución se genera  a partir de las soluciones de los subproblemas más pequeños hasta el problema más grande, a su vez esta sigue los siguientes pasos:
 \begin{enumerate}
 
+
 \item \textbf{Inicialización de DP:}
 \begin{itemize}
     \item Se crea la tabla $dp$ como una lista de diccionarios, la cual será la encargada de guardar los pasos que lleven a la solución óptima.
+
 
 \end{itemize}
 
 \item \textbf{Actualización de estados:}
 \begin{itemize}
+    \item Para cada grupo dentro de la red, se recorren las posibles decisiones (pasos) y estas son almacenadas solo si cumplen con el criterio de que al aplicar las mismas no se puede superar el esfuerzo máximo proporcionado por la red.
     \item Para cada grupo dentro de la red, se recorren las posibles decisiones (pasos) y estas son almacenadas solo si cumplen con el criterio de que al aplicar las mismas no se puede superar el esfuerzo máximo proporcionado por la red.
 \end{itemize}
 
@@ -695,6 +711,7 @@ Respecto a la implemenctación de \textbf{modciPD.py} es importante resaltar que
     \item Luego, se calcula un conflicto promedio de cada estrategia (a partir de la división del conflicto acumulado entre el número de grupos) y se selecciona la estrategia que tenga el conflicto más bajo.
     \item En esta etapa se determina cuál fue la mejor estrategia y se reconstruyen las decisiones que llevaron hasta ese punto.
 \end{itemize}
+\end{itemize}
 \end{enumerate}
 Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener el valor real del conflicto interno de la estrategia seleccionada y se retorna una tupla compuesta por: el conflicto interno total alcanzado por la estrategia, el esfuerzo total requerido para aplicarla y la lista de decisiones tomadas para moderar a los agentes.
     \subsection{Pseudocódigo}
@@ -703,10 +720,13 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
     \KwIn{Una red social $RS$ como lista de tuplas $(n_i, op1_i, op2_i, rigidez_i)$ para cada grupo $i$, y un esfuerzo máximo permitido $R_{max}$}
     \KwOut{Tupla $(CI_{\min}, Esfuerzo_{\text{total}}, Estrategia_{\text{óptima}})$}
 
+
     $n \leftarrow$ cantidades por grupo, $op1$, $op2$, $rigidez$ extraídos de $RS$ \\
     $d_i \leftarrow (op1_i - op2_i)^2$ para cada grupo $i$ \tcp*[r]{Desacuerdo cuadrático}
 
+
     Inicializar $dp[0][0][0] \leftarrow (0.0, [])$ \tcp*[r]{Suma $S$, decisiones}
+
 
     \For{$i \leftarrow 0$ \KwTo $|RS| - 1$}{
         \ForEach{$usedEffort$ en $dp[i]$}{
@@ -731,6 +751,7 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
         }
     }
 
+
     $mejorCI \leftarrow \infty$, $mejorEstrategia \leftarrow$ \texttt{None} \\
     \ForEach{$usedEffort$ en $dp[num\_grupos]$}{
         \ForEach{$totalRem, (S, decisions)$ en $dp[num\_grupos][usedEffort]$}{
@@ -741,6 +762,7 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
             }
         }
     }
+
 
     \If{$mejorEstrategia = \texttt{None}$}{
         \Return $(\infty, 0, [])$
@@ -784,18 +806,19 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
     \subsubsection{¿Es Útil en la Práctica?}
     El enfoque de programación dinámica es útil para reducir drásticamente el número de combinaciones evaluadas en comparación con una busqueda exhaustiva, especialmente en instancias donde el número de grupos $n$ y el esfuerzo máximo $R_{max}$ son moderados.
 
+
     \paragraph{Hipótesis:}
 
-    La reutilización de resultados parciales mediante $DP$ permite calcular la solución óptima sin tener que explorar todo el campo de de las posibles estrategias que se puedan aplicar.
+    La reutilización de resultados parciales mediante $PD$ permite calcular la solución óptima sin tener que explorar todo el campo de de las posibles estrategias que se puedan aplicar.
 
-    Teniendo en cuenta lo anterior, se crea la tabla que explica un poco mas a detalle como seria el uso de capacidad en KB y el tiempo en segundos aproximado teorico para cada una de las pruebas realizadas donde:
+    Teniendo en cuenta lo anterior, se realiza un análisisi teórico de cómo sería el uso de capacidad y tiempo aproximado para distintas instancias del problema. Teniendo en cuenta lo siguiente:
 
 \begin{itemize}
 
   \item \textbf{n:}
   El cual esta en terminos de k y se representa de la manera $n=2^k$.
 
-  \item \textbf{R\_max:}
+  \item \textbf{$R_{\text{max}}$:}
   Esfuerzo máximo permitido.
 
   \item \textbf{K\_\{realmax\}:}
@@ -899,18 +922,27 @@ Los cuales nos darian como resultante la siguiente tabla:
 
     \subsection{¿El Algoritmo Siempre da la Respuesta Correcta al Problema?}
 
+
     Sí. Al basarse en programación dinámica, este método garantiza la obtención de la solución óptima para el problema de moderar el conflicto interno en una red social, siempre que se cumplan las siguientes condiciones:
 
+
     \begin{itemize}
+
+      \item \textbf{Propiedad de subestructura óptima:}
 
       \item \textbf{Propiedad de subestructura óptima:}
       El problema puede descomponerse en subproblemas cuya solución óptima se construye a partir de las soluciones óptimas de instancias más pequeñas. Cada decisión de moderar un grupo de agentes se basa en resultados parciales previamente calculados, de modo que ninguna combinación viable queda fuera del análisis.
 
       \item \textbf{Cobertura exhaustiva de las estrategias viables:}
+
+      \item \textbf{Cobertura exhaustiva de las estrategias viables:}
       Se consideran, para cada grupo, todas las cantidades posibles de agentes a moderar (desde cero hasta el tamaño del grupo), respetando siempre el límite de esfuerzo disponible. Esto asegura que no se descarte ninguna estrategia factible que pudiera conducir al mínimo conflicto.
 
       \item \textbf{Comparación y selección global:}
+
+      \item \textbf{Comparación y selección global:}
       Una vez evaluadas todas las combinaciones válidas, se selecciona aquella cuyo nivel de conflicto interno final es el más bajo. Al procesar sistemáticamente todos los subproblemas y reconstruir la mejor secuencia de moderación, la solución resultante es, por definición, la óptima.
+
 
     \end{itemize}
 
@@ -925,33 +957,50 @@ Los cuales nos darian como resultante la siguiente tabla:
         \begin{itemize}
 
     \item \textbf{Crecimiento polinómico controlado:}
+
+    \item \textbf{Crecimiento polinómico controlado:}
     El tiempo de cómputo crece de forma suave al aumentar el número de grupos, manteniéndose dentro de una escala práctica (desde milisegundos hasta minutos). Esto refleja que, aunque se exploran múltiples estados, la fusión de soluciones parciales evita la explosión exponencial.
 
 
     \item \textbf{Estabilidad frente a variaciones de presupuesto:}
+    \item \textbf{Estabilidad frente a variaciones de presupuesto:}
     Para un mismo tamaño de red, la variación del límite de esfuerzo provoca oscilaciones en el tiempo (mayor esfuerzo → más estados a evaluar), pero nunca aumenta desproporcionadamente. Esto evidencia que la estructura de DP maneja eficientemente incluso presupuestos altos.
+
+    \item \textbf{Escalabilidad hasta instancias moderadas–grandes:}
 
     \item \textbf{Escalabilidad hasta instancias moderadas–grandes:}
 
         \begin{itemize}
 
           \item \textbf{Pequeñas ($n \leq 10$):}
+
+          \item \textbf{Pequeñas ($n \leq 10$):}
           tiempos imperceptibles ($<$ 1~ms–500~ms).
+
+          \item \textbf{Medianas ($10 < n \leq 25$):}
 
           \item \textbf{Medianas ($10 < n \leq 25$):}
           siempre por debajo de 13~s, adecuado para uso interactivo.
 
           \item \textbf{Grandes ($25 < n \leq 50$):}
+
+          \item \textbf{Grandes ($25 < n \leq 50$):}
           de decenas a centenares de segundos, aceptable en procesos batch o análisis offline.
 
           \item \textbf{Muy grandes ($n \approx 100$):}
+
+          \item \textbf{Muy grandes ($n \approx 100$):}
           alrededor de 5~min, puede considerarse límite práctico sin optimizaciones adicionales.
+
 
         \end{itemize}
 
 
     \item \textbf{Equilibrio espacio-tiempo:}
+
+    \item \textbf{Equilibrio espacio-tiempo:}
     El algoritmo sacrifica algo de memoria para almacenar la tabla de estados, pero a cambio evita recomputaciones y ofrece un rendimiento más predecible frente a heurísticos voraces o fuerza bruta.
+
 
     \end{itemize}
 
@@ -982,13 +1031,18 @@ Los cuales nos darian como resultante la siguiente tabla:
     \begin{itemize}
 
          \item \textbf{Umbral interactivo:}
+
+         \item \textbf{Umbral interactivo:}
         hasta 15 grupos se mantiene por debajo de 5 s incluso en el peor caso.
 
+        \item \textbf{Procesamiento batch:}
         \item \textbf{Procesamiento batch:}
         entre 20 y 50 grupos, cabe en un marco de decenas de segundos a pocos minutos.
 
         \item \textbf{Límite práctico:}
+        \item \textbf{Límite práctico:}
          alrededor de 100 grupos, el tiempo se acerca a los 5 min, recomendando optimizaciones o partición de la red si se precisa mayor escala.
+
 
     \end{itemize}
 
@@ -1414,13 +1468,19 @@ A partir de esta comparación, respondemos a las preguntas planteadas:
 
     Existen ciertos escenarios en los que la estrategia voraz garantiza la obtención de la solución óptima. Estos casos son estructuralmente simples y no requieren decisiones complejas de distribución del esfuerzo. A continuación, se describen los más relevantes:
 
+
     \begin{itemize}
+        \item \textbf{Red social con un único grupo.}
         \item \textbf{Red social con un único grupo.}
         Si la red contiene un solo grupo de agentes, cualquier cantidad de esfuerzo se destinará únicamente a él. Como no hay necesidad de priorizar entre grupos, la estrategia voraz y la óptima coinciden necesariamente.
 
 
         \item \textbf{El esfuerzo disponible permite moderar completamente a todos los grupos.}
+
+        \item \textbf{El esfuerzo disponible permite moderar completamente a todos los grupos.}
         Cuando el presupuesto de esfuerzo es suficiente para aplicar el máximo nivel de moderación posible en todos los grupos, no es necesario priorizar. En este caso, todos los algoritmos —incluido el voraz— aplicarán la misma estrategia completa y óptima.
+
+    \item \textbf{Escenario favorable para la elección voraz.}
 
     \item \textbf{Escenario favorable para la elección voraz.}
 En ciertos escenarios, el presupuesto disponible coincide de forma precisa con el esfuerzo necesario para moderar completamente a los grupos más eficientes, es decir, aquellos con mayor utilidad y menor costo por agente. En estos casos, el enfoque voraz —que asigna esfuerzo de forma secuencial comenzando por los grupos más rentables— toma las mismas decisiones que una estrategia óptima. Por ejemplo, si moderar tres grupos de alta utilidad consume exactamente el esfuerzo total, y los grupos restantes son menos eficientes o demasiado costosos, no hay necesidad de considerar combinaciones parciales. La estrategia voraz, al seguir su ordenamiento local, construye la solución correcta sin evaluaciones adicionales.
@@ -1432,15 +1492,25 @@ En ciertos escenarios, el presupuesto disponible coincide de forma precisa con e
     \end{itemize}
         \subsubsection{¿Cuándo no da la Respuesta Correcta?}
 
+
     Aunque el algoritmo voraz ofrece una solución válida y eficiente al problema ModCI, su naturaleza heurística implica que no garantiza la obtención del conflicto interno mínimo en todos los casos. A continuación, se detallan algunos escenarios típicos en los que esta estrategia puede generar soluciones subóptimas:
+
+
 
 
     \begin{itemize}
 
     \item \textbf{Distribución óptima del esfuerzo requiere intervenir en varios grupos de forma parcial.}
+
+    \item \textbf{Distribución óptima del esfuerzo requiere intervenir en varios grupos de forma parcial.}
     El enfoque voraz concentra el esfuerzo en el grupo que ofrece la mayor utilidad individual, incluso si esto implica intervenir completamente en un solo grupo. Sin embargo, en muchos casos, distribuir parcialmente ese mismo esfuerzo entre varios grupos puede reducir más el conflicto general. Por ejemplo, usar todo el presupuesto en un grupo con solo dos agentes con mayor utilidad deja sin cubrir a grupos más numerosos donde podrían haberse moderado más individuos con el mismo costo total.
 
+
     \end{itemize}
+
+
+
+
 
 
 
@@ -1448,12 +1518,16 @@ En ciertos escenarios, el presupuesto disponible coincide de forma precisa con e
     \subsection{Análisis}
     El algoritmo voraz implementado para el problema ModCI constituye una solución computacionalmente eficiente que, en la mayoría de casos, entrega resultados cercanos al óptimo. Su lógica de priorización basada en utilidad permite obtener estrategias factibles de forma rápida, lo cual es especialmente valioso en redes sociales de gran tamaño o cuando el tiempo de cómputo es una restricción.
 
+
     A pesar de su eficiencia, el algoritmo presenta limitaciones estructurales debido a su enfoque local. Al no evaluar el impacto global de sus decisiones, puede generar soluciones subóptimas en escenarios donde el esfuerzo debe ser distribuido cuidadosamente entre múltiples grupos.
+
 
     No obstante, la calidad de sus soluciones fue evaluada sistemáticamente mediante una métrica relativa de comparación con soluciones óptimas de la batería de pruebas. Los resultados mostraron que, en promedio, la solución generada por el algoritmo voraz se alejó apenas un 1{,}62\% de la óptima. Esta baja desviación sugiere que, a pesar de no explorar todo el espacio de soluciones, el enfoque voraz logra capturar buena parte de la estructura del problema y construir respuestas competitivas.
 
+
     En resumen, el algoritmo ofrece un equilibrio notable entre velocidad y calidad de solución. Si bien no garantiza optimalidad, su comportamiento consistente y su bajo margen de error lo hacen una herramienta efectiva y escalable para abordar el problema ModCI en contextos prácticos.
     \begin{tcolorbox}[colback=red!5!white, colframe=red!50!black, title=Advertencia sobre la correctitud]
+            La principal debilidad del enfoque voraz radica en que realiza asignaciones de forma secuencial y local, sin considerar la interacción global entre grupos y el impacto acumulado que puede tener una distribución alternativa del esfuerzo. Por ello, si bien en muchos casos ofrece soluciones cercanas al óptimo, existen configuraciones donde se aleja de la mejor estrategia posible.
             La principal debilidad del enfoque voraz radica en que realiza asignaciones de forma secuencial y local, sin considerar la interacción global entre grupos y el impacto acumulado que puede tener una distribución alternativa del esfuerzo. Por ello, si bien en muchos casos ofrece soluciones cercanas al óptimo, existen configuraciones donde se aleja de la mejor estrategia posible.
         \end{tcolorbox}
 
