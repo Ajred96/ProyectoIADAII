@@ -1,0 +1,106 @@
+<div class="container mt-4 text-center">
+  <h2>Moderación de Opiniones - ModCI</h2>
+
+  <!-- Cargar Archivo -->
+  <div class="mb-3">
+    <input #fileInput type="file" (change)="seleccionarArchivo($event)" class="form-control d-inline-block w-auto"
+           [disabled]="archivoCargado">
+    <button *ngIf="archivoCargado" (click)="limpiar()" class="btn btn-danger ms-2">Limpiar</button>
+  </div>
+
+  <!-- Resumen del archivo -->
+  <div *ngIf="gruposResumen.length > 0" class="mt-3 text-start">
+    <h5 class="mb-2">Red Social ({{ gruposResumen.length }} grupo{{ gruposResumen.length > 1 ? 's' : '' }}):</h5>
+
+    <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; border-radius: 0.5rem;">
+      <table class="table table-sm table-hover table-striped mb-0 text-center align-middle">
+        <thead class="table-primary sticky-top">
+          <tr>
+            <th style="width: 60px;">#</th>
+            <th style="width: 100px;">Personas</th>
+            <th style="width: 100px;">Opinión 1</th>
+            <th style="width: 100px;">Opinión 2</th>
+            <th style="width: 100px;">Rigidez</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let grupo of gruposResumen; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ grupo.personas }}</td>
+            <td>{{ grupo.opinion1 }}</td>
+            <td>{{ grupo.opinion2 }}</td>
+            <td>{{ grupo.terquedad }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-1" *ngIf="ciOriginal !== null">
+      <strong> Conflicto Interno: </strong> {{ ciOriginal.toFixed(2) }}
+    </div>
+    <div class="mt-2">
+      <strong>Esfuerzo Disponible: </strong> {{ esfuerzoTotal }}
+    </div>
+  </div>
+
+  <!-- Botones de Métodos -->
+  <div class="mt-3" *ngIf="archivoCargado">
+    <button (click)="ejecutarMetodo('fuerzaBruta')" [disabled]="procesando || resultado" class="btn btn-primary me-2">
+      Fuerza Bruta
+    </button>
+    <button (click)="ejecutarMetodo('voraz')" [disabled]="procesando || resultado" class="btn btn-success me-2">
+      Algoritmo Voraz
+    </button>
+    <button (click)="ejecutarMetodo('dinamico')" [disabled]="procesando || resultado" class="btn btn-warning">
+      Programación Dinámica
+    </button>
+  </div>
+
+  <!-- Spinner -->
+  <div *ngIf="mostrandoSpinner" class="mt-3">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Procesando...</span>
+    </div>
+  </div>
+
+  <!-- Resultado -->
+  <div *ngIf="resultado" class="mt-4">
+    <h3>Resultados:</h3>
+    <p><strong>Algoritmo Usado:</strong> {{ metodoUsado }}</p>
+    <p><strong>Tiempo Ejecución:</strong> {{ resultado.Tiempo }} segundos</p>
+    <p><strong>Estrategia Aplicada:</strong> {{ resultado.Estrategia?.join(', ') }}</p>
+    <p><strong>Conflicto Interno:</strong> {{ resultado.CI }}</p>
+    <p><strong>Esfuerzo Aplicado:</strong> {{ resultado.Esfuerzo }}</p>
+    
+  </div>
+
+  <!-- Tabla con estrategia aplicada -->
+  <div *ngIf="resultado?.Estrategia?.length" class="mt-4 text-start">
+    <h5>Red Social Moderada:</h5>
+
+    <div style="max-height: 200px; overflow-y: auto; border: 1px solid #ccc; border-radius: 0.5rem;">
+      <table class="table table-sm table-hover table-striped mb-0 text-center align-middle">
+        <thead class="table-success sticky-top">
+          <tr>
+            <th>#</th>
+            <th>Personas</th>
+            <th>Opinión 1</th>
+            <th>Opinión 2</th>
+            <th>Rigidez</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let grupo of gruposResumen; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ grupo.personas - resultado.Estrategia[i] }}</td>
+            <td>{{ grupo.opinion1 }}</td>
+            <td>{{ grupo.opinion2 }}</td>
+            <td>{{ grupo.terquedad }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Limpiar Resultados -->
+  <button *ngIf="resultado" (click)="limpiarResultados()" class="btn btn-danger mt-3">Limpiar Resultados</button>
+</div>
