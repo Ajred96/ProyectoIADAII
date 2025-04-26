@@ -784,6 +784,7 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
     \subsubsection{¿Es Útil en la Práctica?}
     El enfoque de programación dinámica es útil para reducir drásticamente el número de combinaciones evaluadas en comparación con una busqueda exhaustiva, especialmente en instancias donde el número de grupos $n$ y el esfuerzo máximo $R_{max}$ son moderados.
 
+
     \paragraph{Hipótesis:}
 
     La reutilización de resultados parciales mediante $PD$ permite calcular la solución óptima sin tener que explorar todo el campo de de las posibles estrategias que se puedan aplicar.
@@ -792,29 +793,30 @@ Finalmente, se utiliza la función \textbf{calcular\_ci\_esfuerzo} para obtener 
 
 \begin{itemize}
 
-  \item \textbf{n:}
-  Cantidad de grupos, que está en terminos de k de la siguiente forma $n=2^k$.
+   \item \textbf{K:}
+  Mayor cantidad de agentes en un grupo dentro de la red social (sería el peor caso, donde no se modera ningún agente en un grupo).
+  \item \textbf{n:} Cantidad de grupos de la red social. Esta en terminos de k y se representa de la manera $n=2^k$.
 
   \item \textbf{$R_{\text{max}}$:}
   Esfuerzo máximo permitido.
 
-  \item \textbf{Tamaño de celda de memoria:}
-  Se asume como 4 Bytes por celda
+  \item \textbf{Tamaño de celda:}
+  El cual esta expresado como un tamaño de 4 Bytes (por celda)
 
-  \item \textbf{Rendimiento de la máquina en operaciones por minuto:}
-  Se estableció como $3 \times 10^8$ operaciones por minuto.
+  \item \textbf{$\mu$:}
+  Rendimiento de la máquina en operaciones por segundo, el cual se establecio como $3 \times 10^8$ en minutos  (ajustado a $\frac{3 \times 10^{8}}{60} = 5 \times 10^{6}$ para pasarlo a segundos).
 
-    \item \textbf{Fórmula del espacio teórico}
-La formula utilizada en este caso es la de la complejidad espacial multiplicado por el tamaño de celda:
+    \item \textbf{Cual es la formula del espacio teorico?}
+La formula utilizada en este caso es la de la complejidad espacial multiplicado por el tamaño de celda, el cual quedaria de la siguiente manera:
     \[
-        n^2 \cdot R_{max} \cdot k \cdot 4 bytes = 2^{2K} \cdot R_{max} \cdot k \cdot 4 bytes
+        n^2 \cdot R_{max} \cdot k \cdot 4 bytes
     \]
-
-    \item \textbf{Formula del tiempo teórico}
-La formula utilizada en este caso es la de la complejidad temporal dividido entre el rendimiento de la maquina:
+    
+    \item \textbf{Cual es la formula del tiempo teorico?}
+La formula utilizada en este caso es la de la complejidad temporal dividido entre el rendimiento de la maquina en segundos ($\mu$) , el cual quedaria de la siguiente manera:
 
 \[
-\frac{n \cdot (k+1) \cdot (R_{max}+1)}{3 \times 10^{8}} minutos = \frac{2^k \cdot (k+1) \cdot (R_{max}+1)}{3 \times 10^{8}} minutos
+\frac{n \cdot (k+1) \cdot (R_{max}+1)}{5 \times 10^{6}}
 \]
 
 
@@ -824,91 +826,68 @@ Los cuales nos darian como resultante la siguiente tabla:
 
 \begin{table}[H]
     \centering
-    \small
-\begin{tabular}{|c|c|c|c|l|l|}
-\hline
-\# & k & $n=2^k$ & R\_max & Espacio Aproximado & Tiempo Aproximado\\
-\hline
-0  & 6  & 64      & 40     & 3.75 MB        & 3.674 ms \\
-1  & 6  & 64      & 4044   & 379.13 MB      & 0.36 s \\
-2  & 7  & 128     & 388    & 169.75 MB      & 0.08 s \\
-3  & 7  & 128     & 365    & 159.69 MB      & 0.07 s \\
-4  & 7  & 128     & 315    & 137.81 MB      & 0.06 s \\
-5  & 9  & 512     & 460    & 4.14 GB        & 0.47 s \\
-6  & 9  & 512     & 64     & 576 MB         & 0.07 s \\
-7  & 8  & 256     & 819    & 1.64 GB        & 0.38 s \\
-8  & 12 & 4096    & 955    & 733.44 GB      & 10.18 s \\
-9  & 13 & 8192    & 39     & 129.79 GB      & 0.92 s \\
-10 & 14 & 16384   & 1223   & 17.53 TB       & 1.00 h \\
-11 & 9  & 512     & 798    & 7.18 GB        & 0.82 s \\
-12 & 9  & 512     & 116    & 1.04 GB        & 0.12 s \\
-13 & 19 & 524288  & 474    & 9443.48 TB     & 16.60 min \\
-14 & 18 & 262144  & 1809   & 8535.93 TB     & 30.05 min \\
-15 & 16 & 65536   & 734    & 192.41 TB      & 2.73 h \\
-16 & 8  & 256     & 4572   & 9.14 GB        & 2.11 s \\
-17 & 9  & 512     & 3313   & 29.82 GB       & 3.39 s \\
-18 & 9  & 512     & 1283   & 11.55 GB       & 1.31 s \\
-19 & 8  & 256     & 6465   & 12.93 GB       & 2.98 s \\
-20 & 9  & 512     & 2147   & 19.32 GB       & 2.20 s \\
-21 & 4  & 16      & 11905  & 46.50 MB       & 0.19 s \\
-22 & 4  & 16      & 7959   & 31.09 MB       & 0.13 s \\
-23 & 9  & 512     & 21052  & 189.47 GB      & 21.56 s \\
-24 & 9  & 512     & 16928  & 152.35 GB      & 17.34 s \\
-25 & 9  & 512     & 10403  & 93.63 GB       & 10.65 s \\
-26 & 19 & 524288  & 1375   & 27394.05 TB    & 48.09 min \\
-27 & 23 & 8388608 & 4345   & 26826.10 TB    & 2 días \\
-28 & 4  & 16      & 8097   & 31.63 MB       & 0.13 s \\
-29 & 9  & 512     & 47096  & 423.86 GB      & 48.23 s \\
-30 & 24 & 16777216 & 12114 & 1300730.85 TB  & 3.92 mes \\
-31 & 30 & 1073741824 & 1000 & 131941395.33 TB & 2.52 mes \\
-32 & 40 & 1.09951E+12 & 1000 & 184467440737.10 TB & 290.16 años \\
-33 & 50 & 1.1259E+15 & 1000 & 241785163922926.00 TB & 369587.94 años \\
-\hline
-\end{tabular}
-    \caption{Espacio y tiempo teórico para diferentes configuraciones de prueba.}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \# Prueba & $k$ & $n=(2^k)$ & $R_{max}$ (Esfuerzo) & Espacio teórico & Tiempo teórico \\
+    \hline
+    1 & 4 & 16 & 1000 & 4.10 MB & 0.02 s \\
+    2 & 4 & 16 & 10000 & 40.96 MB & 0.16 s \\
+    3 & 4 & 16 & 50000 & 204.80 MB & 0.80 s \\
+    4 & 9 & 512 & 1000 & 9.44 GB & 1.02 s \\
+    5 & 9 & 512 & 10000 & 94.37 GB & 10.24 s \\
+    6 & 9 & 512 & 50000 & 471.86 GB & 51.20 s \\
+    7 & 14 & 16384 & 1000 & 15.03 TB & 49.15 s \\
+    8 & 14 & 16384 & 10000 & 150.32 TB & 8.19 min \\
+    9 & 14 & 16384 & 50000 & 751.62 TB & 40.96 min \\
+    10 & 19 & 524288 & 1000 & 20.89 PB & 34.95 min \\
+    11 & 19 & 524288 & 10000 & 208.91 PB & 5.83 h \\
+    12 & 19 & 524288 & 50000 & 1.04 EB & 1.21 d \\
+    13 & 24 & 16777216 & 1000 & 27.02 EB & 23.30 h \\
+    14 & 24 & 16777216 & 10000 & 270.22 EB & 9.71 d \\
+    15 & 24 & 16777216 & 50000 & 1351.08 EB & 1.62 mes \\
+    \hline
+    \end{tabular}
+    \caption{Resultados ordenados por $k$ y tamaño de entrada $n$.}
+    \label{tab:resultados_escala}
     \end{table}
 
 
 
-\paragraph{Conclusión Hipótesis Temporal:}
-Los resultados indican que, para valores de \(k\) pequeños (por ejemplo, \(k \le 13\)), el tiempo de ejecución se mantiene en un rango totalmente aceptable (menos de 1 minuto), incluso cuando \(R_{\max}\) es considerable. Para \(k\) entre 14 y 19, el tiempo crece hasta decenas de minutos u horas, lo cual puede considerarse moderadamente aceptable dependiendo del contexto (por ejemplo, ejecución en segundo plano o procesamiento por lotes). No obstante, a partir de \(k \ge 20\), el tiempo asciende a varias horas, días, meses o incluso años, lo cual resulta inaceptable en la mayoría de los entornos prácticos.
+
+    \paragraph{Conclusión Hipótesis Temporal:}
+
+    Cuando el número de grupos y el límite $R_{max}$ no son excesivamente altos, el algoritmo de programación dinámica consigue una solución óptima en un tiempo razonable. Sin embargo, para valores muy grandes, la cantidad de estados crece de forma considerable, y el tiempo de ejecución puede llegar a ser elevado. Aun así, representa una mejora sustancial frente a enfoques como fuerza bruta.
+
+    \begin{quote}
+    Por ejemplo, con $n = 512$ y $R_{\text{max}} = 1\,000$ el tiempo teórico estimado es $\approx 1{,}02\ \text{s}$; con $n = 16\,384$ y $R_{\text{max}} = 10\,000$ asciende a $\approx 8{,}19\ \text{min}$; y para $n = 524\,288$ y $R_{\text{max}} = 50\,000$ el tiempo estimado llega a $\approx 1{,}21\ \text{días}$.
+    \end{quote}
+\begin{itemize}
+    \item Para valores de \( k \) entre 4 y 9, el tiempo de resolución es bueno, ya que varía de fracciones de segundo a pocos segundos, sin superar el minuto. Para k = 14 y $R_{\text{max}}$ = 1000, el tiempo de respuesta sigue siendo bueno aunque asciende casi al minuto.
+    \item Para \( k=14 \) y $R_{\text{max}}$ mayores, el tiempo de respuesta se vuelve aceptable, siendo de varios minutos sin superar la hora. Para k=19 y $R_{\text{max}}$ bajos, el tiempo de respuesta sigue siendo aceptable
+    \item Para los casos de k=19 y $R_{\text{max}}$ medianos y grandes, el tiempo de respuesta se vuelve inaceptable. Los valores de k\>19 tienen tiempos de respuesta de varias horas, incluso días o meses lo cual los vuelve completamente inaceptables
+    \end{itemize}
+    
+    \paragraph{Conclusión Hipótesis Espacial:}
+
+    El uso de memoria adicional para almacenar la tabla $dp$ es el principal factor en el costo espacial del método. Sin embargo, en la práctica, la poda de estados ineficientes y la restricción basada en el esfuerzo máximo $(R_{max})$ disminuyen notablemente el consumo de memoria, haciéndolo viable incluso en redes de gran tamaño.
+
+
+    \begin{quote}
+    Por ejemplo, para $n = 512$ y $R_{\text{max}} = 10\,000$ la tabla ocupa $\approx 94{,}37\ \text{GB}$; con $n = 16\,384$ y $R_{\text{max}} = 50\,000$ llega a $\approx 751{,}62\ \text{TB}$; y para $n = 16\,777\,216$ con $R_{\text{max}} = 10\,000$ se requieren hasta $\approx 270{,}22\ \text{EB}$.
+    \end{quote}
 
 \begin{itemize}
-  \item Para \(k=13\), \(n=8192\), \(R_{\max}=39\), el tiempo es \(\sim0.92\) minutos.
-  \item Para \(k=14\), \(n=16384\), \(R_{\max}=1223\), el tiempo asciende a \(\sim1\) hora.
-  \item Para \(k=19\), \(n=524288\), \(R_{\max}=1375\), el tiempo alcanza \(\sim48.09\) minutos.
-  \item Para \(k=24\), \(n=16\,777\,216\), \(R_{\max}=12114\), el tiempo sube a \(\sim3.92\) meses.
-  \item Para \(k=30\), \(n=107\,3741\,824\), \(R_{\max}=1000\), el tiempo estimado es \(\sim2.52\) meses.
+    \item Para $k$ = 4 el espacio utilizado es bueno, sin superar unos cuantos MB
+    \item Para $k$ = 9 y $R_{\text{max}}$ pequeños y medianos, el espacio utilizado es aceptable, sin superar las 100GB
+    \item Para $k$ = 9 y $R_{\text{max}}$ grandes, el espacio utilizado ascende casi a la media TB, lo cual se vuelve inaceptable. Para  \( k > 9 \) el espacio utilizado es completamente inaceptable, yendo desde descenas de TB hasta miles de EB.
 \end{itemize}
 
-Esto confirma que la complejidad temporal escala agresivamente con el número de estados, y que \(R_{\max}\) también tiene un impacto significativo aunque no completamente predecible.
+\subsection*{Impacto de $R_{max}$}
+Dos configuraciones con el mismo \(k\) y \(n\) pueden diferir significativamente en tiempo según el valor de \(R_{\max}\), lo que sugiere que este parámetro afecta directamente la cantidad de subproblemas o combinaciones evaluadas por el algoritmo.
 
-\paragraph{Conclusión Hipótesis Espacial:}
-El espacio requerido crece desde unos pocos megabytes en casos pequeños, hasta petabytes o incluso exabytes cuando \(k\) se incrementa. Para \(k \le 10\), el consumo de memoria es manejable, pero incrementa drásticamente al aumentar \(R_max\). Además, a partir de \(k=14\), el crecimiento se vuelve dramático y rápidamente supera la capacidad de la mayoría de sistemas, alcanzando valores que solo serían viables en entornos de supercomputación.
-
-\begin{itemize}
-  \item Para \(k=13\), \(n=8192\), el espacio requerido es \(\sim129.79\) GB.
-  \item Para \(k=14\), \(n=16384\), se necesitan \(\sim17.53\) TB.
-  \item Para \(k=16\), \(n=65536\), el espacio asciende a \(\sim192.41\) TB.
-  \item Para \(k=19\), \(n=524288\), se requieren \(\sim27394.05\) TB.
-  \item Para \(k=30\), \(n=107\,3741\,824\), el almacenamiento estimado es \(\sim1.32\times10^8\) TB.
-\end{itemize}
-
-Aunque el uso de programación dinámica ya introduce una optimización significativa al evitar la recomputación de subproblemas, el crecimiento exponencial del número total de estados posibles sigue imponiendo una barrera severa a la escalabilidad espacial del enfoque. 
-
-
-\paragraph{Impacto del parámetro \texorpdfstring{$R_{\max}$}{Rmax}:}
-Aunque el parámetro \(k\) (y por ende \(n = 2^k\)) domina el crecimiento del tiempo y espacio, el valor de \(R_{\max}\) también influye notablemente en el tiempo de ejecución. En la tabla, se observa que dos configuraciones con el mismo \(k\) y \(n\) pueden diferir significativamente en tiempo según el valor de \(R_{\max}\), lo que sugiere que este parámetro afecta directamente la cantidad de subproblemas o combinaciones evaluadas por el algoritmo.
-
-\begin{itemize}
-  \item Para \(k=9\), \(n=512\), con \(R_{\max}=64\), el tiempo es de apenas \(\sim0.07\) s.
-  \item Para el mismo \(k=9\), con \(R_{\max}=47096\), el tiempo sube hasta \(\sim48.23\) s.
-  \item De forma similar, con \(k=8\), \(n=256\), \(R_{\max}=4572\), el tiempo es de \(\sim2.11\) s; pero si \(R_{\max}=819\), solo toma \(\sim0.38\) s.
-\end{itemize}
+Aunque para valores altos de Rmax se disponga de mayor libertad para moderar a más agentes, lo que intuitivamente sugiere que el problema se vuelve menos complejo, se observa que para casos en los que se tiene el mismo k pero aumenta Rmax el rendimiento empeora. Esto debido a que un valor más alto de Rmax implica evaluar aún más estados factibles para encontrar la solución optima.
 
 Esto indica que \(R_{\max}\) afecta el tamaño del espacio de soluciones factibles y por tanto modificando el costo tanto temporal como espacial. Sin embargo, el impacto de \(R_{\max}\) no es completamente predecible ni proporcional: aumentar este parámetro no siempre implica un incremento lineal del tiempo. Esto se debe a que su efecto depende del comportamiento interno del algoritmo, es decir, de cuántos subproblemas adicionales son realmente considerados y almacenados como consecuencia de permitir soluciones más amplias.
-
-
 
     \subsection{¿El Algoritmo Siempre da la Respuesta Correcta al Problema?}
 
