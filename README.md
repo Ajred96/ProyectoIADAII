@@ -36,6 +36,39 @@ MarkupSafe 3.0.2
 Werkzeug 3.1.3
 pip 24.3.1
 
+## Estructura de Archivos
+
+```bash
+
+├── BateriaPruebas                ## Archivos de la Batería de Pruebas
+├── Informe                       ## Código Fuente Latex y PDF del Informe 
+├── README.md                     ## Este Archivo
+├── backend                       ## CODIGO FUENTE DEL BACKEND
+│   ├── Dockerfile                ## Dockerfile para despliegue del backend
+│   ├── app.py                    ## Archivo principal de la api
+│   ├── modciFB.py                ## FUNCIONES PARA PROCESAR FUERZA BRUTA
+│   ├── modciPD.py                ## FUNCIONES PARA PROCESAR PROGRAMACIÓN DINÁMICA
+│   ├── modciPV.py                ## FUNCIONES PARA PROCESAR PROGRAMACIÓN VORAZ
+│   ├── requirements.txt          ## Librerias necesarias para instalar
+│   ├── static                    ## Carpeta que guarda los archivos de resultados
+│   └── utils.py                  ## FUNCIONES AUXILIARES PARA LOS ALGORITMOS 
+├── docker-compose.yml            ## docker-compose para el despliegue del proyecto
+└── frontend                      ##CÓDIGO FUENTE DEL FRONTEND
+    ├── Dockerfile                ## Dockerfile para despliegue del frontend
+    ├── README.md                 ## readme del front-end 
+    ├── angular.json              ## archivo de angular
+    ├── e2e                       ## archivo de angular
+    ├── karma.conf.js             ## archivo de angular
+    ├── package-lock.json         ## dependencias necesarias
+    ├── package.json              ## dependencias necesarias
+    ├── src                       ## APLICACIÓN DEL FRONTEND
+    ├── tsconfig.app.json         ## archivo de angular
+    ├── tsconfig.json             ## archivo de angular
+    ├── tsconfig.spec.json        ## archivo de angular
+    └── tslint.json               ## archivo de angular
+
+```
+
 
 ## Ejecución del proyecto
 
